@@ -9,7 +9,7 @@ module fifo2 (rdata, wfull, rempty, wdata, winc, wclk, wrst_n, rinc, rclk, rrst_
     input winc, wclk, wrst_n;
     input rinc, rclk, rrst_n;
     wire [ASIZE-1:0] wptr, rptr;
-    wire [ASIZE-1:0] waddr, raddr;
+    wire [ASIZE-1:0] waddr, raddr; 
 
     async_cmp #(ASIZE) async_cmp(.aempty_n(aempty_n), .afull_n(afull_n), .wptr(wptr), .rptr(rptr), .wrst_n(wrst_n));
     fifomem #(DSIZE, ASIZE) fifomem(.rdata(rdata), .wdata(wdata), .waddr(wptr), .raddr(rptr), .wclken(winc), .wclk(wclk));
