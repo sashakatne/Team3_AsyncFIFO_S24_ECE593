@@ -1,0 +1,28 @@
+# Specification B
+
+FIFO Operating Conditions:
+
+Transmitter clk1 frequency = 80 MHz
+Receiver clk2 frequency = 50 MHz
+
+With duty-cycle of 50%. 
+Max reads Burst size = 120
+
+Num. of idle cycle between successive writes = 0
+Num. of idle cycles between successive reads = 0
+
+There are no idle cycles in both reading and writing which means that, all the items
+in the burst will be written and read in consecutive clock cycles
+ 
+Time required to write one data item = 1 x (1/80MHz) = 12.5ns
+Time required to write all the data in the burst = 120 x 12.5ns = 1500ns
+
+Time required to read one data item = 1 x (1/50MHz) = 20ns
+So, for every 20 ns, the Receiver is going to read one data item in the burst. In a period of 1500ns, 120 data items can be written
+
+The no. of data items can be read in a period of 1500 ns = 1500/20 = 75
+The remaining no. of bytes to be stored in the FIFO = 120 - 75 = 45
+
+So, the FIFO which has to be in this scenario must be capable of storing 45 data items
+
+So, the minimum depth of the FIFO should be 45
