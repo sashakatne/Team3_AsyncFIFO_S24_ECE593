@@ -1,7 +1,7 @@
 if [file exists "work"] {vdel -all}
 vlib work
 
-vlog +acc -source -lint async_fifo.sv async_fifo_tb.sv
+vlog +acc -source -lint async_fifo2.sv async_fifo2_tb.sv
 vsim -voptargs=+acc work.top
 
 add wave -position insertpoint sim:/top/uut/*
