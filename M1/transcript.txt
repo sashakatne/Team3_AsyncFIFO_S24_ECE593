@@ -1,0 +1,163 @@
+# transcript.txt
+do run.do
+# QuestaSim-64 vlog 2019.2_1 Compiler 2019.05 May 13 2019
+# Start time: 19:45:45 on Apr 24,2024
+# vlog -reportprogress 300 "+acc" -source -lint async_fifo.sv async_fifo_tb.sv 
+# -- Compiling module fifo2
+# -- Compiling module fifomem
+# -- Compiling module async_cmp
+# -- Compiling module rptr_empty
+# -- Compiling module wptr_full
+# -- Compiling module top
+# 
+# Top level modules:
+# 	top
+# End time: 19:45:45 on Apr 24,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vsim -voptargs="+acc" work.top 
+# Start time: 19:45:45 on Apr 24,2024
+# ** Note: (vsim-3812) Design is being optimized...
+# Loading sv_std.std
+# Loading work.top(fast)
+# Loading work.fifo2(fast)
+# Loading work.async_cmp(fast)
+# Loading work.fifomem(fast)
+# Loading work.rptr_empty(fast)
+# Loading work.wptr_full(fast)
+# Time=                   0, wdata=  0, rdata=  x, wfull=0, rempty=1
+# Time=                  66, wdata=  1, rdata=  x, wfull=0, rempty=1
+# Time=                  78, wdata=  2, rdata=  1, wfull=0, rempty=1
+# Time=                  90, wdata=  3, rdata=  1, wfull=0, rempty=1
+# Time=                 102, wdata=  4, rdata=  1, wfull=0, rempty=1
+# Time=                 110, wdata=  4, rdata=  1, wfull=0, rempty=0
+# Time=                 114, wdata=  5, rdata=  1, wfull=0, rempty=0
+# Time=                 126, wdata=  6, rdata=  1, wfull=0, rempty=0
+# Time=                 138, wdata=  7, rdata=  1, wfull=0, rempty=0
+# Time=                 150, wdata=  8, rdata=  1, wfull=0, rempty=0
+# Time=                 162, wdata=  9, rdata=  1, wfull=0, rempty=0
+# Time=                 174, wdata= 10, rdata=  1, wfull=0, rempty=0
+# Time=                 186, wdata= 11, rdata=  1, wfull=0, rempty=0
+# Time=                 198, wdata= 12, rdata=  1, wfull=0, rempty=0
+# Time=                 210, wdata= 13, rdata=  1, wfull=0, rempty=0
+# Time=                 222, wdata= 14, rdata=  1, wfull=0, rempty=0
+# Time=                 234, wdata= 15, rdata=  1, wfull=0, rempty=0
+# Time=                 246, wdata= 16, rdata=  1, wfull=0, rempty=0
+# Time=                 258, wdata= 17, rdata=  1, wfull=0, rempty=0
+# Time=                 270, wdata= 18, rdata=  1, wfull=0, rempty=0
+# Time=                 282, wdata= 19, rdata=  1, wfull=0, rempty=0
+# Time=                 294, wdata= 20, rdata=  1, wfull=0, rempty=0
+# Time=                 306, wdata= 21, rdata=  1, wfull=0, rempty=0
+# Time=                 318, wdata= 22, rdata=  1, wfull=0, rempty=0
+# Time=                 330, wdata= 23, rdata=  1, wfull=0, rempty=0
+# Time=                 342, wdata= 24, rdata=  1, wfull=0, rempty=0
+# Time=                 354, wdata= 25, rdata=  1, wfull=0, rempty=0
+# Time=                 366, wdata= 26, rdata=  1, wfull=0, rempty=0
+# Time=                 378, wdata= 27, rdata=  1, wfull=0, rempty=0
+# Time=                 390, wdata= 28, rdata=  1, wfull=0, rempty=0
+# Time=                 402, wdata= 29, rdata=  1, wfull=0, rempty=0
+# Time=                 414, wdata= 30, rdata=  1, wfull=0, rempty=0
+# Time=                 426, wdata= 31, rdata=  1, wfull=0, rempty=0
+# Time=                 438, wdata= 32, rdata=  1, wfull=0, rempty=0
+# Time=                 450, wdata= 33, rdata=  1, wfull=0, rempty=0
+# Time=                 462, wdata= 34, rdata=  1, wfull=0, rempty=0
+# Time=                 474, wdata= 35, rdata=  1, wfull=0, rempty=0
+# Time=                 486, wdata= 36, rdata=  1, wfull=0, rempty=0
+# Time=                 498, wdata= 37, rdata=  1, wfull=0, rempty=0
+# Time=                 510, wdata= 38, rdata=  1, wfull=0, rempty=0
+# Time=                 522, wdata= 39, rdata=  1, wfull=0, rempty=0
+# Time=                 534, wdata= 40, rdata=  1, wfull=0, rempty=0
+# Time=                 546, wdata= 41, rdata=  1, wfull=0, rempty=0
+# Time=                 558, wdata= 42, rdata=  1, wfull=0, rempty=0
+# Time=                 570, wdata= 43, rdata=  1, wfull=0, rempty=0
+# Time=                 582, wdata= 44, rdata=  1, wfull=0, rempty=0
+# Time=                 594, wdata= 45, rdata=  1, wfull=0, rempty=0
+# Time=                 606, wdata= 46, rdata=  1, wfull=0, rempty=0
+# Time=                 618, wdata= 47, rdata=  1, wfull=0, rempty=0
+# Time=                 630, wdata= 48, rdata=  1, wfull=0, rempty=0
+# Time=                 642, wdata= 49, rdata=  1, wfull=0, rempty=0
+# Time=                 654, wdata= 50, rdata=  1, wfull=0, rempty=0
+# Time=                 666, wdata= 51, rdata=  1, wfull=0, rempty=0
+# Time=                 678, wdata= 52, rdata=  1, wfull=0, rempty=0
+# Time=                 690, wdata= 53, rdata=  1, wfull=0, rempty=0
+# Time=                 702, wdata= 54, rdata=  1, wfull=0, rempty=0
+# Time=                 714, wdata= 55, rdata=  1, wfull=0, rempty=0
+# Time=                 726, wdata= 56, rdata=  1, wfull=0, rempty=0
+# Time=                 738, wdata= 57, rdata=  1, wfull=0, rempty=0
+# Time=                 750, wdata= 58, rdata=  1, wfull=0, rempty=0
+# Time=                 762, wdata= 59, rdata=  1, wfull=0, rempty=0
+# Time=                 774, wdata= 60, rdata=  1, wfull=0, rempty=0
+# Time=                 786, wdata= 61, rdata=  1, wfull=0, rempty=0
+# Time=                 798, wdata= 62, rdata=  1, wfull=0, rempty=0
+# Time=                 810, wdata= 63, rdata=  1, wfull=0, rempty=0
+# Time=                 822, wdata= 64, rdata=  1, wfull=0, rempty=0
+# Time=                 834, wdata= 65, rdata=  1, wfull=1, rempty=0
+# Time=                 846, wdata= 65, rdata= 65, wfull=1, rempty=0
+# Time=                1650, wdata= 65, rdata=  2, wfull=1, rempty=0
+# Time=                1670, wdata= 65, rdata=  3, wfull=1, rempty=0
+# Time=                1674, wdata= 65, rdata=  3, wfull=0, rempty=0
+# Time=                1690, wdata= 65, rdata=  4, wfull=0, rempty=0
+# Time=                1710, wdata= 65, rdata=  5, wfull=0, rempty=0
+# Time=                1730, wdata= 65, rdata=  6, wfull=0, rempty=0
+# Time=                1750, wdata= 65, rdata=  7, wfull=0, rempty=0
+# Time=                1770, wdata= 65, rdata=  8, wfull=0, rempty=0
+# Time=                1790, wdata= 65, rdata=  9, wfull=0, rempty=0
+# Time=                1810, wdata= 65, rdata= 10, wfull=0, rempty=0
+# Time=                1830, wdata= 65, rdata= 11, wfull=0, rempty=0
+# Time=                1850, wdata= 65, rdata= 12, wfull=0, rempty=0
+# Time=                1870, wdata= 65, rdata= 13, wfull=0, rempty=0
+# Time=                1890, wdata= 65, rdata= 14, wfull=0, rempty=0
+# Time=                1910, wdata= 65, rdata= 15, wfull=0, rempty=0
+# Time=                1930, wdata= 65, rdata= 16, wfull=0, rempty=0
+# Time=                1950, wdata= 65, rdata= 17, wfull=0, rempty=0
+# Time=                1970, wdata= 65, rdata= 18, wfull=0, rempty=0
+# Time=                1990, wdata= 65, rdata= 19, wfull=0, rempty=0
+# Time=                2010, wdata= 65, rdata= 20, wfull=0, rempty=0
+# Time=                2030, wdata= 65, rdata= 21, wfull=0, rempty=0
+# Time=                2050, wdata= 65, rdata= 22, wfull=0, rempty=0
+# Time=                2070, wdata= 65, rdata= 23, wfull=0, rempty=0
+# Time=                2090, wdata= 65, rdata= 24, wfull=0, rempty=0
+# Time=                2110, wdata= 65, rdata= 25, wfull=0, rempty=0
+# Time=                2130, wdata= 65, rdata= 26, wfull=0, rempty=0
+# Time=                2150, wdata= 65, rdata= 27, wfull=0, rempty=0
+# Time=                2170, wdata= 65, rdata= 28, wfull=0, rempty=0
+# Time=                2190, wdata= 65, rdata= 29, wfull=0, rempty=0
+# Time=                2210, wdata= 65, rdata= 30, wfull=0, rempty=0
+# Time=                2230, wdata= 65, rdata= 31, wfull=0, rempty=0
+# Time=                2250, wdata= 65, rdata= 32, wfull=0, rempty=0
+# Time=                2270, wdata= 65, rdata= 33, wfull=0, rempty=0
+# Time=                2290, wdata= 65, rdata= 34, wfull=0, rempty=0
+# Time=                2310, wdata= 65, rdata= 35, wfull=0, rempty=0
+# Time=                2330, wdata= 65, rdata= 36, wfull=0, rempty=0
+# Time=                2350, wdata= 65, rdata= 37, wfull=0, rempty=0
+# Time=                2370, wdata= 65, rdata= 38, wfull=0, rempty=0
+# Time=                2390, wdata= 65, rdata= 39, wfull=0, rempty=0
+# Time=                2410, wdata= 65, rdata= 40, wfull=0, rempty=0
+# Time=                2430, wdata= 65, rdata= 41, wfull=0, rempty=0
+# Time=                2450, wdata= 65, rdata= 42, wfull=0, rempty=0
+# Time=                2470, wdata= 65, rdata= 43, wfull=0, rempty=0
+# Time=                2490, wdata= 65, rdata= 44, wfull=0, rempty=0
+# Time=                2510, wdata= 65, rdata= 45, wfull=0, rempty=0
+# Time=                2530, wdata= 65, rdata= 46, wfull=0, rempty=0
+# Time=                2550, wdata= 65, rdata= 47, wfull=0, rempty=0
+# Time=                2570, wdata= 65, rdata= 48, wfull=0, rempty=0
+# Time=                2590, wdata= 65, rdata= 49, wfull=0, rempty=0
+# Time=                2610, wdata= 65, rdata= 50, wfull=0, rempty=0
+# Time=                2630, wdata= 65, rdata= 51, wfull=0, rempty=0
+# Time=                2650, wdata= 65, rdata= 52, wfull=0, rempty=0
+# Time=                2670, wdata= 65, rdata= 53, wfull=0, rempty=0
+# Time=                2690, wdata= 65, rdata= 54, wfull=0, rempty=0
+# Time=                2710, wdata= 65, rdata= 55, wfull=0, rempty=0
+# Time=                2730, wdata= 65, rdata= 56, wfull=0, rempty=0
+# Time=                2750, wdata= 65, rdata= 57, wfull=0, rempty=0
+# Time=                2770, wdata= 65, rdata= 58, wfull=0, rempty=0
+# Time=                2790, wdata= 65, rdata= 59, wfull=0, rempty=0
+# Time=                2810, wdata= 65, rdata= 60, wfull=0, rempty=0
+# Time=                2830, wdata= 65, rdata= 61, wfull=0, rempty=0
+# Time=                2850, wdata= 65, rdata= 62, wfull=0, rempty=0
+# Time=                2870, wdata= 65, rdata= 63, wfull=0, rempty=0
+# Time=                2890, wdata= 65, rdata= 64, wfull=0, rempty=0
+# Time=                2910, wdata= 65, rdata= 65, wfull=0, rempty=1
+# ** Note: $finish    : async_fifo_tb.sv(82)
+#    Time: 4210 ns  Iteration: 0  Instance: /top
+# 1
+# Break in Module top at async_fifo_tb.sv line 82
