@@ -4,7 +4,7 @@ FIFO Operating Conditions:
 
 Transmitter clk1 frequency = 80 MHz
 Receiver clk2 frequency = 50 MHz
-
+ 
 With duty-cycle of 50%. 
 Max reads Burst size = 120
 
