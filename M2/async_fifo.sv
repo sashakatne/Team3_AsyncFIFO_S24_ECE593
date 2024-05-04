@@ -3,7 +3,7 @@ module asynchronous_fifo #(parameter DEPTH=64, DATA_WIDTH=8) (
   input rclk, rrst_n,
   input w_en, r_en,
   input [DATA_WIDTH-1:0] data_in,
-  output reg [DATA_WIDTH-1:0] data_out,
+  output reg [DATA_WIDTH-1:0] data_out, 
   output reg full, empty,
   output reg half_full, half_empty
 );
