@@ -1,6 +1,6 @@
 module fifo2 (rdata, wfull, rempty, wdata, winc, wclk, wrst_n, rinc, rclk, rrst_n);
     parameter DSIZE = 8;
-    parameter ASIZE = 4;
+    parameter ASIZE = 6;
 
     output [DSIZE-1:0] rdata;
     output wfull;
@@ -20,7 +20,7 @@ endmodule
 
 module fifomem (rdata, wdata, waddr, raddr, wclken, wclk);
     parameter DATASIZE = 8; // Memory data word width
-    parameter ADDRSIZE = 4; // Number of memory address bits
+    parameter ADDRSIZE = 6; // Number of memory address bits
     parameter DEPTH = 1<<ADDRSIZE; // DEPTH = 2**ADDRSIZE
 
     output [DATASIZE-1:0] rdata;
@@ -36,7 +36,7 @@ module fifomem (rdata, wdata, waddr, raddr, wclken, wclk);
 endmodule
 
 module async_cmp (aempty_n, afull_n, wptr, rptr, wrst_n);
-    parameter ADDRSIZE = 4;
+    parameter ADDRSIZE = 6;
     parameter N = ADDRSIZE-1;
 
     output aempty_n, afull_n;
@@ -59,7 +59,7 @@ module async_cmp (aempty_n, afull_n, wptr, rptr, wrst_n);
 endmodule
 
 module rptr_empty (rempty, rptr, aempty_n, rinc, rclk, rrst_n);
-    parameter ADDRSIZE = 4;
+    parameter ADDRSIZE = 6;
 
     output rempty;
     output [ADDRSIZE-1:0] rptr;
@@ -92,7 +92,7 @@ module rptr_empty (rempty, rptr, aempty_n, rinc, rclk, rrst_n);
 endmodule
 
 module wptr_full (wfull, wptr, afull_n, winc, wclk, wrst_n);
-    parameter ADDRSIZE = 4;
+    parameter ADDRSIZE = 6;
     
     output wfull;
     output [ADDRSIZE-1:0] wptr;
