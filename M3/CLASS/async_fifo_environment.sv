@@ -97,7 +97,7 @@ task run();
 
     pre_env();
     $display("------ Write Bursts requested-------");
-    for (int i = 0; i < no_of_transactions; i++) 
+	for (int i = 0; i < no_of_transactions; i++)  
 	begin
     	test_write();
     end
