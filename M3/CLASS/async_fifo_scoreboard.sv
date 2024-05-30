@@ -3,7 +3,7 @@ class scoreboard;
 	parameter DATA_SIZE = 8;
 	parameter ADDR_SIZE = 6;
 	parameter DEPTH = 64;
-	int no_trans;
+	int no_trans; 
 	logic [DATA_SIZE-1 : 0] fifo_mem [DEPTH-1 : 0];
 	bit [ADDR_SIZE : 0] wr_count;
 	bit [ADDR_SIZE : 0] rd_count;

@@ -1,0 +1,1296 @@
+couldn't open "transcript": permission denied
+# Reading pref.tcl
+# //  Questa Sim-64
+# //  Version 2023.3 win64 Jul 17 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+cd {\\thoth.cecs.pdx.edu\Home06\maheswar\Downloads\ECE593_S24_team_03_Asyn_ FIFO_M4\ECE593_S24_team_03_Asyn_ FIFO_M3\CLASS}
+do run.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# Errors: 0, Warnings: 1
+# QuestaSim-64 vlog 2023.3 Compiler 2023.07 Jul 17 2023
+# Start time: 22:04:32 on May 29,2024
+# vlog -reportprogress 300 async_fifo.sv 
+# -- Compiling module asynchronous_fifo
+# -- Compiling module fifo_mem
+# -- Compiling module synchronizer
+# -- Compiling module rptr_handler
+# -- Compiling module wptr_handler
+# 
+# Top level modules:
+# 	asynchronous_fifo
+# End time: 22:04:32 on May 29,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2023.3 Compiler 2023.07 Jul 17 2023
+# Start time: 22:04:32 on May 29,2024
+# vlog -reportprogress 300 async_fifo_package.sv 
+# -- Compiling package fifo_pkg
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# ** Note: (vlog-2286) async_fifo_seq_item.sv(2): Using implicit +incdir+C:/questasim64_2023.3/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# 
+# Top level modules:
+# 	--none--
+# End time: 22:04:33 on May 29,2024, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2023.3 Compiler 2023.07 Jul 17 2023
+# Start time: 22:04:33 on May 29,2024
+# vlog -reportprogress 300 async_fifo_top.sv 
+# ** Note: (vlog-2286) async_fifo_top.sv(2): Using implicit +incdir+C:/questasim64_2023.3/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# -- Compiling package async_fifo_top_sv_unit
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# -- Importing package fifo_pkg
+# -- Compiling interface intf
+# -- Compiling module tb_top
+# 
+# Top level modules:
+# 	tb_top
+# End time: 22:04:34 on May 29,2024, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2023.3 Compiler 2023.07 Jul 17 2023
+# Start time: 22:04:34 on May 29,2024
+# vlog -reportprogress 300 async_fifo_test.sv 
+# ** Note: (vlog-2286) async_fifo_test.sv(3): Using implicit +incdir+C:/questasim64_2023.3/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# -- Compiling package async_fifo_test_sv_unit
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# -- Importing package fifo_pkg
+# 
+# Top level modules:
+# 	--none--
+# End time: 22:04:35 on May 29,2024, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2023.3 Compiler 2023.07 Jul 17 2023
+# Start time: 22:04:35 on May 29,2024
+# vlog -reportprogress 300 async_fifo_driver.sv 
+# ** Note: (vlog-2286) async_fifo_driver.sv(2): Using implicit +incdir+C:/questasim64_2023.3/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# -- Compiling package async_fifo_driver_sv_unit
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# -- Importing package fifo_pkg
+# 
+# Top level modules:
+# 	--none--
+# End time: 22:04:36 on May 29,2024, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2023.3 Compiler 2023.07 Jul 17 2023
+# Start time: 22:04:36 on May 29,2024
+# vlog -reportprogress 300 async_fifo_env.sv 
+# ** Note: (vlog-2286) async_fifo_env.sv(2): Using implicit +incdir+C:/questasim64_2023.3/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# -- Compiling package async_fifo_env_sv_unit
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# -- Importing package fifo_pkg
+# 
+# Top level modules:
+# 	--none--
+# End time: 22:04:36 on May 29,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2023.3 Compiler 2023.07 Jul 17 2023
+# Start time: 22:04:36 on May 29,2024
+# vlog -reportprogress 300 async_fifo_interface.sv 
+# -- Compiling interface intf
+# 
+# Top level modules:
+# 	--none--
+# End time: 22:04:37 on May 29,2024, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2023.3 Compiler 2023.07 Jul 17 2023
+# Start time: 22:04:37 on May 29,2024
+# vlog -reportprogress 300 async_fifo_read_agent.sv 
+# ** Note: (vlog-2286) async_fifo_read_agent.sv(2): Using implicit +incdir+C:/questasim64_2023.3/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# -- Compiling package async_fifo_read_agent_sv_unit
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# -- Importing package fifo_pkg
+# 
+# Top level modules:
+# 	--none--
+# End time: 22:04:38 on May 29,2024, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2023.3 Compiler 2023.07 Jul 17 2023
+# Start time: 22:04:38 on May 29,2024
+# vlog -reportprogress 300 async_fifo_scoreboard.sv 
+# ** Note: (vlog-2286) async_fifo_scoreboard.sv(2): Using implicit +incdir+C:/questasim64_2023.3/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# -- Compiling package async_fifo_scoreboard_sv_unit
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# -- Importing package fifo_pkg
+# 
+# Top level modules:
+# 	--none--
+# End time: 22:04:39 on May 29,2024, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2023.3 Compiler 2023.07 Jul 17 2023
+# Start time: 22:04:39 on May 29,2024
+# vlog -reportprogress 300 async_fifo_seq_item.sv 
+# ** Note: (vlog-2286) async_fifo_seq_item.sv(2): Using implicit +incdir+C:/questasim64_2023.3/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# -- Compiling package async_fifo_seq_item_sv_unit
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# 
+# Top level modules:
+# 	--none--
+# End time: 22:04:39 on May 29,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2023.3 Compiler 2023.07 Jul 17 2023
+# Start time: 22:04:39 on May 29,2024
+# vlog -reportprogress 300 async_fifo_seq_test.sv 
+# ** Note: (vlog-2286) async_fifo_seq_test.sv(2): Using implicit +incdir+C:/questasim64_2023.3/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# -- Compiling package async_fifo_seq_test_sv_unit
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# -- Importing package fifo_pkg
+# 
+# Top level modules:
+# 	--none--
+# End time: 22:04:40 on May 29,2024, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2023.3 Compiler 2023.07 Jul 17 2023
+# Start time: 22:04:40 on May 29,2024
+# vlog -reportprogress 300 async_fifo_sequencer.sv 
+# ** Note: (vlog-2286) async_fifo_sequencer.sv(2): Using implicit +incdir+C:/questasim64_2023.3/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# -- Compiling package async_fifo_sequencer_sv_unit
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# -- Importing package fifo_pkg
+# 
+# Top level modules:
+# 	--none--
+# End time: 22:04:41 on May 29,2024, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2023.3 Compiler 2023.07 Jul 17 2023
+# Start time: 22:04:41 on May 29,2024
+# vlog -reportprogress 300 async_fifo_write_agent.sv 
+# ** Note: (vlog-2286) async_fifo_write_agent.sv(2): Using implicit +incdir+C:/questasim64_2023.3/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# -- Compiling package async_fifo_write_agent_sv_unit
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# -- Importing package fifo_pkg
+# 
+# Top level modules:
+# 	--none--
+# End time: 22:04:42 on May 29,2024, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2023.3 Compiler 2023.07 Jul 17 2023
+# Start time: 22:04:42 on May 29,2024
+# vlog -reportprogress 300 async_fifo_coverage.sv 
+# -- Compiling package async_fifo_coverage_sv_unit
+# 
+# Top level modules:
+# 	--none--
+# End time: 22:04:42 on May 29,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2023.3 Compiler 2023.07 Jul 17 2023
+# Start time: 22:04:42 on May 29,2024
+# vlog -reportprogress 300 async_fifo_read_monitor.sv 
+# ** Note: (vlog-2286) async_fifo_read_monitor.sv(2): Using implicit +incdir+C:/questasim64_2023.3/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# -- Compiling package async_fifo_read_monitor_sv_unit
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# -- Importing package fifo_pkg
+# 
+# Top level modules:
+# 	--none--
+# End time: 22:04:43 on May 29,2024, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2023.3 Compiler 2023.07 Jul 17 2023
+# Start time: 22:04:43 on May 29,2024
+# vlog -reportprogress 300 async_fifo_write_monitor.sv 
+# ** Note: (vlog-2286) async_fifo_write_monitor.sv(2): Using implicit +incdir+C:/questasim64_2023.3/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# -- Compiling package async_fifo_write_monitor_sv_unit
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# -- Importing package fifo_pkg
+# 
+# Top level modules:
+# 	--none--
+# End time: 22:04:44 on May 29,2024, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# vsim -coverage -vopt work.tb_top -c -do "coverage save -onexit -directive -codeAll test.ucdb; run -all" 
+# Start time: 22:04:45 on May 29,2024
+# ** Note: (vsim-8009) Loading existing optimized design _opt1
+# Loading sv_std.std
+# Loading work.intf(fast)
+# Loading mtiUvm.uvm_pkg(fast)
+# Loading work.fifo_pkg(fast)
+# Loading work.async_fifo_top_sv_unit(fast)
+# Loading mtiUvm.questa_uvm_pkg(fast)
+# Loading work.tb_top(fast)
+# Loading C:/questasim64_2023.3/uvm-1.1d\win64\uvm_dpi.dll
+# ** Warning: (vsim-8634) Code was not compiled with coverage options.
+# coverage save -onexit -directive -codeAll test.ucdb
+#  run -all
+# ----------------------------------------------------------------
+# UVM-1.1d
+# (C) 2007-2013 Mentor Graphics Corporation
+# (C) 2007-2013 Cadence Design Systems, Inc.
+# (C) 2006-2013 Synopsys, Inc.
+# (C) 2011-2013 Cypress Semiconductor Corp.
+# ----------------------------------------------------------------
+# 
+#   ***********       IMPORTANT RELEASE NOTES         ************
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_NO_DEPRECATED undefined.
+#   See http://www.eda.org/svdb/view.php?id=3313 for more details.
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_OBJECT_MUST_HAVE_CONSTRUCTOR undefined.
+#   See http://www.eda.org/svdb/view.php?id=3770 for more details.
+# 
+#       (Specify +UVM_NO_RELNOTES to turn off this notice)
+# 
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(277) @ 0: reporter [Questa UVM] QUESTA_UVM-1.2.3
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(278) @ 0: reporter [Questa UVM]  questa_uvm::init(+struct)
+# UVM_INFO async_fifo_top.sv(28) @ 0: reporter [tb_top] uvm_config_db set for uvm_tb_top
+# UVM_INFO @ 0: reporter [RNTST] Running test fifo_base_test...
+# UVM_INFO async_fifo_write_agent.sv(14) @ 0: uvm_test_top.env.wa [WRITE_AGENT_CLASS] Inside constructor
+# UVM_INFO async_fifo_read_agent.sv(15) @ 0: uvm_test_top.env.ra [READ_AGENT_CLASS] Inside constructor
+# UVM_INFO async_fifo_sequencer.sv(30) @ 0: uvm_test_top.env.ra.rs [READ_SEQUENCER_CLASS] Inside constructor
+# UVM_INFO async_fifo_driver.sv(70) @ 0: uvm_test_top.env.ra.rd [READ_DRIVER_CLASS] Inside constructor
+# UVM_INFO async_fifo_read_monitor.sv(19) @ 0: uvm_test_top.env.ra.rm [READ_MONITOR_CLASS] Inside constructor
+# UVM_INFO async_fifo_driver.sv(75) @ 0: uvm_test_top.env.ra.rd [READ_DRIVER_CLASS] Build Phase
+# UVM_INFO async_fifo_sequencer.sv(35) @ 0: uvm_test_top.env.ra.rs [READ_SEQUENCER_CLASS] Build Phase
+# UVM_INFO async_fifo_sequencer.sv(10) @ 0: uvm_test_top.env.wa.ws [WRITE_SEQUENCER_CLASS] Inside constructor
+# UVM_INFO async_fifo_driver.sv(14) @ 0: uvm_test_top.env.wa.wd [WRITE_DRIVER_CLASS] Inside constructor
+# UVM_INFO async_fifo_write_monitor.sv(18) @ 0: uvm_test_top.env.wa.wm [WRITE_MONITOR_CLASS] Inside constructor
+# UVM_INFO async_fifo_driver.sv(19) @ 0: uvm_test_top.env.wa.wd [WRITE_DRIVER_CLASS] Build Phase
+# UVM_INFO async_fifo_sequencer.sv(15) @ 0: uvm_test_top.env.wa.ws [WRITE_SEQUENCER_CLASS] Build Phase
+# UVM_INFO async_fifo_driver.sv(82) @ 0: uvm_test_top.env.ra.rd [READ_DRIVER_CLASS] Connect Phase
+# UVM_INFO async_fifo_sequencer.sv(40) @ 0: uvm_test_top.env.ra.rs [READ_SEQUENCER_CLASS] Connect Phase
+# UVM_INFO async_fifo_driver.sv(26) @ 0: uvm_test_top.env.wa.wd [WRITE_DRIVER_CLASS] Connect Phase
+# UVM_INFO async_fifo_sequencer.sv(20) @ 0: uvm_test_top.env.wa.ws [WRITE_SEQUENCER_CLASS] Connect Phase
+# UVM_INFO @ 0: reporter [UVMTOP] UVM testbench topology:
+# ---------------------------------------------------------------
+# Name                       Type                     Size  Value
+# ---------------------------------------------------------------
+# uvm_test_top               fifo_base_test           -     @471 
+#   env                      fifo_env                 -     @478 
+#     ra                     read_agent               -     @493 
+#       rd                   read_driver              -     @618 
+#         rsp_port           uvm_analysis_port        -     @633 
+#         seq_item_port      uvm_seq_item_pull_port   -     @625 
+#       rm                   read_monitor             -     @641 
+#         port_read          uvm_analysis_port        -     @649 
+#       rs                   read_sequencer           -     @509 
+#         rsp_export         uvm_analysis_export      -     @516 
+#         seq_item_export    uvm_seq_item_pull_imp    -     @610 
+#         arbitration_queue  array                    0     -    
+#         lock_queue         array                    0     -    
+#         num_last_reqs      integral                 32    'd1  
+#         num_last_rsps      integral                 32    'd1  
+#     scb                    fifo_scoreboard          -     @500 
+#       read_port            uvm_analysis_imp_port_b  -     @671 
+#       write_port           uvm_analysis_imp_port_a  -     @663 
+#     wa                     write_agent              -     @486 
+#       wd                   write_driver             -     @789 
+#         rsp_port           uvm_analysis_port        -     @804 
+#         seq_item_port      uvm_seq_item_pull_port   -     @796 
+#       wm                   write_monitor            -     @812 
+#         port_write         uvm_analysis_port        -     @820 
+#       ws                   write_sequencer          -     @680 
+#         rsp_export         uvm_analysis_export      -     @687 
+#         seq_item_export    uvm_seq_item_pull_imp    -     @781 
+#         arbitration_queue  array                    0     -    
+#         lock_queue         array                    0     -    
+#         num_last_reqs      integral                 32    'd1  
+#         num_last_rsps      integral                 32    'd1  
+# ---------------------------------------------------------------
+# 
+# /t Starting sequence w_seq run_phase
+# UVM_INFO async_fifo_seq_test.sv(13) @ 0: reporter@@write_sequence [WRITE_SEQUENCE_CLASS] Inside constructor
+# /t Starting sequence r_seq run_phase
+# UVM_INFO async_fifo_seq_test.sv(37) @ 0: reporter@@read_sequence [READ_SEQUENCE_CLASS] Inside constructor
+# UVM_INFO async_fifo_driver.sv(39) @ 0: uvm_test_top.env.wa.wd [DRIVER_CLASS] Inside Run Phase
+# UVM_INFO async_fifo_driver.sv(94) @ 0: uvm_test_top.env.ra.rd [DRIVER_CLASS] Inside Run Phase
+# UVM_INFO async_fifo_seq_test.sv(17) @ 0: reporter@@write_sequence [WRITE_SEQUENCE_CLASS] Inside body task
+# UVM_INFO async_fifo_seq_test.sv(41) @ 0: reporter@@read_sequence [READ_SEQUENCE_CLASS] Inside body task
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = c0 	 w_count=1
+# 	 Scoreboard wData = c0
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = e1 	 w_count=2
+# 	 Scoreboard wData = e1
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 62 	 w_count=3
+# 	 Scoreboard wData = 62
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = bf 	 w_count=4
+# 	 Scoreboard wData = bf
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 3 	 w_count=5
+# 	 Scoreboard wData = 3
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 70 	 w_count=6
+# 	 Scoreboard wData = 70
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 99 	 w_count=7
+# 	 Scoreboard wData = 99
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 3a 	 w_count=8
+# 	 Scoreboard wData = 3a
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = f0 	 w_count=9
+# 	 Scoreboard wData = f0
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = d5 	 w_count=10
+# 	 Scoreboard wData = d5
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 46 	 w_count=11
+# 	 Scoreboard wData = 46
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 96 	 w_count=12
+# 	 Scoreboard wData = 96
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = d2 	 w_count=13
+# 	 Scoreboard wData = d2
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 9e 	 w_count=14
+# 	 Scoreboard wData = 9e
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = eb 	 w_count=15
+# 	 Scoreboard wData = eb
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 20 	 w_count=16
+# 	 Scoreboard wData = 20
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 77 	 w_count=17
+# 	 Scoreboard wData = 77
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 93 	 w_count=18
+# 	 Scoreboard wData = 93
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = f4 	 w_count=19
+# 	 Scoreboard wData = f4
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor rinc = 1 	 rData = e1 	 	 rcount=1
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 240: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: e1 --- DUT Read Data: e1
+# 	 Monitor winc = 1 	 wData = ca 	 w_count=20
+# 	 Scoreboard wData = ca
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 80 	 w_count=21
+# 	 Scoreboard wData = 80
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = ac 	 w_count=22
+# 	 Scoreboard wData = ac
+# 	 Monitor rinc = 1 	 rData = 62 	 	 rcount=2
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 260: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 62 --- DUT Read Data: 62
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = c 	 w_count=23
+# 	 Scoreboard wData = c
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 98 	 w_count=24
+# 	 Scoreboard wData = 98
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor rinc = 1 	 rData = bf 	 	 rcount=3
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 280: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: bf --- DUT Read Data: bf
+# 	 Monitor winc = 1 	 wData = 4e 	 w_count=25
+# 	 Scoreboard wData = 4e
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 2f 	 w_count=26
+# 	 Scoreboard wData = 2f
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 41 	 w_count=27
+# 	 Scoreboard wData = 41
+# 	 Monitor rinc = 1 	 rData = 3 	 	 rcount=4
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 300: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 3 --- DUT Read Data: 3
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = f3 	 w_count=28
+# 	 Scoreboard wData = f3
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = f9 	 w_count=29
+# 	 Scoreboard wData = f9
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor rinc = 1 	 rData = 70 	 	 rcount=5
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 320: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 70 --- DUT Read Data: 70
+# 	 Monitor winc = 1 	 wData = 25 	 w_count=30
+# 	 Scoreboard wData = 25
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = be 	 w_count=31
+# 	 Scoreboard wData = be
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 9c 	 w_count=32
+# 	 Scoreboard wData = 9c
+# 	 Monitor rinc = 1 	 rData = 99 	 	 rcount=6
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 340: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 99 --- DUT Read Data: 99
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 18 	 w_count=33
+# 	 Scoreboard wData = 18
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 55 	 w_count=34
+# 	 Scoreboard wData = 55
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor rinc = 1 	 rData = 3a 	 	 rcount=7
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 360: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 3a --- DUT Read Data: 3a
+# 	 Monitor winc = 1 	 wData = bb 	 w_count=35
+# 	 Scoreboard wData = bb
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 78 	 w_count=36
+# 	 Scoreboard wData = 78
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 6f 	 w_count=37
+# 	 Scoreboard wData = 6f
+# 	 Monitor rinc = 1 	 rData = f0 	 	 rcount=8
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 380: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: f0 --- DUT Read Data: f0
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 42 	 w_count=38
+# 	 Scoreboard wData = 42
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = c7 	 w_count=39
+# 	 Scoreboard wData = c7
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor rinc = 1 	 rData = d5 	 	 rcount=9
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 400: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: d5 --- DUT Read Data: d5
+# 	 Monitor winc = 1 	 wData = a4 	 w_count=40
+# 	 Scoreboard wData = a4
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 2d 	 w_count=41
+# 	 Scoreboard wData = 2d
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = b5 	 w_count=42
+# 	 Scoreboard wData = b5
+# 	 Monitor rinc = 1 	 rData = 46 	 	 rcount=10
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 420: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 46 --- DUT Read Data: 46
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = ba 	 w_count=43
+# 	 Scoreboard wData = ba
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 6c 	 w_count=44
+# 	 Scoreboard wData = 6c
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor rinc = 1 	 rData = 96 	 	 rcount=11
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 440: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 96 --- DUT Read Data: 96
+# 	 Monitor winc = 1 	 wData = ff 	 w_count=45
+# 	 Scoreboard wData = ff
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 80 	 w_count=46
+# 	 Scoreboard wData = 80
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = d4 	 w_count=47
+# 	 Scoreboard wData = d4
+# 	 Monitor rinc = 1 	 rData = d2 	 	 rcount=12
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 460: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: d2 --- DUT Read Data: d2
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = a2 	 w_count=48
+# 	 Scoreboard wData = a2
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 5 	 w_count=49
+# 	 Scoreboard wData = 5
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor rinc = 1 	 rData = 9e 	 	 rcount=13
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 480: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 9e --- DUT Read Data: 9e
+# 	 Monitor winc = 1 	 wData = fe 	 w_count=50
+# 	 Scoreboard wData = fe
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = f3 	 w_count=51
+# 	 Scoreboard wData = f3
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = a5 	 w_count=52
+# 	 Scoreboard wData = a5
+# 	 Monitor rinc = 1 	 rData = eb 	 	 rcount=14
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 500: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: eb --- DUT Read Data: eb
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 99 	 w_count=53
+# 	 Scoreboard wData = 99
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = ee 	 w_count=54
+# 	 Scoreboard wData = ee
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor rinc = 1 	 rData = 20 	 	 rcount=15
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 520: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 20 --- DUT Read Data: 20
+# 	 Monitor winc = 1 	 wData = 68 	 w_count=55
+# 	 Scoreboard wData = 68
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 38 	 w_count=56
+# 	 Scoreboard wData = 38
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = e5 	 w_count=57
+# 	 Scoreboard wData = e5
+# 	 Monitor rinc = 1 	 rData = 77 	 	 rcount=16
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 540: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 77 --- DUT Read Data: 77
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 3d 	 w_count=58
+# 	 Scoreboard wData = 3d
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = e7 	 w_count=59
+# 	 Scoreboard wData = e7
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor rinc = 1 	 rData = 93 	 	 rcount=17
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 560: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 93 --- DUT Read Data: 93
+# 	 Monitor winc = 1 	 wData = cd 	 w_count=60
+# 	 Scoreboard wData = cd
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = d8 	 w_count=61
+# 	 Scoreboard wData = d8
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = fd 	 w_count=62
+# 	 Scoreboard wData = fd
+# 	 Monitor rinc = 1 	 rData = f4 	 	 rcount=18
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 580: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: f4 --- DUT Read Data: f4
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 58 	 w_count=63
+# 	 Scoreboard wData = 58
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 17 	 w_count=64
+# 	 Scoreboard wData = 17
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor rinc = 1 	 rData = ca 	 	 rcount=19
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 600: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: ca --- DUT Read Data: ca
+# 	 Monitor winc = 1 	 wData = ab 	 w_count=65
+# 	 Scoreboard wData = ab
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = e4 	 w_count=66
+# 	 Scoreboard wData = e4
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 69 	 w_count=67
+# 	 Scoreboard wData = 69
+# 	 Monitor rinc = 1 	 rData = 80 	 	 rcount=20
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 620: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 80 --- DUT Read Data: 80
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = b4 	 w_count=68
+# 	 Scoreboard wData = b4
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 86 	 w_count=69
+# 	 Scoreboard wData = 86
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor rinc = 1 	 rData = ac 	 	 rcount=21
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 640: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: ac --- DUT Read Data: ac
+# 	 Monitor winc = 1 	 wData = 67 	 w_count=70
+# 	 Scoreboard wData = 67
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 24 	 w_count=71
+# 	 Scoreboard wData = 24
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = e9 	 w_count=72
+# 	 Scoreboard wData = e9
+# 	 Monitor rinc = 1 	 rData = c 	 	 rcount=22
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 660: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: c --- DUT Read Data: c
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 13 	 w_count=73
+# 	 Scoreboard wData = 13
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = a 	 w_count=74
+# 	 Scoreboard wData = a
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor rinc = 1 	 rData = 98 	 	 rcount=23
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 680: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 98 --- DUT Read Data: 98
+# 	 Monitor winc = 1 	 wData = 23 	 w_count=75
+# 	 Scoreboard wData = 23
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = fa 	 w_count=76
+# 	 Scoreboard wData = fa
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 60 	 w_count=77
+# 	 Scoreboard wData = 60
+# 	 Monitor rinc = 1 	 rData = 4e 	 	 rcount=24
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 700: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 4e --- DUT Read Data: 4e
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 44 	 w_count=78
+# 	 Scoreboard wData = 44
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 2a 	 w_count=79
+# 	 Scoreboard wData = 2a
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor rinc = 1 	 rData = 2f 	 	 rcount=25
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 720: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 2f --- DUT Read Data: 2f
+# 	 Monitor winc = 1 	 wData = 77 	 w_count=80
+# 	 Scoreboard wData = 77
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = df 	 w_count=81
+# 	 Scoreboard wData = df
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 2 	 w_count=82
+# 	 Scoreboard wData = 2
+# 	 Monitor rinc = 1 	 rData = 41 	 	 rcount=26
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 740: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 41 --- DUT Read Data: 41
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = ca 	 w_count=83
+# 	 Scoreboard wData = ca
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 2d 	 w_count=84
+# 	 Scoreboard wData = 2d
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor rinc = 1 	 rData = f3 	 	 rcount=27
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 760: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: f3 --- DUT Read Data: f3
+# 	 Monitor winc = 1 	 wData = e6 	 w_count=85
+# 	 Scoreboard wData = e6
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = f8 	 w_count=86
+# 	 Scoreboard wData = f8
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = ce 	 w_count=87
+# 	 Scoreboard wData = ce
+# 	 Monitor rinc = 1 	 rData = f9 	 	 rcount=28
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 780: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: f9 --- DUT Read Data: f9
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 6f 	 w_count=88
+# 	 Scoreboard wData = 6f
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 17 	 w_count=89
+# 	 Scoreboard wData = 17
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor rinc = 1 	 rData = 25 	 	 rcount=29
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 800: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 25 --- DUT Read Data: 25
+# 	 Monitor winc = 1 	 wData = 82 	 w_count=90
+# 	 Scoreboard wData = 82
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = f5 	 w_count=91
+# 	 Scoreboard wData = f5
+# SK_DEBUG4 entered before wait statement wr_driver
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = be 	 w_count=92
+# 	 Scoreboard wData = be
+# 	 Monitor rinc = 1 	 rData = be 	 	 rcount=30
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 820: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: be --- DUT Read Data: be
+# SK_DEBUG4 entered before wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 95 	 w_count=93
+# 	 Scoreboard wData = 95
+# 	 Monitor winc = 1 	 wData = 95 	 w_count=94
+# 	 Scoreboard wData = 95
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor rinc = 1 	 rData = 9c 	 	 rcount=31
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 840: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 9c --- DUT Read Data: 9c
+# 	 Monitor winc = 1 	 wData = 95 	 w_count=95
+# 	 Scoreboard wData = 95
+# SK_DEBUG4 entered before wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = ff 	 w_count=96
+# 	 Scoreboard wData = ff
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = ff 	 w_count=97
+# 	 Scoreboard wData = ff
+# 	 Monitor rinc = 1 	 rData = 18 	 	 rcount=32
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 860: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 18 --- DUT Read Data: 18
+# SK_DEBUG4 entered before wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 49 	 w_count=98
+# 	 Scoreboard wData = 49
+# 	 Monitor winc = 1 	 wData = 49 	 w_count=99
+# 	 Scoreboard wData = 49
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor rinc = 1 	 rData = 55 	 	 rcount=33
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 880: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 55 --- DUT Read Data: 55
+# 	 Monitor winc = 1 	 wData = 49 	 w_count=100
+# 	 Scoreboard wData = 49
+# SK_DEBUG4 entered before wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 21 	 w_count=101
+# 	 Scoreboard wData = 21
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 21 	 w_count=102
+# 	 Scoreboard wData = 21
+# 	 Monitor rinc = 1 	 rData = bb 	 	 rcount=34
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 900: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: bb --- DUT Read Data: bb
+# SK_DEBUG4 entered before wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 63 	 w_count=103
+# 	 Scoreboard wData = 63
+# 	 Monitor winc = 1 	 wData = 63 	 w_count=104
+# 	 Scoreboard wData = 63
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor rinc = 1 	 rData = 78 	 	 rcount=35
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 920: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 78 --- DUT Read Data: 78
+# 	 Monitor winc = 1 	 wData = 63 	 w_count=105
+# 	 Scoreboard wData = 63
+# SK_DEBUG4 entered before wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = b8 	 w_count=106
+# 	 Scoreboard wData = b8
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = b8 	 w_count=107
+# 	 Scoreboard wData = b8
+# 	 Monitor rinc = 1 	 rData = 6f 	 	 rcount=36
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 940: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 6f --- DUT Read Data: 6f
+# SK_DEBUG4 entered before wait statement wr_driver
+# 	 Monitor winc = 1 	 wData = 50 	 w_count=108
+# 	 Scoreboard wData = 50
+# 	 Monitor winc = 1 	 wData = 50 	 w_count=109
+# 	 Scoreboard wData = 50
+# SK_DEBUG5 entered after wait statement wr_driver
+# 	 Monitor rinc = 1 	 rData = 42 	 	 rcount=37
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 960: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 42 --- DUT Read Data: 42
+# 	 Monitor winc = 1 	 wData = 50 	 w_count=110
+# 	 Scoreboard wData = 50
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=111
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=112
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = c7 	 	 rcount=38
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 980: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: c7 --- DUT Read Data: c7
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=113
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=114
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = a4 	 	 rcount=39
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1000: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: a4 --- DUT Read Data: a4
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=115
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=116
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=117
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 2d 	 	 rcount=40
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1020: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 2d --- DUT Read Data: 2d
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=118
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=119
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = b5 	 	 rcount=41
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1040: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: b5 --- DUT Read Data: b5
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=120
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=121
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=122
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = ba 	 	 rcount=42
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1060: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: ba --- DUT Read Data: ba
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=123
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=124
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 6c 	 	 rcount=43
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1080: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 6c --- DUT Read Data: 6c
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=125
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=126
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=127
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = ff 	 	 rcount=44
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1100: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: ff --- DUT Read Data: ff
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=128
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=129
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 80 	 	 rcount=45
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1120: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 80 --- DUT Read Data: 80
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=130
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=131
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=132
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = d4 	 	 rcount=46
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1140: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: d4 --- DUT Read Data: d4
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=133
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=134
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = a2 	 	 rcount=47
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1160: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: a2 --- DUT Read Data: a2
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=135
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=136
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=137
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 5 	 	 rcount=48
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1180: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 5 --- DUT Read Data: 5
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=138
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=139
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = fe 	 	 rcount=49
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1200: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: fe --- DUT Read Data: fe
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=140
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=141
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=142
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = f3 	 	 rcount=50
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1220: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: f3 --- DUT Read Data: f3
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=143
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=144
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = a5 	 	 rcount=51
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1240: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: a5 --- DUT Read Data: a5
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=145
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=146
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=147
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 99 	 	 rcount=52
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1260: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 99 --- DUT Read Data: 99
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=148
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=149
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = ee 	 	 rcount=53
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1280: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: ee --- DUT Read Data: ee
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=150
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=151
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=152
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 68 	 	 rcount=54
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1300: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 68 --- DUT Read Data: 68
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=153
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=154
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 38 	 	 rcount=55
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1320: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 38 --- DUT Read Data: 38
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=155
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=156
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=157
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = e5 	 	 rcount=56
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1340: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: e5 --- DUT Read Data: e5
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=158
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=159
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 3d 	 	 rcount=57
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1360: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 3d --- DUT Read Data: 3d
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=160
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=161
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=162
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = e7 	 	 rcount=58
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1380: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: e7 --- DUT Read Data: e7
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=163
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=164
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = cd 	 	 rcount=59
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1400: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: cd --- DUT Read Data: cd
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=165
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=166
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=167
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = d8 	 	 rcount=60
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1420: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: d8 --- DUT Read Data: d8
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=168
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=169
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = fd 	 	 rcount=61
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1440: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: fd --- DUT Read Data: fd
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=170
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=171
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=172
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 58 	 	 rcount=62
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1460: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 58 --- DUT Read Data: 58
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=173
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=174
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 17 	 	 rcount=63
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1480: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 17 --- DUT Read Data: 17
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=175
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=176
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=177
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = ab 	 	 rcount=64
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1500: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: ab --- DUT Read Data: ab
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=178
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=179
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = e4 	 	 rcount=65
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1520: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: e4 --- DUT Read Data: e4
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=180
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=181
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=182
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 69 	 	 rcount=66
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1540: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 69 --- DUT Read Data: 69
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=183
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=184
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = b4 	 	 rcount=67
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1560: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: b4 --- DUT Read Data: b4
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=185
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=186
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=187
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 86 	 	 rcount=68
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1580: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 86 --- DUT Read Data: 86
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=188
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=189
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 67 	 	 rcount=69
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1600: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 67 --- DUT Read Data: 67
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=190
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=191
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=192
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 24 	 	 rcount=70
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1620: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 24 --- DUT Read Data: 24
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=193
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=194
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = e9 	 	 rcount=71
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1640: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: e9 --- DUT Read Data: e9
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=195
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=196
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=197
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 13 	 	 rcount=72
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1660: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 13 --- DUT Read Data: 13
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=198
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=199
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = a 	 	 rcount=73
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1680: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: a --- DUT Read Data: a
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=200
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=201
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=202
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 23 	 	 rcount=74
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1700: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 23 --- DUT Read Data: 23
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=203
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=204
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = fa 	 	 rcount=75
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1720: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: fa --- DUT Read Data: fa
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=205
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=206
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=207
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 60 	 	 rcount=76
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1740: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 60 --- DUT Read Data: 60
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=208
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=209
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 44 	 	 rcount=77
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1760: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 44 --- DUT Read Data: 44
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=210
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=211
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=212
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 2a 	 	 rcount=78
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1780: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 2a --- DUT Read Data: 2a
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=213
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=214
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 77 	 	 rcount=79
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1800: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 77 --- DUT Read Data: 77
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=215
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=216
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=217
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = df 	 	 rcount=80
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1820: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: df --- DUT Read Data: df
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=218
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=219
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 2 	 	 rcount=81
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1840: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 2 --- DUT Read Data: 2
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=220
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=221
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=222
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = ca 	 	 rcount=82
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1860: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: ca --- DUT Read Data: ca
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=223
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=224
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 2d 	 	 rcount=83
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1880: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 2d --- DUT Read Data: 2d
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=225
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=226
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=227
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = e6 	 	 rcount=84
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1900: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: e6 --- DUT Read Data: e6
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=228
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=229
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = f8 	 	 rcount=85
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1920: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: f8 --- DUT Read Data: f8
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=230
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=231
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=232
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = ce 	 	 rcount=86
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1940: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: ce --- DUT Read Data: ce
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=233
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=234
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 6f 	 	 rcount=87
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1960: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 6f --- DUT Read Data: 6f
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=235
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=236
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=237
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 17 	 	 rcount=88
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 1980: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 17 --- DUT Read Data: 17
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=238
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=239
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 82 	 	 rcount=89
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 2000: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 82 --- DUT Read Data: 82
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=240
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=241
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=242
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = f5 	 	 rcount=90
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 2020: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: f5 --- DUT Read Data: f5
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=243
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=244
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = be 	 	 rcount=91
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 2040: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: be --- DUT Read Data: be
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=245
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=246
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=247
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 95 	 	 rcount=92
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 2060: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 95 --- DUT Read Data: 95
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=248
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=249
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = ff 	 	 rcount=93
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 2080: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: ff --- DUT Read Data: ff
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=250
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=251
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=252
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 49 	 	 rcount=94
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 2100: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 49 --- DUT Read Data: 49
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=253
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=254
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 21 	 	 rcount=95
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 2120: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 21 --- DUT Read Data: 21
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=255
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=256
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=257
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 63 	 	 rcount=96
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 2140: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 63 --- DUT Read Data: 63
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=258
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=259
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = b8 	 	 rcount=97
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 2160: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: b8 --- DUT Read Data: b8
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=260
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=261
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=262
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 50 	 	 rcount=98
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 2180: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 50 --- DUT Read Data: 50
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=263
+# 	 Scoreboard wData = 74
+# SK_DEBUG2 entered the end of read sequence
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=264
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 74 	 	 rcount=99
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 2200: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 74 --- DUT Read Data: 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=265
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=266
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=267
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 74 	 	 rcount=100
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 2220: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 74 --- DUT Read Data: 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=268
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=269
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 74 	 	 rcount=101
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 2240: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 74 --- DUT Read Data: 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=270
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=271
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=272
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 74 	 	 rcount=102
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 2260: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 74 --- DUT Read Data: 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=273
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=274
+# 	 Scoreboard wData = 74
+# 	 Monitor rinc = 1 	 rData = 74 	 	 rcount=103
+# UVM_INFO async_fifo_scoreboard.sv(49) @ 2280: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 74 --- DUT Read Data: 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=275
+# 	 Scoreboard wData = 74
+# 	 Monitor winc = 1 	 wData = 74 	 w_count=276
+# 	 Scoreboard wData = 74
+# UVM_INFO verilog_src/uvm-1.1d/src/base/uvm_objection.svh(1267) @ 2290: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+# 
+# --- UVM Report Summary ---
+# 
+# ** Report counts by severity
+# UVM_INFO :  131
+# UVM_WARNING :    0
+# UVM_ERROR :    0
+# UVM_FATAL :    0
+# ** Report counts by id
+# [ASYNC_FIFO_SCOREBOARD]   103
+# [DRIVER_CLASS]     2
+# [Questa UVM]     2
+# [READ_AGENT_CLASS]     1
+# [READ_DRIVER_CLASS]     3
+# [READ_MONITOR_CLASS]     1
+# [READ_SEQUENCER_CLASS]     3
+# [READ_SEQUENCE_CLASS]     2
+# [RNTST]     1
+# [TEST_DONE]     1
+# [UVMTOP]     1
+# [WRITE_AGENT_CLASS]     1
+# [WRITE_DRIVER_CLASS]     3
+# [WRITE_MONITOR_CLASS]     1
+# [WRITE_SEQUENCER_CLASS]     3
+# [WRITE_SEQUENCE_CLASS]     2
+# [tb_top]     1
+# ** Note: $finish    : C:/questasim64_2023.3/win64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh(430)
+#    Time: 2290 ns  Iteration: 54  Instance: /tb_top
+# 1
+# Break in Task uvm_pkg/uvm_root::run_test at C:/questasim64_2023.3/win64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh line 430
