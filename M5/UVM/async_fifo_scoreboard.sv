@@ -13,7 +13,7 @@ class fifo_scoreboard extends uvm_scoreboard;
 	uvm_analysis_imp_port_a#(transaction_write,fifo_scoreboard) write_port;
 	uvm_analysis_imp_port_b#(transaction_read,fifo_scoreboard) read_port; 
 
-	transaction_write tw[$];
+	transaction_write tw[$]; 
 	transaction_read tr[$];     
 	
 	function new(string name,uvm_component parent);
