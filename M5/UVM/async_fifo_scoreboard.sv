@@ -33,6 +33,8 @@ class fifo_scoreboard extends uvm_scoreboard;
 	function void write_port_a(transaction_write txw); 
 		tw.push_back(txw);
 		$display ("\t Scoreboard wData = %0h", txw.wData);
+		assert(!$isunknown(txw.wData)) else
+			`uvm_error("ASSERTION ERROR", "Write Data has bits with x or z")
 	endfunction
 
 	function void write_port_b(transaction_read txr);
