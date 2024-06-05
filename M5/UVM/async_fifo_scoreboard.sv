@@ -38,14 +38,17 @@ class fifo_scoreboard extends uvm_scoreboard;
 	function void write_port_b(transaction_read txr);
 		logic [DATA_SIZE-1:0] popped_wData;
 		empty_count = tw.size;
+
+		assert(!$isunknown(txr.rData)) else
+			`uvm_error("ASSERTION ERROR", "Read Data has bits with x or z")
 		
 		if (tw.size() > 0) 
 		begin
 			popped_wData = tw.pop_front().wData;
-			if (txr.rData === txr.rData)
-				`uvm_info("ASYNC_FIFO_SCOREBOARD", $sformatf("PASSED Expected Data: %0h --- DUT Read Data: %0h", txr.rData, txr.rData), UVM_MEDIUM)
+			if (txr.rData === popped_wData)
+				`uvm_info("ASYNC_FIFO_SCOREBOARD", $sformatf("PASSED Expected Data: %0h --- DUT Read Data: %0h", popped_wData, txr.rData), UVM_MEDIUM)
 			else
-				`uvm_error("ASYNC_FIFO_SCOREBOARD", $sformatf("ERROR Expected Data: %0h Does not match DUT Read Data: %0h", txr.rData, popped_wData))
+				`uvm_error("ASYNC_FIFO_SCOREBOARD", $sformatf("ERROR Expected Data: %0h Does not match DUT Read Data: %0h", popped_wData, txr.rData))
 		end     
 	endfunction
 

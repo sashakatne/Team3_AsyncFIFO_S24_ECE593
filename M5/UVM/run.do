@@ -2,7 +2,9 @@ vdel -all
 
 vlib work
 
-vlog -source -lint -source -lint async_fifo.sv
+# vlog -source -lint async_fifo.sv
+vlog +define+INJECT_THE_BUG -source -lint async_fifo.sv
+
 vlog -source -lint async_fifo_package.sv
 vlog -source -lint async_fifo_top.sv
 vlog -source -lint async_fifo_test.sv

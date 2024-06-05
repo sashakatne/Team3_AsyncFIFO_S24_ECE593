@@ -98,9 +98,15 @@ module fifo_mem #(
 
     // Read operation
     always_ff @(posedge rclk) begin
-        if(r_en & !empty) begin
-            data_out <= fifo[b_rptr[ADDR_SIZE-1:0]];
-        end
+        `ifdef INJECT_THE_BUG
+            if(r_en & !empty) begin
+                data_out <= fifo[b_rptr[ADDR_SIZE-1:0]] ^ 8'hFF; // Corrupting data by XORing with 0xFF
+            end
+        `else
+            if(r_en & !empty) begin
+                data_out <= fifo[b_rptr[ADDR_SIZE-1:0]];
+            end
+        `endif
     end
 
 endmodule
@@ -122,8 +128,13 @@ module synchronizer #(
             d_out <= '0;
         end
         else begin
-            q1 <= d_in;
-            d_out <= q1;
+            `ifdef INJECT_THE_BUG
+                q1 <= '0;    // Introduce bug: q1 is not assigned d_in
+                d_out <= q1; // This results in q1 always being zero
+            `else
+                q1 <= d_in;
+                d_out <= q1;
+            `endif
         end
     end
 
@@ -165,8 +176,13 @@ module rptr_handler #(
     assign rptr_diff  = b_wptr_sync - b_rptr;
     assign rhalf_empty = (rptr_diff <= (DEPTH >> 1));
 
-    // Calculate empty flag
-    assign rempty = (g_wptr_sync == g_rptr_next);
+    `ifdef INJECT_THE_BUG
+        // Introduce bug in empty flag calculation
+        assign rempty = (g_wptr_sync == g_rptr_next) & (rptr_diff != 0);
+    `else
+        // Calculate empty flag
+        assign rempty = (g_wptr_sync == g_rptr_next);
+    `endif
 
     // Update read pointers and flags on clock edge or reset
     always_ff @(posedge rclk or negedge rrst_n) begin
@@ -228,8 +244,13 @@ module wptr_handler #(
     assign wptr_diff  = b_wptr - b_rptr_sync;
     assign whalf_full = (wptr_diff >= (DEPTH >> 1));
 
-    // Calculate full flag
-    assign wfull = (g_wptr_next == {~g_rptr_sync[PTR_WIDTH:PTR_WIDTH-1], g_rptr_sync[PTR_WIDTH-2:0]});
+    `ifdef INJECT_THE_BUG
+        // Introduce bug in full flag calculation
+        assign wfull = (g_wptr_next == g_rptr_sync);
+    `else
+        // Calculate full flag
+        assign wfull = (g_wptr_next == {~g_rptr_sync[PTR_WIDTH:PTR_WIDTH-1], g_rptr_sync[PTR_WIDTH-2:0]});
+    `endif
     
     // Update write pointers and flags on clock edge or reset
     always_ff @(posedge wclk or negedge wrst_n) begin
