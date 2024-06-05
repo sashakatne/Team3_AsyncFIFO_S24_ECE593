@@ -17,7 +17,7 @@ class fifo_env extends uvm_env;
           super.build_phase(phase);
           wa = write_agent::type_id::create("wa", this);
           ra = read_agent::type_id::create("ra", this);
-          scb = fifo_scoreboard::type_id::create("scb", this);
+          scb = fifo_scoreboard::type_id::create("scb", this); 
 
           if (!uvm_config_db#(virtual intf)::get(this, "", "vif", vif))
                begin
