@@ -40,7 +40,7 @@ module asynchronous_fifo #(
     );
 
     synchronizer #(ADDR_SIZE) synchronizer_w2r_inst (
-        .clk(wclk),
+        .clk(wclk), 
         .rst_n(wrst),
         .d_in(g_wptr),
         .d_out(g_wptr_sync)
