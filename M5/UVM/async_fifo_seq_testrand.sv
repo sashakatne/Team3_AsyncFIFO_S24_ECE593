@@ -10,7 +10,7 @@ class write_sequence_random extends uvm_sequence#(transaction_write);
 	transaction_write txw;
 		
 	function new(string name = "write_sequence_full");
-		super.new(name);
+		super.new(name); 
 		`uvm_info("WRITE_SEQUENCE_CLASS", "Inside constructor",UVM_LOW)
 	endfunction
 
