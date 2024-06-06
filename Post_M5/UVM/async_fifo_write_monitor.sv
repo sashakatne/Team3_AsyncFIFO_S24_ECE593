@@ -52,14 +52,16 @@ class write_monitor extends uvm_monitor;
 				txw=transaction_write::type_id::create("txw");  
 				txw.winc = vif.winc;
 				txw.wData = vif.wData;
-				// $display ("\t Write Monitor winc = %0h \t wData = %0h \t w_count=%0d \t wFull=%0h \t wHalfFull=%0h", txw.winc, txw.wData, w_count, vif.wFull, vif.wHalfFull);
+				txw.wFull = vif.wFull;
+				txw.wHalfFull = vif.wHalfFull;
+				$display ("\t [WRITE_MONITOR] winc = %0h \t wData = %0h \t w_count=%0d \t wFull=%0h \t wHalfFull=%0h", txw.winc, txw.wData, w_count, txw.wFull, txw.wHalfFull);
 				port_write.write(txw);
 				w_count = w_count + 1;
 			end
 		else if (vif.winc == '1 && vif.wrst == '1 && vif.wFull == '1)
 			begin
-				$display ("\t Write Monitor winc = %0h \t wData = %0h \t w_count=%0d \t wFull=%0h \t wHalfFull=%0h", vif.winc, vif.wData, w_count, vif.wFull, vif.wHalfFull);
-				`uvm_info("WRITE_MONITOR", "Writing to a Full FIFO", UVM_MEDIUM)
+				$display ("\t [WRITE_MONITOR] winc = %0h \t wData = %0h \t w_count=%0d \t wFull=%0h \t wHalfFull=%0h", vif.winc, vif.wData, w_count, vif.wFull, vif.wHalfFull);
+				`uvm_info("WRITE_MONITOR", "Write attempted to a full FIFO", UVM_MEDIUM)
 			end
 	endtask
 

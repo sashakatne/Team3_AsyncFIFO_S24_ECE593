@@ -18,8 +18,8 @@ endclass
 class transaction_read extends uvm_sequence_item;
         `uvm_object_utils(transaction_read)
 
-        rand bit rinc;
         logic [DATA_SIZE-1:0] rData;
+        rand bit rinc;
         bit rEmpty;
         bit rHalfEmpty;
 

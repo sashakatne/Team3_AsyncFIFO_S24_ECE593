@@ -16,7 +16,7 @@ class read_monitor extends uvm_monitor;
 
 	function new (string name = "read_monitor", uvm_component parent);
 		super.new(name, parent);
-		`uvm_info("READ_MONITOR_CLASS", "Inside constructor",UVM_LOW)
+		`uvm_info("READ_MONITOR_CLASS", "Inside constructor", UVM_LOW)
 	endfunction
 
 	function void build_phase(uvm_phase phase);
@@ -55,7 +55,9 @@ class read_monitor extends uvm_monitor;
 					begin
 						@(negedge vif.rclk);
 						txr.rData = vif.rData;
-						$display ("\t Read Monitor rinc = %0h \t rData = %0h \t rcount=%0d \t rEmpty=%0h \t rHalfEmpty=%0h",  txr.rinc, txr.rData, r_count, vif.rEmpty, vif.rHalfEmpty);
+						txr.rEmpty = vif.rEmpty;
+						txr.rHalfEmpty = vif.rHalfEmpty;
+						$display ("\t [READ_MONITOR] rinc = %0h \t rData = %0h \t rcount=%0d \t rEmpty=%0h \t rHalfEmpty=%0h", txr.rinc, txr.rData, r_count, txr.rEmpty, txr.rHalfEmpty);
 						port_read.write(txr);
 						r_count= r_count + 1;
 					end
@@ -63,8 +65,8 @@ class read_monitor extends uvm_monitor;
 			end
 		else if (vif.rinc == '1 && vif.rrst == '1 && vif.rEmpty == '1)
 			begin
-				$display ("\t Read Monitor rinc = %0h \t rData = %0h \t rcount=%0d \t rEmpty=%0h \t rHalfEmpty=%0h", vif.rinc, vif.rData, r_count, vif.rEmpty, vif.rHalfEmpty);
-				`uvm_info("READ_MONITOR", "Reading from an Empty FIFO", UVM_MEDIUM)
+				$display ("\t [READ_MONITOR] rinc = %0h \t rData = %0h \t rcount=%0d \t rEmpty=%0h \t rHalfEmpty=%0h", vif.rinc, vif.rData, r_count, vif.rEmpty, vif.rHalfEmpty);
+				`uvm_info("READ_MONITOR", "Read attempted from an empty FIFO", UVM_MEDIUM)
 			end
 	endtask
 
