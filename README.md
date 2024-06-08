@@ -59,7 +59,7 @@ For more details, refer to the `async_fifo.sv` file in the `Post_M5/UVM` directo
 - **Description**: The testbench was further enhanced using the Universal Verification Methodology (UVM). This included the creation of UVM components such as agents, sequences, and sequencers. The UVM testbench also included coverage and assertions to ensure thorough verification of the design.
 
 ### Milestone 5 (M5)
-- **Objective**: Final UVM testbench with coverage and assertions. Bug injection has been added too to verify the correctness of the UVM design.
+- **Objective**: Final UVM testbench with coverage and assertions. Bug injection has been added too to verify the correctness of the UVM design. Add assertions to check the validity of flag generation, data integrity, etc.
 - **Description**: The final UVM testbench was completed with full coverage and assertions. This milestone focused on achieving high coverage and ensuring the correctness of the design through rigorous verification.
 
 ## UVM Topology
@@ -291,9 +291,9 @@ Below are the key highlights from the transcript in the Post_M5 folder:
   - async_fifo_coverage_sv_unit
 
 ## Coverage Report and Waveform
-Below are the coverage report and waveform images from the Post_M5 folder. Thorough testing of the AFIFO was done with extensive constrained randomization to achieve 100% code coverage. The stretch goal of 100% functional coverage was also achieved with different testcases to exercise and verify different functional features of the AFIFO like full and empty flag generation, half full and half empty flag generation and checking logic, etc:
+Below are the coverage report and waveform images from the Post_M5 folder. Thorough testing of the AFIFO was done with extensive constrained randomization to achieve 100% code coverage. The stretch goal of 100% functional coverage was also achieved with different testcases to exercise and verify different functional features of the AFIFO like full and empty flag generation, half full and half empty flag generation and checking logic, etc. In addition, assertions were added to check the validity of flag generation, data integrity, etc.:
 
-### Coverage Report
+### Coverage Report with Assertions-based verification!
 ![Coverage Report](Post_M5/docs/coverage_summary.png)
 
 ### Example Simulation Waveform
