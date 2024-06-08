@@ -1,6 +1,45 @@
 
 # Team3 Asynchronous FIFO Project
 
+## Asynchronous FIFO Design Overview
+
+The asynchronous FIFO (First-In-First-Out) design is a specialized memory buffer that allows data to be safely transferred between two clock domains with different frequencies. The design ensures that data integrity is maintained despite the asynchronous nature of the read and write operations. Below is a brief explanation of the key components and their functionalities:
+
+1. **Module Parameters**:
+   - `DATA_SIZE`: Defines the width of the data bus.
+   - `ADDR_SIZE`: Defines the address width, which determines the depth of the FIFO.
+
+2. **Inputs and Outputs**:
+   - `wclk`, `rclk`: Write and read clock signals.
+   - `wrst`, `rrst`: Write and read reset signals.
+   - `winc`, `rinc`: Write and read enable signals.
+   - `wData`: Data input for writing.
+   - `rData`: Data output for reading.
+   - `wFull`, `rEmpty`: Flags indicating full and empty status of the FIFO.
+   - `wHalfFull`, `rHalfEmpty`: Flags indicating half-full and half-empty status of the FIFO.
+
+3. **Internal Signals**:
+   - `wptr`, `rptr`: Write and read pointers.
+   - `waddr`, `raddr`: Write and read addresses.
+   - `wq2_rptr`, `rq2_wptr`: Synchronized pointers for cross-domain communication.
+
+4. **Memory Module**:
+   - `fifo_memory`: Stores the data and manages read/write operations. It includes logic for half-full and half-empty status.
+
+5. **Pointer Modules**:
+   - `write_pointer`: Manages the write pointer and full flag logic.
+   - `read_pointer`: Manages the read pointer and empty flag logic.
+
+6. **Synchronization Modules**:
+   - `sync_w2r`: Synchronizes the write pointer to the read clock domain.
+   - `sync_r2w`: Synchronizes the read pointer to the write clock domain.
+
+The design also includes conditional compilation flags (`ifdef`) to introduce bugs for testing purposes, such as data corruption, synchronization issues, and pointer mismanagement.
+
+This asynchronous FIFO design is crucial for applications requiring reliable data transfer between different clock domains, ensuring data integrity and efficient communication.
+
+For more details, refer to the `async_fifo.sv` file in the `Post_M5/UVM` directory.
+
 ## Project Milestones
 
 ### Milestone 1 (M1)
@@ -20,7 +59,7 @@
 - **Description**: The testbench was further enhanced using the Universal Verification Methodology (UVM). This included the creation of UVM components such as agents, sequences, and sequencers. The UVM testbench also included coverage and assertions to ensure thorough verification of the design.
 
 ### Milestone 5 (M5)
-- **Objective**: Final UVM testbench with coverage and assertions.
+- **Objective**: Final UVM testbench with coverage and assertions. Bug injection has been added too to verify the correctness of the UVM design.
 - **Description**: The final UVM testbench was completed with full coverage and assertions. This milestone focused on achieving high coverage and ensuring the correctness of the design through rigorous verification.
 
 ## UVM Topology
@@ -72,7 +111,7 @@ uvm_test_top               fifo_random_test         -     @471
 ---------------------------------------------------------------
 ```
 
-### UVM Transcript
+### UVM Transcript Snippet
 
 ```
 # ***** Queue Size: 10 *****
@@ -280,7 +319,7 @@ The \`run.do\` file is a script used to automate the compilation, simulation, an
 
 3. **vlog -source -lint async_fifo.sv**
    - Compiles the \`async_fifo.sv\` file with source code and linting enabled.
-   - The commented lines with \`+define\` are used to compile the design with specific bug definitions for testing purposes.
+   - The commented lines with \`+define\` are used to compile the design with specific bug injections for testing purposes.
 
 4. **vlog -source -lint async_fifo_package.sv**
    - Compiles the \`async_fifo_package.sv\` file with source code and linting enabled.

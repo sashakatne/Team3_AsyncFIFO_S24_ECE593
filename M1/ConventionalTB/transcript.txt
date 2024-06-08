@@ -1,0 +1,138 @@
+# transcript.txt
+do run.do
+# Error 133: Unable to remove directory "/u/katne/myCourses/PreSi/asyncfifo_conventionaltb/work".
+# QuestaSim-64 vlog 2019.2_1 Compiler 2019.05 May 13 2019
+# Start time: 12:51:27 on Jun 08,2024
+# vlog -reportprogress 300 -source -lint async_fifo2.sv 
+# -- Compiling module asynchronous_fifo
+# -- Compiling module fifo_memory
+# -- Compiling module sync
+# -- Compiling module read_pointer
+# -- Compiling module write_pointer
+# 
+# Top level modules:
+# 	asynchronous_fifo
+# End time: 12:51:27 on Jun 08,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2019.2_1 Compiler 2019.05 May 13 2019
+# Start time: 12:51:27 on Jun 08,2024
+# vlog -reportprogress 300 -source -lint async_fifo_tb.sv 
+# -- Compiling module top
+# 
+# Top level modules:
+# 	top
+# End time: 12:51:27 on Jun 08,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vopt 2019.2_1 Compiler 2019.05 May 13 2019
+# Start time: 12:51:27 on Jun 08,2024
+# vopt -reportprogress 300 top -o top_optimized "+acc" "+cover=sbfec+asynchronous_fifo(rtl)." 
+# 
+# Top level modules:
+# 	top
+# 
+# Analyzing design...
+# -- Loading module top
+# -- Loading module asynchronous_fifo
+# -- Loading module fifo_memory
+# -- Loading module write_pointer
+# -- Loading module read_pointer
+# -- Loading module sync
+# Optimizing 6 design-units (inlining 0/7 module instances):
+# -- Optimizing module top(fast)
+# -- Optimizing module write_pointer(fast)
+# -- Optimizing module fifo_memory(fast)
+# -- Optimizing module asynchronous_fifo(fast)
+# -- Optimizing module read_pointer(fast)
+# -- Optimizing module sync(fast)
+# Optimized design name is top_optimized
+# End time: 12:51:28 on Jun 08,2024, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# End time: 12:51:30 on Jun 08,2024, Elapsed time: 12:40:04
+# Errors: 32, Warnings: 0
+# vsim top_optimized -coverage 
+# Start time: 12:51:30 on Jun 08,2024
+# Loading sv_std.std
+# Loading work.top(fast)
+# Loading work.asynchronous_fifo(fast)
+# Loading work.fifo_memory(fast)
+# Loading work.write_pointer(fast)
+# Loading work.read_pointer(fast)
+# Loading work.sync(fast)
+# 1
+# *** PASSED ***
+# ** Note: $finish    : async_fifo_tb.sv(98)
+#    Time: 17930 ns  Iteration: 1  Instance: /top
+# 1
+# Break in Module top at async_fifo_tb.sv line 98
+# QuestaSim-64 vcover 2019.2_1 Coverage Utility 2019.05 May 13 2019
+# Start time: 12:51:33 on Jun 08,2024
+# vcover report async_fifo.ucdb 
+# Coverage Report Summary Data by instance
+# 
+# =================================================================================
+# === Instance: /top/DUT/mem_inst
+# === Design Unit: work.fifo_memory
+# =================================================================================
+#     Enabled Coverage              Bins      Hits    Misses  Coverage
+#     ----------------              ----      ----    ------  --------
+#     Branches                         6         6         0   100.00%
+#     Expressions                      2         2         0   100.00%
+#     Statements                      11        11         0   100.00%
+# 
+# =================================================================================
+# === Instance: /top/DUT/write_ptr
+# === Design Unit: work.write_pointer
+# =================================================================================
+#     Enabled Coverage              Bins      Hits    Misses  Coverage
+#     ----------------              ----      ----    ------  --------
+#     Branches                         2         2         0   100.00%
+#     Expressions                      3         3         0   100.00%
+#     Statements                      11        11         0   100.00%
+# 
+# =================================================================================
+# === Instance: /top/DUT/read_ptr
+# === Design Unit: work.read_pointer
+# =================================================================================
+#     Enabled Coverage              Bins      Hits    Misses  Coverage
+#     ----------------              ----      ----    ------  --------
+#     Branches                         2         2         0   100.00%
+#     Expressions                      1         1         0   100.00%
+#     Statements                      11        11         0   100.00%
+# 
+# =================================================================================
+# === Instance: /top/DUT/sync_w2r
+# === Design Unit: work.sync
+# =================================================================================
+#     Enabled Coverage              Bins      Hits    Misses  Coverage
+#     ----------------              ----      ----    ------  --------
+#     Branches                         2         2         0   100.00%
+#     Statements                       5         5         0   100.00%
+# 
+# =================================================================================
+# === Instance: /top/DUT/sync_r2w
+# === Design Unit: work.sync
+# =================================================================================
+#     Enabled Coverage              Bins      Hits    Misses  Coverage
+#     ----------------              ----      ----    ------  --------
+#     Branches                         2         2         0   100.00%
+#     Statements                       5         5         0   100.00%
+# 
+# =================================================================================
+# === Instance: /top/DUT
+# === Design Unit: work.asynchronous_fifo
+# =================================================================================
+#     Enabled Coverage              Bins      Hits    Misses  Coverage
+#     ----------------              ----      ----    ------  --------
+#     Expressions                      4         4         0   100.00%
+# 
+# 
+# Total Coverage By Instance (filtered view): 100.00%
+# 
+# End time: 12:51:33 on Jun 08,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vcover 2019.2_1 Coverage Utility 2019.05 May 13 2019
+# Start time: 12:51:33 on Jun 08,2024
+# vcover report async_fifo.ucdb -cvg -details 
+# ** Note: (vcover-17388) No matching coverage data found in file 'async_fifo.ucdb'.
+# End time: 12:51:33 on Jun 08,2024, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
