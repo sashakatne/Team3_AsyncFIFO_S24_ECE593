@@ -290,21 +290,13 @@ Below are the key highlights from the transcript in the Post_M5 folder:
   - async_fifo_seq_test_sv_unit
   - async_fifo_coverage_sv_unit
 
-- **Start and End Times:**
-  - Start time: 01:40:38 on Jun 08,2024
-  - End time: 01:40:55 on Jun 08,2024
-
-- **Errors and Warnings Summary:**
-  - Errors: 0
-  - Warnings: 0
-
 ## Coverage Report and Waveform
-Below are the coverage report and waveform images from the Post_M5 folder:
+Below are the coverage report and waveform images from the Post_M5 folder. Thorough testing of the AFIFO was done with extensive constrained randomization to achieve 100% code coverage. The stretch goal of 100% functional coverage was also achieved with different testcases to exercise and verify different functional features of the AFIFO like full and empty flag generation, half full and half empty flag generation and checking logic, etc:
 
 ### Coverage Report
 ![Coverage Report](Post_M5/docs/coverage_summary.png)
 
-### Waveform
+### Example Simulation Waveform
 ![Waveform](Post_M5/docs/waveform.png)
 
 ## Explanation of run.do File
