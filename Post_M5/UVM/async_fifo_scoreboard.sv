@@ -15,13 +15,11 @@ class fifo_scoreboard extends uvm_scoreboard;
 	transaction_read tr[$];     
 
 	virtual intf vif;
-	int w_count;
-	int r_count;
+	int fifo_count;
 	
 	function new(string name,uvm_component parent);
 		super.new(name,parent);
-		w_count = 0;
-		r_count = 0;
+		fifo_count = 0;
 	endfunction  
 				
 	function void build_phase(uvm_phase phase);
@@ -36,7 +34,7 @@ class fifo_scoreboard extends uvm_scoreboard;
 	
 	function void write_port_a(transaction_write txw); 
 		tw.push_back(txw);
-		w_count++;
+		fifo_count = fifo_count + 1;
 		// $display ("\t Scoreboard wData = %0h", txw.wData);
 		assert(!$isunknown(txw.wData)) else
 			`uvm_error("ASSERTION ERROR", "Write Data is unknown")
@@ -51,15 +49,16 @@ class fifo_scoreboard extends uvm_scoreboard;
 		assert(!$isunknown(txr.rData)) else
 			`uvm_error("ASSERTION ERROR", "Read Data is unknown")
 		
-		if ((tw.size() > 0) && (tw.size() < 2**ADDR_SIZE-1))
+		if ((tw.size() > 0) && (tw.size() < 2**ADDR_SIZE))
 			begin
 				popped_write_transaction = tw.pop_front();
 				popped_wData = popped_write_transaction.wData;
 				popped_wFull = popped_write_transaction.wFull;
 				popped_wHalfFull = popped_write_transaction.wHalfFull;
-				$display("***** Queue Size: %0d *****", tw.size());
+				// $display("***** Queue Size: %0d *****", tw.size());
+				// $display("***** Flag Status: wFull=%0h, wHalfFull=%0h, rEmpty=%0h, rHalfEmpty=%0h *****", popped_wFull, popped_wHalfFull, txr.rEmpty, txr.rHalfEmpty);
 				check_flags(popped_wFull, txr.rEmpty, popped_wHalfFull, txr.rHalfEmpty);
-				r_count++;
+				fifo_count = fifo_count - 1;
 				if (txr.rData === popped_wData)
 					`uvm_info("ASYNC_FIFO_SCOREBOARD", $sformatf("PASSED Expected Data: %0h --- DUT Read Data: %0h", popped_wData, txr.rData), UVM_MEDIUM)
 				else
@@ -69,60 +68,55 @@ class fifo_scoreboard extends uvm_scoreboard;
 
 	task w_reset();
 		tw.delete();
-		w_count = 0;
-		r_count = 0;
+		fifo_count = 0;
 		$display("Scoreboard w queue has been flushed due to reset.");
 	endtask
 
 	function void check_flags(logic wFull, logic rEmpty, logic wHalfFull, logic rHalfEmpty);
-		int fifo_count = w_count - r_count;
 		if (fifo_count > 2**ADDR_SIZE)
 			begin
 				`uvm_info("SCOREBOARD", "FIFO IS FULL", UVM_MEDIUM)
 				assert(wFull) else
-					`uvm_error("SCOREBOARD", $sformatf("ASSERTION ERROR: FIFO Full flag is not set when FIFO is full (w_count: %0d, r_count: %0d)", w_count, r_count))
+					`uvm_error("SCOREBOARD", $sformatf("ASSERTION ERROR: FIFO Full flag is not set when FIFO is full (fifo_count: %0d)", fifo_count))
 			end 
 		else
 			begin
 				assert(!wFull) else
-					`uvm_error("SCOREBOARD", $sformatf("ASSERTION ERROR: FIFO Full flag is set when FIFO is not full (w_count: %0d, r_count: %0d)", w_count, r_count))
+					`uvm_error("SCOREBOARD", $sformatf("ASSERTION ERROR: FIFO Full flag is set when FIFO is not full (fifo_count: %0d)", fifo_count))
 			end
 
 		if (fifo_count == 1)
 			begin
 				`uvm_info("SCOREBOARD", "FIFO IS EMPTY", UVM_MEDIUM)
 				assert(rEmpty) else
-					`uvm_error("SCOREBOARD", $sformatf("ASSERTION ERROR: FIFO Empty flag is not set when FIFO is empty (w_count: %0d, r_count: %0d)", w_count, r_count))
+					`uvm_error("SCOREBOARD", $sformatf("ASSERTION ERROR: FIFO Empty flag is not set when FIFO is empty (fifo_count: %0d)", fifo_count))
 			end
 		else
 			begin
 				assert(!rEmpty) else
-					`uvm_error("SCOREBOARD", $sformatf("ASSERTION ERROR: FIFO Empty flag is set when FIFO is not empty (w_count: %0d, r_count: %0d)", w_count, r_count))
+					`uvm_error("SCOREBOARD", $sformatf("ASSERTION ERROR: FIFO Empty flag is set when FIFO is not empty (fifo_count: %0d)", fifo_count))
 			end
 
-		// Need to update this part
-		// if (fifo_count > ((2**(ADDR_SIZE-1))-1))
+		// if (fifo_count > 2**(ADDR_SIZE-1))
 		// 	begin
-		// 		`uvm_info("SCOREBOARD", "FIFO IS HALF FULL", UVM_MEDIUM)
 		// 		assert(wHalfFull) else
-		// 			`uvm_error("SCOREBOARD", $sformatf("ASSERTION ERROR: FIFO Half Full flag is not set when FIFO is half full (w_count: %0d, r_count: %0d)", w_count, r_count))
+		// 			`uvm_error("SCOREBOARD", $sformatf("ASSERTION ERROR: FIFO Half Full flag is not set when FIFO is half full (fifo_count: %0d)", fifo_count))
 		// 	end
 		// else
 		// 	begin
 		// 		assert(!wHalfFull) else
-		// 			`uvm_error("SCOREBOARD", $sformatf("ASSERTION ERROR: FIFO Half Full flag is set when FIFO is not half full (w_count: %0d, r_count: %0d)", w_count, r_count))
+		// 			`uvm_error("SCOREBOARD", $sformatf("ASSERTION ERROR: FIFO Half Full flag is set when FIFO is not half full (fifo_count: %0d)", fifo_count))
 		// 	end
 
-		// if (fifo_count < ((2**(ADDR_SIZE-1))+1))
+		// if (fifo_count < 2**(ADDR_SIZE-1))
 		// 	begin
-		// 		`uvm_info("SCOREBOARD", "FIFO IS HALF EMPTY", UVM_MEDIUM)
 		// 		assert(rHalfEmpty) else
-		// 			`uvm_error("SCOREBOARD", $sformatf("ASSERTION ERROR: FIFO Half Empty flag is not set when FIFO is half empty (w_count: %0d, r_count: %0d)", w_count, r_count))
+		// 			`uvm_error("SCOREBOARD", $sformatf("ASSERTION ERROR: FIFO Half Empty flag is not set when FIFO is half empty (fifo_count: %0d)", fifo_count))
 		// 	end
 		// else
 		// 	begin
 		// 		assert(!rHalfEmpty) else
-		// 			`uvm_error("SCOREBOARD", $sformatf("ASSERTION ERROR: FIFO Half Empty flag is set when FIFO is not half empty (w_count: %0d, r_count: %0d)", w_count, r_count))
+		// 			`uvm_error("SCOREBOARD", $sformatf("ASSERTION ERROR: FIFO Half Empty flag is set when FIFO is not half empty (fifo_count: %0d)", fifo_count))
 		// 	end
 	endfunction
 		
