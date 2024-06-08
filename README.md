@@ -33,7 +33,7 @@ The UVM (Universal Verification Methodology) based testbench setup includes the 
 - **Environment**: Environment to encapsulate all the components.
 
 ### UVM Testbench Topology
-\`\`\`
+```
 UVM_INFO @ 0: reporter [UVMTOP] UVM testbench topology:
 ---------------------------------------------------------------
 Name                       Type                     Size  Value
@@ -70,11 +70,11 @@ uvm_test_top               fifo_random_test         -     @471
         num_last_reqs      integral                 32    'd1  
         num_last_rsps      integral                 32    'd1  
 ---------------------------------------------------------------
-\`\`\`
+```
 
 ### UVM Transcript
 
-\`\`\`
+```
 # ***** Queue Size: 10 *****
 # ***** Flag Status: wFull=0, wHalfFull=0, rEmpty=0, rHalfEmpty=1 *****
 # UVM_INFO async_fifo_scoreboard.sv(63) @ 440: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: b --- DUT Read Data: b
@@ -104,11 +104,11 @@ uvm_test_top               fifo_random_test         -     @471
 # 	 [WRITE_MONITOR] winc = 1 	 wData = ab 	 w_count=21 	 wFull=0 	 wHalfFull=0
 # 	 [WRITE_MONITOR] winc = 1 	 wData = 53 	 w_count=22 	 wFull=0 	 wHalfFull=0
 # 	 [READ_MONITOR] rinc = 0 	 rData = 81 	 rcount=8 	 rEmpty=0 	 rHalfEmpty=1
-\`\`\`
+```
 
 ## UVM Report Summary
 
-\`\`\`
+```
 # --- UVM Report Summary ---
 # 
 # ** Report counts by severity
@@ -136,13 +136,13 @@ uvm_test_top               fifo_random_test         -     @471
 # [WRITE_SEQUENCER_CLASS]     3
 # [WRITE_SEQUENCE_CLASS]     2
 # [tb_top]     1
-\`\`\`
+```
 
 ## Coverage Report Summary
 
 ### Coverage Report Summary Data by Instance
 
-\`\`\`
+```
 =================================================================================
 === Instance: /tb_top/DUT/mem_inst
 === Design Unit: work.fifo_memory
@@ -222,7 +222,7 @@ TOTAL COVERGROUP COVERAGE: 100.00%  COVERGROUP TYPES: 9
 TOTAL ASSERTION COVERAGE: 100.00%  ASSERTIONS: 5
 
 Total Coverage By Instance (filtered view): 100.00%
-\`\`\`
+```
 
 
 ## Post M5 Snapshot
