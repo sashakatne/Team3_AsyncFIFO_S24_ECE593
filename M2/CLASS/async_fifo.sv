@@ -20,8 +20,10 @@ module asynchronous_fifo #(parameter DATA_SIZE = 8, parameter ADDR_SIZE = 6) ( w
 	
 	//FIFO Memory
 	fifo_mem #(DATA_SIZE, ADDR_SIZE) fifo_mem_inst (.wclk(wclk), .w_en(winc), .rclk(rclk), .r_en(rinc), .b_wptr(wptr), .b_rptr(rptr), .data_in(wData), .full(wFull), .empty(rEmpty), .data_out(rData));
-	synchronizer #(ADDR_SIZE) synchronizer_r2w_inst (.clk(rclk), .rst_n(rrst), .d_in(g_rptr), .d_out(g_rptr_sync));
-	synchronizer #(ADDR_SIZE) synchronizer_w2r_inst (.clk(wclk), .rst_n(wrst), .d_in(g_wptr), .d_out(g_wptr_sync));
+	// Sync read pointer into the write domain: destination clock = wclk, destination reset = wrst.
+	synchronizer #(ADDR_SIZE) synchronizer_r2w_inst (.clk(wclk), .rst_n(wrst), .d_in(g_rptr), .d_out(g_rptr_sync));
+	// Sync write pointer into the read domain: destination clock = rclk, destination reset = rrst.
+	synchronizer #(ADDR_SIZE) synchronizer_w2r_inst (.clk(rclk), .rst_n(rrst), .d_in(g_wptr), .d_out(g_wptr_sync));
 	rptr_handler #(ADDR_SIZE) rptr_handler_inst (.rclk(rclk), .rrst_n(rrst), .r_en(rinc), .g_wptr_sync(g_wptr_sync), .b_rptr(rptr), .g_rptr(g_rptr), .empty(rEmpty), .half_empty(rHalfEmpty));
 	wptr_handler #(ADDR_SIZE) wptr_handler_inst (.wclk(wclk), .wrst_n(wrst), .w_en(winc), .g_rptr_sync(g_rptr_sync), .b_wptr(wptr), .g_wptr(g_wptr), .full(wFull), .half_full(wHalfFull));
 	
@@ -36,8 +38,15 @@ module fifo_mem #(DATA_SIZE=8, ADDR_SIZE=6) (
 );
 
 	localparam DEPTH = 1<<ADDR_SIZE;
+	// Note: 'fifo' is left at its default X at elaboration. data_out below is
+	// combinational on b_rptr, so rData is X until the first write reaches the
+	// active read slot. This is benign under the post-fix TB because the
+	// monitor and the driver both gate read activity on (rinc && !rEmpty), so
+	// no scoreboard comparison ever sees the X. Adding a reset path to fifo_mem
+	// would close the silicon-side window but would change the module
+	// port-list, which is outside the scope of this fix pass.
 	reg [DATA_SIZE-1:0] fifo[0:DEPTH-1];
-  
+
 	always_ff @(posedge wclk) begin
 	if(w_en & !full) begin
 		fifo[b_wptr[ADDR_SIZE-1:0]] <= data_in;
