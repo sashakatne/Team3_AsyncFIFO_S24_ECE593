@@ -1,5 +1,6 @@
-
-vdel -all
+# 'catch {}' so a fresh checkout (no work/ yet) does not fail on vdel.
+catch {vdel -all}
+vlib work
 
 vlog -source -lint async_fifo.sv
 vlog -source -lint async_fifo_package.sv
@@ -7,15 +8,17 @@ vlog -source -lint async_fifo_interface.sv
 vlog -source -lint async_fifo_top.sv
 vlog -source -lint async_fifo_test.sv
 
-vsim  async_fifo_top
+# Instrument code coverage on the DUT only. Covergroup coverage from
+# async_fifo_top is still collected by running vsim with -coverage.
+vopt async_fifo_top -o top_optimized +acc +cover=sbfec+asynchronous_fifo(rtl).
+vsim top_optimized -coverage
 
+set NoQuitOnFinish 1
+onbreak {resume}
+log /* -r
 
-vsim -coverage async_fifo_top -voptargs="+cover=bcesfx"
-vlog -cover bcst async_fifo.sv
-vsim -coverage async_fifo_top -do "run -all; exit"
 run -all
-coverage report -code bcesft
-coverage report -assert -binrhs -details -cvg
-vcover report -html coverage_results
-coverage report -codeAll
 
+coverage save async_fifo.ucdb
+vcover report async_fifo.ucdb
+vcover report async_fifo.ucdb -cvg -details
