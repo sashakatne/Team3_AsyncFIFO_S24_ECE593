@@ -1,350 +1,461 @@
+# Team 3 Asynchronous FIFO Verification Project
 
-# Team3 Asynchronous FIFO Project
+This repository is a complete SystemVerilog/UVM verification project for an
+asynchronous FIFO: a hardware buffer that safely moves data between two unrelated
+clock domains.  The project is organized as a milestone-by-milestone evolution
+from a conventional procedural testbench to a final UVM environment with
+scoreboarding, coverage, bug injection, reset-aware checking, and farm-backed
+waveform evidence.
 
-## Asynchronous FIFO Design Overview
+The short version:
 
-The asynchronous FIFO (First-In-First-Out) design is a specialized memory buffer that allows data to be safely transferred between two clock domains with different frequencies. The design ensures that data integrity is maintained despite the asynchronous nature of the read and write operations. Below is a brief explanation of the key components and their functionalities:
+- **Design problem:** safely transfer data from an 80 MHz write domain to a
+  50 MHz read domain without losing ordering, corrupting data, or falsely
+  asserting status flags.
+- **Final implementation:** `Post_M5/UVM/` is the canonical final design and
+  verification environment.
+- **Verification result:** the final farm run is warning-clean, reaches
+  `UVM_ERROR : 0`, `UVM_FATAL : 0`, reports **100% DUT-focused code coverage**
+  and **100% covergroup coverage**, and proves exact half/full/empty flag
+  timing with directed waveform tests.
+- **What this showcases:** CDC-aware RTL design, Gray-coded pointer logic,
+  UVM architecture, race-free driver/monitor timing, reset-aware scoreboarding,
+  functional coverage, defect injection, and reproducible simulator evidence.
 
-1. **Module Parameters**:
-   - `DATA_SIZE`: Defines the width of the data bus.
-   - `ADDR_SIZE`: Defines the address width, which determines the depth of the FIFO.
+## The Recruiter Walkthrough
 
-2. **Inputs and Outputs**:
-   - `wclk`, `rclk`: Write and read clock signals.
-   - `wrst`, `rrst`: Write and read reset signals.
-   - `winc`, `rinc`: Write and read enable signals.
-   - `wData`: Data input for writing.
-   - `rData`: Data output for reading.
-   - `wFull`, `rEmpty`: Flags indicating full and empty status of the FIFO.
-   - `wHalfFull`, `rHalfEmpty`: Flags indicating half-full and half-empty status of the FIFO.
+If I were walking someone through this repo live, I would frame it this way:
 
-3. **Internal Signals**:
-   - `wptr`, `rptr`: Write and read pointers.
-   - `waddr`, `raddr`: Write and read addresses.
-   - `wq2_rptr`, `rq2_wptr`: Synchronized pointers for cross-domain communication.
+1. **This is not just an RTL FIFO.** It is a verification progression that shows
+   how a simple testbench matures into a production-style UVM environment.
+2. **The hard part is the clock-domain crossing.** The FIFO has independent
+   write and read clocks, so the design cannot share a normal counter across
+   domains.  It uses binary pointers locally, Gray-coded pointers across clock
+   boundaries, and two-flop synchronizers in the destination domain.
+3. **The verification environment had to be engineered carefully.** The drivers
+   drive before the active clock edge, monitors publish only accepted transfers,
+   and the scoreboard models the FIFO with a queue instead of trusting internal
+   DUT state.
+4. **The repo includes negative testing hooks.** The final RTL has intentional
+   bug-injection macros for data corruption, synchronizer damage, pointer
+   encoding errors, and broken full-flag logic.
+5. **The evidence is real.** The transcripts and waveform images were generated
+   from Siemens Questa runs on the PSU ECE farm, not from hand-written examples.
 
-4. **Memory Module**:
-   - `fifo_memory`: Stores the data and manages read/write operations. It includes logic for half-full and half-empty status.
+## Final Result At A Glance
 
-5. **Pointer Modules**:
-   - `write_pointer`: Manages the write pointer and full flag logic.
-   - `read_pointer`: Manages the read pointer and empty flag logic.
+The final implementation lives in [`Post_M5/UVM/`](Post_M5/UVM/).  It is the
+best place to start when reviewing the project.
 
-6. **Synchronization Modules**:
-   - `sync_w2r`: Synchronizes the write pointer to the read clock domain.
-   - `sync_r2w`: Synchronizes the read pointer to the write clock domain.
+| Area | Result |
+|---|---|
+| Simulator | Siemens Questa 2021.3_1 |
+| Final target | [`Post_M5/UVM`](Post_M5/UVM/) |
+| FIFO depth | 64 entries |
+| Data width | 8 bits |
+| Write clock | 12.5 ns period, 80 MHz |
+| Read clock | 20 ns period, 50 MHz |
+| CDC strategy | Gray pointers + two-flop destination-domain synchronizers |
+| Scoreboard | Reset-aware queue reference model |
+| Coverage | 100% DUT-filtered code coverage + 100% covergroup coverage |
+| Directed flags | Immediate half-full, full, half-empty, and empty threshold checks |
+| Farm proof | [`Post_M5/UVM/MANIFEST.txt`](Post_M5/UVM/MANIFEST.txt) |
 
-The design also includes conditional compilation flags (`ifdef`) to introduce bugs for testing purposes, such as data corruption, synchronization issues, and pointer mismanagement.
+![Post_M5 farm debug waveform](Post_M5/UVM/flag_debug_waveforms.png)
 
-This asynchronous FIFO design is crucial for applications requiring reliable data transfer between different clock domains, ensuring data integrity and efficient communication.
+The waveform above is a directed flag-debug run.  The red ticks mark rising
+clock edges, the pointer tracks show decimal pointer positions, and the lower
+signals show write/read enables plus all four key flags.  This is the kind of
+artifact I use to explain that the status flags are not merely asserted
+eventually; they assert at the intended threshold edges.
 
-For more details, refer to the `async_fifo.sv` file in the `Post_M5/UVM` directory.
+## What An Asynchronous FIFO Does
 
-## Project Milestones
+An asynchronous FIFO is used when producer and consumer logic run on different
+clocks.  In this project, the write side can push data every 12.5 ns while the
+read side can pull data every 20 ns.  Since those domains are independent, the
+design must avoid two common mistakes:
 
-### Milestone 1 (M1)
-- **Objective**: Initial design and conventional testbench setup.
-- **Description**: In this milestone, the basic design of the asynchronous FIFO was created. A conventional testbench was set up to verify the basic functionality of the FIFO design. This testbench included simple stimulus and response checks.
+- **Unsafe CDC state sharing:** a normal `fifo_count` written by both clocks is
+  not safe or portable.
+- **Multi-bit metastability hazards:** sending a raw binary pointer across a
+  clock boundary can expose the destination domain to multiple changing bits.
 
-### Milestone 2 (M2)
-- **Objective**: Class-based testbench setup.
-- **Description**: The testbench was enhanced using SystemVerilog classes. This included the creation of transaction, driver, monitor, scoreboard, and environment classes to improve the modularity and reusability of the testbench components.
+The final design solves this with a standard, robust CDC pattern:
 
-### Milestone 3 (M3)
-- **Objective**: Enhanced class-based testbench with additional features.
-- **Description**: Additional features were added to the class-based testbench, including more complex stimulus generation and enhanced checking mechanisms.
+```text
+Write domain                                  Read domain
+------------                                  -----------
+binary_wptr                                   binary_rptr
+    |                                             |
+    v                                             v
+Gray-coded wptr  ---> 2-FF sync into rclk ---> rq2_wptr
+wFull / wHalfFull                         rEmpty / rHalfEmpty
 
-### Milestone 4 (M4)
-- **Objective**: UVM (Universal Verification Methodology) based testbench setup.
-- **Description**: The testbench was further enhanced using the Universal Verification Methodology (UVM). This included the creation of UVM components such as agents, sequences, and sequencers. The UVM testbench also included coverage and assertions to ensure thorough verification of the design.
-
-### Milestone 5 (M5)
-- **Objective**: Final UVM testbench with coverage and assertions. Bug injection has been added too to verify the correctness of the UVM design. Add assertions to check the validity of flag generation, data integrity, etc.
-- **Description**: The final UVM testbench was completed with full coverage and assertions. This milestone focused on achieving high coverage and ensuring the correctness of the design through rigorous verification.
-
-## UVM Topology
-The UVM (Universal Verification Methodology) based testbench setup includes the following components:
-- **Agents**: Read and Write agents for driving and monitoring the DUT.
-- **Sequences**: Sequences to generate stimulus for the DUT.
-- **Sequencers**: Sequencers to control the flow of sequences.
-- **Monitors**: Monitors to observe the DUT's behavior.
-- **Scoreboard**: Scoreboard to check the correctness of the DUT's output.
-- **Environment**: Environment to encapsulate all the components.
-
-### UVM Testbench Topology
-```
-UVM_INFO @ 0: reporter [UVMTOP] UVM testbench topology:
----------------------------------------------------------------
-Name                       Type                     Size  Value
----------------------------------------------------------------
-uvm_test_top               fifo_random_test         -     @471 
-  env                      fifo_env                 -     @478 
-    ra                     read_agent               -     @493 
-      rd                   read_driver              -     @618 
-        rsp_port           uvm_analysis_port        -     @633 
-        seq_item_port      uvm_seq_item_pull_port   -     @625 
-      rm                   read_monitor             -     @641 
-        port_read          uvm_analysis_port        -     @649 
-      rs                   read_sequencer           -     @509 
-        rsp_export         uvm_analysis_export      -     @516 
-        seq_item_export    uvm_seq_item_pull_imp    -     @610 
-        arbitration_queue  array                    0     -    
-        lock_queue         array                    0     -    
-        num_last_reqs      integral                 32    'd1  
-        num_last_rsps      integral                 32    'd1  
-    scb                    fifo_scoreboard          -     @500 
-      read_port            uvm_analysis_imp_port_b  -     @671 
-      write_port           uvm_analysis_imp_port_a  -     @663 
-    wa                     write_agent              -     @486 
-      wd                   write_driver             -     @789 
-        rsp_port           uvm_analysis_port        -     @804 
-        seq_item_port      uvm_seq_item_pull_port   -     @796 
-      wm                   write_monitor            -     @812 
-        port_write         uvm_analysis_port        -     @820 
-      ws                   write_sequencer          -     @680 
-        rsp_export         uvm_analysis_export      -     @687 
-        seq_item_export    uvm_seq_item_pull_imp    -     @781 
-        arbitration_queue  array                    0     -    
-        lock_queue         array                    0     -    
-        num_last_reqs      integral                 32    'd1  
-        num_last_rsps      integral                 32    'd1  
----------------------------------------------------------------
+Read domain                                   Write domain
+-----------                                   ------------
+Gray-coded rptr  ---> 2-FF sync into wclk ---> wq2_rptr
 ```
 
-### UVM Transcript Snippet
+## Final RTL Architecture
 
-```
-# ***** Queue Size: 10 *****
-# ***** Flag Status: wFull=0, wHalfFull=0, rEmpty=0, rHalfEmpty=1 *****
-# UVM_INFO async_fifo_scoreboard.sv(63) @ 440: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: b --- DUT Read Data: b
-# 	 [WRITE_MONITOR] winc = 1 	 wData = c8 	 w_count=14 	 wFull=0 	 wHalfFull=0
-# 	 [READ_MONITOR] rinc = 0 	 rData = ba 	 rcount=4 	 rEmpty=0 	 rHalfEmpty=1
-# ***** Queue Size: 10 *****
-# ***** Flag Status: wFull=0, wHalfFull=0, rEmpty=0, rHalfEmpty=1 *****
-# UVM_INFO async_fifo_scoreboard.sv(63) @ 460: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: ba --- DUT Read Data: ba
-# 	 [WRITE_MONITOR] winc = 1 	 wData = 57 	 w_count=15 	 wFull=0 	 wHalfFull=0
-# 	 [READ_MONITOR] rinc = 0 	 rData = 4f 	 rcount=5 	 rEmpty=0 	 rHalfEmpty=1
-# ***** Queue Size: 10 *****
-# ***** Flag Status: wFull=0, wHalfFull=0, rEmpty=0, rHalfEmpty=1 *****
-# UVM_INFO async_fifo_scoreboard.sv(63) @ 480: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: 4f --- DUT Read Data: 4f
-# 	 [WRITE_MONITOR] winc = 1 	 wData = b0 	 w_count=16 	 wFull=0 	 wHalfFull=0
-# 	 [READ_MONITOR] rinc = 0 	 rData = f0 	 rcount=6 	 rEmpty=0 	 rHalfEmpty=1
-# ***** Queue Size: 10 *****
-# ***** Flag Status: wFull=0, wHalfFull=0, rEmpty=0, rHalfEmpty=1 *****
-# UVM_INFO async_fifo_scoreboard.sv(63) @ 500: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: f0 --- DUT Read Data: f0
-# 	 [WRITE_MONITOR] winc = 1 	 wData = c8 	 w_count=17 	 wFull=0 	 wHalfFull=0
-# 	 [READ_MONITOR] rinc = 0 	 rData = cc 	 rcount=7 	 rEmpty=0 	 rHalfEmpty=1
-# ***** Queue Size: 10 *****
-# ***** Flag Status: wFull=0, wHalfFull=0, rEmpty=0, rHalfEmpty=1 *****
-# UVM_INFO async_fifo_scoreboard.sv(63) @ 520: uvm_test_top.env.scb [ASYNC_FIFO_SCOREBOARD] PASSED Expected Data: cc --- DUT Read Data: cc
-# 	 [WRITE_MONITOR] winc = 1 	 wData = 72 	 w_count=18 	 wFull=0 	 wHalfFull=0
-# 	 [WRITE_MONITOR] winc = 1 	 wData = 34 	 w_count=19 	 wFull=0 	 wHalfFull=0
-# 	 [WRITE_MONITOR] winc = 1 	 wData = cb 	 w_count=20 	 wFull=0 	 wHalfFull=0
-# 	 [WRITE_MONITOR] winc = 1 	 wData = ab 	 w_count=21 	 wFull=0 	 wHalfFull=0
-# 	 [WRITE_MONITOR] winc = 1 	 wData = 53 	 w_count=22 	 wFull=0 	 wHalfFull=0
-# 	 [READ_MONITOR] rinc = 0 	 rData = 81 	 rcount=8 	 rEmpty=0 	 rHalfEmpty=1
+The canonical DUT is [`Post_M5/UVM/async_fifo.sv`](Post_M5/UVM/async_fifo.sv).
+It is intentionally split into small modules with one clear responsibility each:
+
+```text
+asynchronous_fifo
+|-- fifo_memory      storage array, write/read gating
+|-- write_pointer    binary/Gray write pointer, wFull, wHalfFull
+|-- read_pointer     binary/Gray read pointer, rEmpty, rHalfEmpty
+|-- sync_w2r         write pointer synchronized into the read clock domain
+`-- sync_r2w         read pointer synchronized into the write clock domain
 ```
 
-## UVM Report Summary
+### Key Design Decisions
 
-```
-# --- UVM Report Summary ---
-# 
-# ** Report counts by severity
-# UVM_INFO :  884
-# UVM_WARNING :    0
-# UVM_ERROR :    0
-# UVM_FATAL :    0
-# ** Report counts by id
-# [ASYNC_FIFO_SCOREBOARD]   250
-# [Questa UVM]     2
-# [READ_AGENT_CLASS]     1
-# [READ_DRIVER_CLASS]     4
-# [READ_MONITOR]   343
-# [READ_MONITOR_CLASS]     1
-# [READ_SEQUENCER_CLASS]     3
-# [READ_SEQUENCE_CLASS]     2
-# [RNTST]     1
-# [SCOREBOARD]     1
-# [TEST_DONE]     1
-# [UVMTOP]     1
-# [WRITE_AGENT_CLASS]     1
-# [WRITE_DRIVER_CLASS]     4
-# [WRITE_MONITOR]   262
-# [WRITE_MONITOR_CLASS]     1
-# [WRITE_SEQUENCER_CLASS]     3
-# [WRITE_SEQUENCE_CLASS]     2
-# [tb_top]     1
+**1. Binary locally, Gray across domains**
+
+Inside each domain, pointer arithmetic is easiest and safest in binary.  When a
+pointer crosses into the other clock domain, it is Gray encoded so only one bit
+changes per increment.  That limits the CDC sampling risk to one changing bit
+instead of an arbitrary binary transition.
+
+**2. One extra pointer bit for wrap awareness**
+
+The FIFO address is 6 bits for 64 entries, but the pointer is 7 bits.  The extra
+MSB lets the design distinguish:
+
+- same address, same wrap: FIFO is empty;
+- same address, different wrap: FIFO is full.
+
+This is why full detection is not a naive pointer equality check.
+
+**3. Synchronizers live in the destination domain**
+
+The two-flop synchronizers are clocked and reset by the domain that consumes the
+synchronized pointer.  That is a subtle CDC detail and one of the important
+fixes carried through the milestone progression.
+
+```systemverilog
+sync_w2r (.clk(rclk), .rst_n(rrst), ...);  // write pointer into read domain
+sync_r2w (.clk(wclk), .rst_n(wrst), ...);  // read pointer into write domain
 ```
 
-## Coverage Report Summary
+**4. Half flags are computed from next-pointer occupancy**
 
-### Coverage Report Summary Data by Instance
+The final design does not use a shared dual-clock `fifo_count`.  Instead:
 
-```
-=================================================================================
-=== Instance: /tb_top/DUT/mem_inst
-=== Design Unit: work.fifo_memory
-=================================================================================
-    Enabled Coverage              Bins      Hits    Misses  Coverage
-    ----------------              ----      ----    ------  --------
-    Branches                         6         6         0   100.00%
-    Expressions                      2         2         0   100.00%
-    Statements                      11        11         0   100.00%
-
-=================================================================================
-=== Instance: /tb_top/DUT/write_ptr
-=== Design Unit: work.write_pointer
-=================================================================================
-    Enabled Coverage              Bins      Hits    Misses  Coverage
-    ----------------              ----      ----    ------  --------
-    Branches                         2         2         0   100.00%
-    Expressions                      3         3         0   100.00%
-    Statements                      11        11         0   100.00%
-
-=================================================================================
-=== Instance: /tb_top/DUT/read_ptr
-=== Design Unit: work.read_pointer
-=================================================================================
-    Enabled Coverage              Bins      Hits    Misses  Coverage
-    ----------------              ----      ----    ------  --------
-    Branches                         2         2         0   100.00%
-    Expressions                      1         1         0   100.00%
-    Statements                      11        11         0   100.00%
-
-=================================================================================
-=== Instance: /tb_top/DUT/sync_w2r
-=== Design Unit: work.sync
-=================================================================================
-    Enabled Coverage              Bins      Hits    Misses  Coverage
-    ----------------              ----      ----    ------  --------
-    Branches                         2         2         0   100.00%
-    Statements                       5         5         0   100.00%
-
-=================================================================================
-=== Instance: /tb_top/DUT/sync_r2w
-=== Design Unit: work.sync
-=================================================================================
-    Enabled Coverage              Bins      Hits    Misses  Coverage
-    ----------------              ----      ----    ------  --------
-    Branches                         2         2         0   100.00%
-    Statements                       5         5         0   100.00%
-
-=================================================================================
-=== Instance: /tb_top/DUT
-=== Design Unit: work.asynchronous_fifo
-=================================================================================
-    Enabled Coverage              Bins      Hits    Misses  Coverage
-    ----------------              ----      ----    ------  --------
-    Expressions                      4         4         0   100.00%
-
-=================================================================================
-=== Instance: /tb_top
-=== Design Unit: work.tb_top
-=================================================================================
-    Enabled Coverage              Bins      Hits    Misses  Coverage
-    ----------------              ----      ----    ------  --------
-    Covergroups                      9        na        na   100.00%
-        Coverpoints/Crosses         19        na        na        na
-            Covergroup Bins         36        36         0   100.00%
-
-=================================================================================
-=== Instance: /fifo_pkg
-=== Design Unit: work.fifo_pkg
-=================================================================================
-    Enabled Coverage              Bins      Hits    Misses  Coverage
-    ----------------              ----      ----    ------  --------
-    Assertions                       5         5         0   100.00%
-
-TOTAL COVERGROUP COVERAGE: 100.00%  COVERGROUP TYPES: 9
-
-TOTAL ASSERTION COVERAGE: 100.00%  ASSERTIONS: 5
-
-Total Coverage By Instance (filtered view): 100.00%
+```systemverilog
+assign wptr_diff = binary_wptr_next - binary_rptr_sync;
+assign rptr_diff = binary_wptr_sync - binary_rptr_next;
 ```
 
+That is deliberate.  Using the **next** local pointer means `wHalfFull` asserts
+on the same accepted write that reaches 32 entries, and `rHalfEmpty` asserts on
+the same accepted read that drops occupancy to 32 entries.  Earlier versions
+exposed a one-clock-late half-flag bug; the directed tests now prove the fix.
 
-## Post M5 Snapshot
-Below are the key highlights from the transcript in the Post_M5 folder:
+### Flag Threshold Evidence
 
-- **Compilation of Modules:**
-  - asynchronous_fifo
-  - fifo_memory
-  - sync
-  - read_pointer
-  - write_pointer
-  - fifo_pkg
-  - tb_top
-  - async_fifo_test_sv_unit
-  - async_fifo_driver_sv_unit
-  - async_fifo_env_sv_unit
-  - async_fifo_testrand_sv_unit
-  - async_fifo_interface_sv_unit
-  - async_fifo_read_agent_sv_unit
-  - async_fifo_write_agent_sv_unit
-  - async_fifo_read_monitor_sv_unit
-  - async_fifo_write_monitor_sv_unit
-  - async_fifo_scoreboard_sv_unit
-  - async_fifo_sequencer_sv_unit
-  - async_fifo_seq_item_sv_unit
-  - async_fifo_seq_test_sv_unit
-  - async_fifo_coverage_sv_unit
+Write-side threshold zoom:
 
-## Coverage Report and Waveform
-Below are the coverage report and waveform images from the Post_M5 folder. Thorough testing of the AFIFO was done with extensive constrained randomization to achieve 100% code coverage. The stretch goal of 100% functional coverage was also achieved with different testcases to exercise and verify different functional features of the AFIFO like full and empty flag generation, half full and half empty flag generation and checking logic, etc. In addition, assertions were added to check the validity of flag generation, data integrity, etc.:
+![Write-side half-full and full threshold](Post_M5/UVM/flag_debug_write_thresholds.png)
 
-### Coverage Report with Assertions-based verification!
-![Coverage Report](Post_M5/docs/coverage_summary.png)
+Read-side threshold zoom:
 
-### Example Simulation Waveform
-![Waveform](Post_M5/docs/waveform.png)
+![Read-side half-empty and empty threshold](Post_M5/UVM/flag_debug_read_thresholds.png)
 
-## Explanation of run.do File
+These two images are useful in an interview because they turn a subtle CDC flag
+timing discussion into something visual:
 
-The \`run.do\` file is a script used to automate the compilation, simulation, and coverage analysis of the asynchronous FIFO design. Below is an explanation of each command in the \`run.do\` file:
+- at write pointer 32, `wHalfFull` is asserted;
+- at write pointer 64, `wFull` is asserted;
+- at read pointer 32 while write pointer is 64, `rHalfEmpty` is asserted;
+- at read pointer 64, `rEmpty` is asserted.
 
-1. **vdel -all**
-   - Deletes all existing libraries and their contents.
+## UVM Verification Architecture
 
-2. **vlib work**
-   - Creates a new library named \`work\`.
+The final UVM environment is built around separate write and read agents.  Each
+domain has its own sequencer, driver, and monitor.  The scoreboard joins both
+streams through analysis ports and checks ordering with a queue.
 
-3. **vlog -source -lint async_fifo.sv**
-   - Compiles the \`async_fifo.sv\` file with source code and linting enabled.
-   - The commented lines with \`+define\` are used to compile the design with specific bug injections for testing purposes.
+```text
+tb_top
+|-- DUT: asynchronous_fifo
+|-- intf: shared SystemVerilog interface
+`-- uvm_test_top: fifo_random_test / fifo_base_test
+    `-- fifo_env
+        |-- write_agent
+        |   |-- write_sequencer
+        |   |-- write_driver
+        |   `-- write_monitor
+        |-- read_agent
+        |   |-- read_sequencer
+        |   |-- read_driver
+        |   `-- read_monitor
+        `-- fifo_scoreboard
+```
 
-4. **vlog -source -lint async_fifo_package.sv**
-   - Compiles the \`async_fifo_package.sv\` file with source code and linting enabled.
+### Why The Testbench Timing Matters
 
-5. **vlog -source -lint +define+RESET_SEQUENCE async_fifo_top.sv**
-   - Compiles the \`async_fifo_top.sv\` file with the \`RESET_SEQUENCE\` definition enabled.
+This is one of the most important verification lessons in the repo.  The DUT
+samples on rising clock edges.  If a driver also changes signals on the same
+rising edge, the testbench can race the DUT.  The final environment drives
+stimulus on the negative edge, so data and enables are stable before the DUT
+samples them.
 
-6. **vlog -source -lint async_fifo_test.sv**
-   - Compiles the `async_fifo_test.sv` file with source code and linting enabled.
+The monitors also avoid false observations.  They sample request and pre-edge
+flag state, then publish only accepted transfers:
 
-7. **vlog -source -lint async_fifo_driver.sv**
-   - Compiles the `async_fifo_driver.sv` file with source code and linting enabled.
+- write accepted if `winc && !wFull`;
+- read accepted if `rinc && !rEmpty`.
 
-8. **vlog -source -lint async_fifo_env.sv**
-   - Compiles the `async_fifo_env.sv` file with source code and linting enabled.
+That means the scoreboard models actual FIFO transactions, not just attempted
+transactions.
 
-9. **vlog -source -lint async_fifo_interface.sv**
-   - Compiles the `async_fifo_interface.sv` file with source code and linting enabled.
+### Reset-Aware Scoreboard
 
-10. **vsim -coverage async_fifo_top -voptargs="+cover=bcesfx"**
-    - Simulates the `async_fifo_top` module with coverage options enabled.
+The final [`fifo_scoreboard`](Post_M5/UVM/async_fifo_scoreboard.sv) uses a
+SystemVerilog queue as a reference model:
 
-11. **run -all**
-    - Runs the simulation until all events are processed.
+- accepted writes push expected `wData`;
+- accepted reads pop and compare against DUT `rData`;
+- unknown data, empty-queue reads, and mismatches raise `uvm_error`;
+- reset assertions flush pending expected data so the scoreboard stays aligned
+  with the DUT during the default reset-sequence run.
 
-12. **coverage report -code bcesft**
-    - Generates a coverage report for branch, condition, expression, state, and toggle coverage.
+Final farm scoreboard summary from
+[`Post_M5/UVM/transcript_farm.txt`](Post_M5/UVM/transcript_farm.txt):
 
-13. **coverage report -assert -binrhs -details -cvg**
-    - Generates a detailed coverage report for assertions.
+```text
+Writes observed       : 659
+Reads  observed       : 596
+Reset flushes         : 2
+Residual expected_q   : 0
+Mismatches / errors   : 0
+Verdict: *** PASSED ***
+UVM_WARNING : 0
+UVM_ERROR   : 0
+UVM_FATAL   : 0
+```
 
-14. **vcover report -html coverage_results**
-    - Generates an HTML report of the coverage results.
+## Coverage Strategy
 
-15. **coverage report -codeAll**
-    - Generates a comprehensive coverage report for all code coverage metrics.
+The final run intentionally instruments the DUT rather than inflating numbers by
+measuring testbench internals.  The run script uses DUT-scoped coverage:
+
+```tcl
+vopt tb_top -o top_optimized +acc +cover=sbfec+asynchronous_fifo(rtl).
+```
+
+The coverage model includes:
+
+- statement, branch, expression, and condition coverage on the DUT;
+- covergroups for flag states and transitions;
+- data integrity and data pattern coverage;
+- burst, idle, high-frequency, abrupt-change, reset, and throughput behavior.
+
+![Post_M5 coverage summary](Post_M5/docs/coverage_summary.png)
+
+The final farm evidence reports:
+
+```text
+DUT filtered instance coverage: 100.00%
+TOTAL COVERGROUP COVERAGE:     100.00%
+Covergroup types:              9
+```
+
+## Techniques Worth Highlighting
+
+These are the parts I would explicitly call out because they show practical
+verification judgment:
+
+**Independent reference model**
+
+The scoreboard does not peek into the DUT's internal memory or pointer state.
+It builds its own expected queue from accepted writes and compares only against
+accepted reads.  That separation is important because a scoreboard that reuses
+the DUT's internal assumptions can miss the same bug the DUT has.
+
+**Accepted-transfer modeling**
+
+The monitors distinguish attempted operations from accepted operations.  A write
+request while full is useful stimulus, but it should not push the scoreboard
+queue.  A read request while empty is also useful stimulus, but it should not pop
+expected data.  Modeling this correctly is what lets the verification
+environment test overflow and underflow pressure without creating false errors.
+
+**Defect-driven verification**
+
+Several fixes in the repo were made only after a directed test or real farm run
+exposed a weakness.  Examples include the half-flag one-clock-late issue and the
+standalone `fifo2` over-full RAM overwrite.  The pattern is deliberate:
+
+```text
+observe failure -> isolate root cause -> patch RTL/TB -> rerun farm sim ->
+commit transcript + waveform proof
+```
+
+**Readable waveform generation**
+
+Instead of committing raw VCDs, the repo keeps scripts that parse VCDs into CSV,
+SVG, and PNG artifacts.  That makes debug evidence easy to review in GitHub and
+easy to discuss in an interview without launching Questa's waveform viewer.
+
+**DUT-focused coverage**
+
+Coverage is scoped to the design under test.  This avoids the common mistake of
+reporting high coverage because the testbench itself was instrumented.
+
+## Intentional Bug Injection
+
+The final RTL includes guarded bug macros that can be enabled one at a time in
+`run.do`.  They are intentionally commented out in the default passing build.
+
+| Macro | What it breaks | Why it is valuable |
+|---|---|---|
+| `WDATA_CORRUPTION_BUG` | Corrupts write data before storing | Proves the scoreboard catches data integrity failures |
+| `SYNC_BUG` | Removes the second synchronizer flop | Exercises CDC robustness checks |
+| `RPTR_BUG` | Uses binary read pointer instead of Gray | Tests pointer encoding assumptions |
+| `WPTR_FULLFLAG_BUG` | Uses naive full equality | Proves wrap-aware full detection matters |
+
+This is a strong verification technique because it checks that the testbench
+fails for real bugs, not just that it passes for the happy path.
+
+## Milestone Progression
+
+The repo is intentionally organized as snapshots.  Each milestone can be read as
+a step in verification maturity.
+
+| Directory | What it demonstrates |
+|---|---|
+| [`M1/ConventionalTB`](M1/ConventionalTB/) | Procedural SystemVerilog testbench, queue scoreboard, first farm artifacts |
+| [`M2/CLASS`](M2/CLASS/) | Pre-UVM class-based architecture: generator, driver, monitor, scoreboard, environment |
+| [`M3/CLASS`](M3/CLASS/) | Enhanced class TB with coverage and directed half-flag timing evidence |
+| [`M4/UVM`](M4/UVM/) | UVM conversion: agents, sequencers, sequences, monitors, scoreboard |
+| [`M5/UVM`](M5/UVM/) | UVM coverage, assertions, bug-injection hooks, improved run flow |
+| [`Post_M5/UVM`](Post_M5/UVM/) | Canonical final implementation with reset-aware scoreboard and final farm proof |
+| [`Miscellaneous`](Miscellaneous/) | Standalone FIFO variants, additional directed flag/debug experiments |
+
+The history matters because it shows more than a finished answer.  It shows the
+engineering path: identify a weakness, create evidence, fix the design or
+testbench, and preserve the proof.
+
+## Notable Engineering Fixes
+
+These are the design and verification issues that are worth calling out during a
+technical walkthrough:
+
+**CDC synchronizer domain correction**
+
+Several earlier snapshots had synchronizers clocked or reset in the wrong
+domain.  The fixed pattern puts both synchronizer flops in the destination
+domain.
+
+**Elimination of unsafe dual-clock occupancy**
+
+A shared `fifo_count` is tempting, but it is not a safe CDC structure if both
+clocks write it.  The final design computes occupancy locally from local binary
+pointers and synchronized remote Gray pointers.
+
+**Immediate half-flag timing**
+
+The half flags originally behaved one clock late in some versions.  Directed
+tests now prove the immediate threshold behavior.
+
+**Race-free testbench sampling**
+
+Drivers moved to negedge drive timing; monitors publish only accepted
+transactions.  This prevents the testbench from creating false pass/fail
+behavior due to simulator scheduling races.
+
+**Reset-aware checking**
+
+The final Post_M5 run keeps periodic reset stimulus enabled and makes the
+scoreboard robust to it.  That is harder than simply disabling reset to make the
+test pass.
+
+**Reproducible debug artifacts**
+
+The repo includes scripts that parse farm-generated VCDs into CSV, SVG, and PNG
+waveforms.  This turns simulator evidence into artifacts that can be reviewed
+without opening a waveform GUI.
+
+## How To Run The Final Simulation
+
+This project targets Siemens/Mentor Questa.  The checked-in farm transcripts
+were generated with Questa 2021.3_1.
+
+From the final directory:
+
+```sh
+cd Post_M5/UVM
+vsim -c -do "do run.do; quit -f"
+```
+
+Focused directed flag run:
+
+```sh
+cd Post_M5/UVM
+vsim -c -do "do run_flags.do; quit -f"
+```
+
+Regenerate waveform images after a VCD-producing run:
+
+```sh
+cd Post_M5/UVM
+python3 make_artifacts.py
+python3 make_flag_debug_waveforms.py
+```
+
+The `quit -f` is important for noninteractive runs because the run scripts set
+`NoQuitOnFinish 1`.
+
+## Where To Look First
+
+For a fast review:
+
+1. [`Post_M5/UVM/async_fifo.sv`](Post_M5/UVM/async_fifo.sv)
+   Final RTL: memory, pointer handlers, Gray conversion, synchronizers, flags.
+
+2. [`Post_M5/UVM/async_fifo_scoreboard.sv`](Post_M5/UVM/async_fifo_scoreboard.sv)
+   Reset-aware queue scoreboard and final PASS/FAIL summary.
+
+3. [`Post_M5/UVM/async_fifo_coverage.sv`](Post_M5/UVM/async_fifo_coverage.sv)
+   Functional coverage model.
+
+4. [`Post_M5/UVM/run.do`](Post_M5/UVM/run.do)
+   Questa compile, optimization, simulation, and coverage flow.
+
+5. [`Post_M5/UVM/MANIFEST.txt`](Post_M5/UVM/MANIFEST.txt)
+   The concise farm evidence record: what was run, what passed, and what
+   artifacts were generated.
+
+6. [`Post_M5/UVM/design.md`](Post_M5/UVM/design.md)
+   Detailed post-fix engineering notes.
+
+## Suggested Interview Story
+
+Here is a concise way to present the project:
+
+> This repo verifies an asynchronous FIFO used for clock-domain crossing.  I
+> started from procedural and class-based testbenches, then evolved the
+> environment into UVM with independent read/write agents, a queue scoreboard,
+> coverage, assertions, and bug-injection hooks.  The final design uses
+> Gray-coded pointers and destination-domain two-flop synchronizers.  A key bug
+> I fixed was half-full and half-empty flags asserting one clock late; the fix
+> computes flags from next-pointer occupancy, and the repo includes farm-backed
+> waveforms proving the exact threshold behavior.  The final Questa run is
+> warning-clean, reset-aware, reports zero UVM errors/fatals, and hits 100%
+> coverage.
+
+## Repository Notes
+
+- The milestone directories are historical snapshots.  They are useful for
+  showing progression, but [`Post_M5/UVM`](Post_M5/UVM/) is the canonical final
+  implementation.
+- Raw simulator outputs such as `.vcd`, `.ucdb`, `.wlf`, `work/`, and
+  `modelsim.ini` are gitignored.  The repo commits the useful derived evidence:
+  transcripts, manifests, CSV samples, SVGs, and PNGs.
+- [`CLAUDE.md`](CLAUDE.md) documents the project-specific simulation workflow
+  and farm conventions used while repairing and verifying the repo.
