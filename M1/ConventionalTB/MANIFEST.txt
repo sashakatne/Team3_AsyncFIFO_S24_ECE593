@@ -1,0 +1,133 @@
+Run:        M1/ConventionalTB (Cliff Cummings Style #2 async FIFO + queue scoreboard, POST-FIX)
+Start UTC:  2026-05-25T20-03-35Z
+End   UTC:  2026-05-25T20-04-16Z   (per the vlog End time on the remote host)
+Host:       Questa-licensed remote host (anonymized)
+Questa:     2021.3_1   (/pkgs/mentor/questa/2021.3_1/questasim/bin)
+License:    <license-server>:<port>
+
+Purpose:
+  Demonstrate that the M1/ConventionalTB async FIFO (Style #2) and its
+  procedural-but-self-checking testbench compile cleanly and pass *** PASSED ***
+  with 100% code coverage AFTER the targeted defect fixes documented in
+  design.md.
+
+Fixes applied (see design.md "Fixes applied" for full rationale):
+  DUT (async_fifo2.sv):
+    A. Removed dual-driver violation: `fifo_count` is no longer written by
+       two `always_ff` blocks on different clocks. `fifo_memory` is now a
+       pure-storage module; the half_full / half_empty flags are computed
+       per-domain in write_pointer (from binary_wptr - gray-to-bin(wq2_rptr))
+       and read_pointer (from gray-to-bin(rq2_wptr) - binary_rptr).
+    B. Corrected sync flop reset domains: `sync_w2r` (clocked by rclk) is
+       now reset by rrst (was wrst); `sync_r2w` (clocked by wclk) is now
+       reset by wrst (was rrst). Each sync now uses its destination
+       domain's reset, the canonical Cummings pattern.
+    C. Added `rData <= '0` to the read-side reset branch in fifo_memory.
+       Previously rData was uninitialized at startup ('X') until the first
+       `rinc & ~rEmpty` event.
+  TB (async_fifo_tb.sv):
+    D. Added a leading comment explaining that the `check_wFull` and
+       `check_rEmpty` tasks are intentionally one-shot (because a naive
+       continuous monitor would false-error during the sync window) and
+       changed `fork ... join` to `fork ... join_none` so the main initial
+       block doesn't wait on them. Behaviour is otherwise unchanged.
+
+Commands executed (from the remote run dir, in order):
+  vlib work    # see Caveats #1
+  vsim -c -do 'do run.do; quit -f' 2>&1 | tee transcript.txt
+
+Files compiled (per run.do):
+  vlog -source -lint async_fifo2.sv     (asynchronous_fifo + 4 submodules)
+  vlog -source -lint async_fifo_tb.sv   (procedural TB with checker tasks)
+  vopt top -o top_optimized +acc +cover=sbfec+asynchronous_fifo(rtl).
+
+Results:
+  Compile (async_fifo2.sv):    Errors 0, Warnings 0
+  Compile (async_fifo_tb.sv):  Errors 0, Warnings 0
+  vopt:                        Errors 0, Warnings 0
+  Simulation:
+    *** PASSED *** printed by TB at async_fifo_tb.sv:92 (scoreboard verdict)
+    $finish at async_fifo_tb.sv:98 at time 17930 ns
+    Exit code 0
+    Zero $error prints across the full random run
+
+Code coverage (per-instance, from vcover report async_fifo.ucdb):
+  /top/DUT/mem_inst     fifo_memory     Branches 5/5,             Statements 5/5    100%
+  /top/DUT/write_ptr    write_pointer   Branches 2/2, Expr 6/6,   Statements 17/17  100%
+  /top/DUT/read_ptr     read_pointer    Branches 2/2, Expr 4/4,   Statements 17/17  100%
+  /top/DUT/sync_w2r     sync            Branches 2/2,             Statements 5/5    100%
+  /top/DUT/sync_r2w     sync            Branches 2/2,             Statements 5/5    100%
+  /top/DUT             asynchronous_fifo                Expr 4/4                    100%
+  TOTAL                                                                              100.00%
+
+  Note: the bin counts changed from the pre-fix run because the half-flag
+  computation moved out of fifo_memory and into write_pointer / read_pointer.
+  Coverage is still 100% on every instance.
+
+Functional evidence (from waveform_samples.csv, derived from dump.vcd):
+  - 1481 change events captured across the full 0 - 17930 ns range.
+  - error_flag never transitions to 1 (zero scoreboard mismatches across
+    the entire two-burst random sequence). The full random pattern from
+    $urandom is identical to the pre-fix run; the data integrity result
+    is unchanged because the original DUT's data path was already correct
+    -- the dual-driver fix removed a latent SV LRM violation, not a
+    functional defect that the scoreboard could see.
+  - First wFull assertion observed during the first burst (around 1 us
+    of simulated time, visible in the windowed waveforms.png).
+
+Caveats:
+  #1  The run.do still has a bare 'vdel -all' (no 'catch {}' wrapper). On
+      a fresh checkout vdel hard-errors; workaround: 'vlib work' before
+      'do run.do'. This is a run.do issue and was left as-is to preserve
+      milestone-style scripting; the proper fix would be 'catch {vdel -all}'.
+  #2  'vcover report ... -cvg -details' prints 'No matching coverage data
+      found' because the testbench defines no covergroups -- only
+      statement/branch/FEC code coverage is instrumented. Not a defect.
+  #3  run.do ends with 'add wave -position insertpoint sim:/top/DUT/*'
+      which executes after 'run -all' in batch mode. Harmless.
+  #4  Pre-existing transcript.txt and transcript2.txt in this directory
+      are the team's *original* June-2024 Questa-2019.2_1 transcripts,
+      preserved (with personal-info redactions applied per user request)
+      for milestone provenance. The new farm transcript from the 2026
+      verification run is transcript_farm.txt.
+  #5  No bug-injection flags enabled.
+
+Artifacts in this directory:
+  Source (POST-FIX, see design.md changelog for the diff):
+    async_fifo2.sv          - DUT (Style #2): asynchronous_fifo + fifo_memory +
+                              write_pointer + read_pointer + sync x2
+    async_fifo.sv           - alternate DUT (not used by run.do as written; unchanged)
+    async_fifo_tb.sv        - procedural TB with queue scoreboard + $error
+    async_fifo_tb2.sv       - alternate TB (commented out in run.do; unchanged)
+    run.do                  - Questa script (vdel, vlib, vlog, vopt, vsim, coverage)
+    transcript.txt          - team's original June-2024 transcript (personal info redacted)
+    transcript2.txt         - team's original second-run transcript (personal info redacted)
+
+  Farm-run evidence (this work):
+    transcript_farm.txt     - Full Questa transcript from the 2026 post-fix farm run
+    dump.vcd                - VCD generated by $dumpfile/$dumpvars in the TB (gitignored)
+    async_fifo.ucdb         - Questa UCDB with 100% code coverage on DUT (gitignored)
+    waveform_samples.csv    - All 1481 tracked-signal change events from dump.vcd
+    waveforms.svg           - Windowed digital-waveform plot (0-2500 ns)
+    waveforms.png           - waveforms.svg converted via sips (1800x712)
+    make_artifacts.py       - Reproducible: parses dump.vcd -> CSV + SVG + PNG
+    MANIFEST.txt            - This file
+    design.md               - DUT review, pre-fix defects, and Fixes-applied changelog
+
+Reproducing locally:
+  1. SSH to a Questa-licensed remote host.
+  2. mkdir a fresh dir, scp async_fifo2.sv async_fifo_tb.sv run.do.
+  3. Pre-create work to dodge Caveat #1:
+         vlib work
+  4. Run: vsim -c -do 'do run.do; quit -f' 2>&1 | tee transcript_farm.txt
+  5. Copy transcript_farm.txt, dump.vcd, async_fifo.ucdb back to this dir,
+     then run:
+         python3 make_artifacts.py
+     to regenerate waveform_samples.csv, waveforms.svg, waveforms.png.
+
+Verdict: PASS (clean). Compile, elaborate, simulate, and coverage all reach
+         their pass criteria with zero warnings. The scoreboard's
+         *** PASSED *** print plus zero $error prints across the VCD trace
+         constitute the proof; 100% statement/branch/FEC coverage on the
+         DUT confirms the random stimulus covered every reachable code path
+         in the post-fix RTL.
