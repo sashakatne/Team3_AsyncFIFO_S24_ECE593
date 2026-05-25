@@ -1,72 +1,66 @@
 import async_fifo_pkg::*;
 
 class environment;
-    
-//Instantiate Generator and Driver
-generator gen;
-driver driv;
-monitor mon;
-scoreboard scb;
-  
-//Instantiate Communication between Generator and Driver
-mailbox gen2driv;
-mailbox mon2scb;
-  
-event driv2gen;
-  
-virtual intf vif;
 
-int no_of_transactions;
+  generator  gen;
+  driver     driv;
+  monitor    mon;
+  scoreboard scb;
 
-function new(virtual intf vif);
-	this.vif = vif;
-    gen2driv = new();
-    mon2scb	= new();
-    gen	= new(gen2driv, driv2gen);
-    driv = new (vif,gen2driv);
-    mon = new (vif, mon2scb);
-    scb	= new (mon2scb);
-endfunction
-  
- //reset task
-task pre_env();
-	driv.reset();
-endtask
-    
-//Generate and Drive
-task test();
+  // Stimulus mailboxes (generator -> driver)
+  mailbox gen2driv_w;
+  mailbox gen2driv_r;
 
-	$display("********************************");
-	$display("------Bursts requested %0d-------",gen.trans_count);
-    $display("********************************");
-    $display("********************************");
-    
-    gen.main();
-	driv.main();
-    mon.main();
-	scb.main();
+  // Observation mailboxes (monitor -> scoreboard)
+  mailbox mon2scb_w;
+  mailbox mon2scb_r;
 
-endtask
+  virtual intf vif;
 
-task post_env();
-	$display("IN POST TEST");
-    wait(driv2gen.triggered);
-    $display("1 DONE");
-    wait(gen.trans_count == driv.no_trans);
-    $display("2 DONE");
-    wait (gen.trans_count == scb.no_trans);
-    $display("3 DONE");
-endtask
-    
-//task run
-task run();
-	pre_env();
-    for (int i = 0; i < no_of_transactions; i++) 
-	begin
-    	test(); // Call the original drive task
-    end
-    //post_env();
+  // Total stimulus cycles per side. Set by the test.
+  int no_of_transactions;
+
+  function new(virtual intf vif);
+    this.vif        = vif;
+    gen2driv_w  = new();
+    gen2driv_r  = new();
+    mon2scb_w   = new();
+    mon2scb_r   = new();
+    gen         = new(gen2driv_w, gen2driv_r);
+    driv        = new(vif, gen2driv_w, gen2driv_r);
+    mon         = new(vif, mon2scb_w,  mon2scb_r);
+    scb         = new(mon2scb_w, mon2scb_r);
+  endfunction
+
+  task pre_env();
+    driv.reset();
+  endtask
+
+  // Start the scoreboard consumer threads first (they sit on their mailboxes
+  // and process events as the producer side emits them). Then run the
+  // generator and the driver/monitor threads in parallel for the full
+  // stimulus count.
+  task test_run();
+    scb.main();
+    fork
+      gen.main();
+      driv.main(gen.trans_count);
+      mon.main(gen.trans_count);
+    join
+  endtask
+
+  // Quiet period so the scoreboard can drain any in-flight monitor messages
+  // that arrived in the last few clock cycles of the active phase.
+  task post_env();
+    repeat (200) @(posedge vif.rclk);
+    scb.final_report();
+  endtask
+
+  task run();
+    pre_env();
+    test_run();
+    post_env();
     $finish;
-endtask
-        
+  endtask
+
 endclass
