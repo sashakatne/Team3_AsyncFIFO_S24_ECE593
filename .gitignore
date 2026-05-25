@@ -14,3 +14,6 @@ CLAUDE.md
 work/
 transcript
 modelsim.ini
+
+# Local deck generation helper; keep the generated PPTX tracked instead.
+make_recruiter_pptx.py
