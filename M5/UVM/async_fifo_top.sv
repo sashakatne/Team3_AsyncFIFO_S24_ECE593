@@ -20,8 +20,16 @@ module tb_top;
 	always #(WCLK_PERIOD/2) wclk = ~wclk;
 	always #(RCLK_PERIOD/2) rclk = ~rclk;
 
-  always #(RESET_PERIOD) wrst = ~wrst;
-  always #(RESET_PERIOD) rrst = ~rrst;
+`ifdef RESET_SEQUENCE
+  always begin
+    #(RESET_PERIOD);
+    wrst = '0;
+    rrst = '0;
+    #(RESET_PERIOD * 0.05);
+    wrst = '1;
+    rrst = '1;
+  end
+`endif
   
   intf intf (wclk, rclk, wrst, rrst);
     
@@ -44,6 +52,12 @@ module tb_top;
     `uvm_info("tb_top","uvm_config_db set for uvm_tb_top", UVM_LOW);
   end
 
+  initial
+  begin
+    $dumpfile("dump.vcd");
+    $dumpvars;
+  end
+
 	initial 
 	begin
 		`ifdef BASE_TEST
@@ -62,9 +76,8 @@ module tb_top;
     rrst = '0;
     intf.rinc ='0;
     intf.winc = '0;
-    #1;
-    rrst = '1;
-    wrst = '1;
+    #(WCLK_PERIOD * 2) wrst = '1;
+    #(RCLK_PERIOD * 2) rrst = '1;
   end
 
   `include "async_fifo_coverage.sv"
@@ -102,4 +115,3 @@ module tb_top;
   end 
 
 endmodule
-

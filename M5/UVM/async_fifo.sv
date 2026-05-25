@@ -31,17 +31,18 @@ module asynchronous_fifo #(
         .data_out(rData)
     );
 
-    // Synchronizer instances for read and write pointers
+    // Synchronizer instances for read and write pointers. Each pointer is
+    // sampled in the destination clock/reset domain.
     synchronizer #(ADDR_SIZE) synchronizer_r2w_inst (
-        .clk(rclk),
-        .rst_n(rrst),
+        .clk(wclk),
+        .rst_n(wrst),
         .d_in(g_rptr),
         .d_out(g_rptr_sync)
     );
 
     synchronizer #(ADDR_SIZE) synchronizer_w2r_inst (
-        .clk(wclk), 
-        .rst_n(wrst),
+        .clk(rclk),
+        .rst_n(rrst),
         .d_in(g_wptr),
         .d_out(g_wptr_sync)
     );
@@ -98,7 +99,7 @@ module fifo_mem #(
 
     // Read operation
     always_ff @(posedge rclk) begin
-        `ifdef INJECT_THE_BUG
+        `ifdef WDATA_CORRUPTION_BUG
             if(r_en & !empty) begin
                 data_out <= fifo[b_rptr[ADDR_SIZE-1:0]] ^ 8'hFF; // Corrupting data by XORing with 0xFF
             end
@@ -128,7 +129,7 @@ module synchronizer #(
             d_out <= '0;
         end
         else begin
-            `ifdef INJECT_THE_BUG
+            `ifdef SYNC_BUG
                 q1 <= '0;    // Introduce bug: q1 is not assigned d_in
                 d_out <= q1; // This results in q1 always being zero
             `else
@@ -173,10 +174,10 @@ module rptr_handler #(
     endgenerate
 
     // Calculate pointer difference and half-empty flag
-    assign rptr_diff  = b_wptr_sync - b_rptr;
+    assign rptr_diff  = b_wptr_sync - b_rptr_next;
     assign rhalf_empty = (rptr_diff <= (DEPTH >> 1));
 
-    `ifdef INJECT_THE_BUG
+    `ifdef RPTR_BUG
         // Introduce bug in empty flag calculation
         assign rempty = (g_wptr_sync == g_rptr_next) & (rptr_diff != 0);
     `else
@@ -241,10 +242,10 @@ module wptr_handler #(
     endgenerate
 
     // Calculate pointer difference and half-full flag
-    assign wptr_diff  = b_wptr - b_rptr_sync;
+    assign wptr_diff  = b_wptr_next - b_rptr_sync;
     assign whalf_full = (wptr_diff >= (DEPTH >> 1));
 
-    `ifdef INJECT_THE_BUG
+    `ifdef WPTR_FULLFLAG_BUG
         // Introduce bug in full flag calculation
         assign wfull = (g_wptr_next == g_rptr_sync);
     `else

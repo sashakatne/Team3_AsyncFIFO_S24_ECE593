@@ -1,9 +1,14 @@
-vdel -all
-
+# Guard vdel so a fresh farm checkout does not fail when work/ is absent.
+if {[file exists work]} {
+  vdel -all
+}
 vlib work
 
-# vlog -source -lint async_fifo.sv
-vlog +define+INJECT_THE_BUG -source -lint async_fifo.sv
+vlog -source -lint async_fifo.sv
+# vlog -source -lint +define+WDATA_CORRUPTION_BUG async_fifo.sv
+# vlog -source -lint +define+SYNC_BUG async_fifo.sv
+# vlog -source -lint +define+RPTR_BUG async_fifo.sv
+# vlog -source -lint +define+WPTR_FULLFLAG_BUG async_fifo.sv
 
 vlog -source -lint async_fifo_package.sv
 vlog -source -lint async_fifo_top.sv

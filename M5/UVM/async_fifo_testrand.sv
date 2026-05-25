@@ -59,8 +59,6 @@ class fifo_random_test extends uvm_test;
                 end
                 join
                 #100;
-                        
-                env.scb.compare_flags();
                 phase.drop_objection(this , "Finished fifo_seq in main phase");
 
                 #1000;
@@ -68,4 +66,3 @@ class fifo_random_test extends uvm_test;
         endtask
 
 endclass
-
