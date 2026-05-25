@@ -35,18 +35,9 @@ endfunction
 
 task run_phase(uvm_phase phase);
 	super.run_phase(phase);
-			fork 
-				begin : read_monitor
-	       				forever @(negedge vif.rclk)begin
-        					mon_read();
-    					end
-				end
-				begin
-
-                  wait (r_count == trans_count_read);
-                  
-				end
-			join_any
+	forever begin
+		mon_read();
+	end
         
 		
 endtask
@@ -55,18 +46,20 @@ endtask
 task mon_read;
      
   transaction_read txr;
-if (vif.rinc==1)begin
-txr=transaction_read::type_id::create("txr"); 
-		fork
-			begin
-				@(negedge vif.rclk);
-				txr.rData = vif.rData; 
-              $display ("\t Monitor rinc = 1 \t rData = %0h \t \t rcount=%0d",  txr.rData, r_count+1);
+  bit accepted;
 
-   				port_read.write(txr);
-				r_count= r_count +1;
-			end
-		join_none	
+	@(negedge vif.rclk);
+	#1;
+	accepted = (vif.rrst === 1'b1) && (vif.rinc === 1'b1) && (vif.rEmpty === 1'b0);
+	@(posedge vif.rclk);
+	#1;
+	if (accepted) begin
+		txr=transaction_read::type_id::create("txr");
+		txr.rinc = 1'b1;
+		txr.rData = vif.rData;
+		txr.rEmpty = vif.rEmpty;
+		port_read.write(txr);
+		r_count= r_count +1;
   	end
 endtask
 endclass

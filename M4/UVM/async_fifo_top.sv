@@ -33,7 +33,7 @@ module tb_top;
               .wrst(intf.wrst),
               .rData(intf.rData));
   
-  initial 
+  initial
   begin
     uvm_config_db#(virtual intf)::set(null, "*","vif", intf);
     `uvm_info("tb_top","uvm_config_db set for uvm_tb_top", UVM_LOW);
@@ -48,6 +48,12 @@ module tb_top;
 		`endif
 	end
 
+  initial
+  begin
+    $dumpfile("dump.vcd");
+    $dumpvars;
+  end
+
   initial 
   begin
     wclk=0;
@@ -56,9 +62,8 @@ module tb_top;
     rrst=0;
     intf.rinc=0;
     intf.winc=0;
-    #1;
-    rrst =1;
-    wrst=1;
+    #(WCLK_PERIOD * 2) wrst = 1;
+    #(RCLK_PERIOD * 2) rrst = 1;
   end
 
     `include "async_fifo_coverage.sv"

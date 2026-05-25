@@ -5,7 +5,7 @@
 class write_sequence extends uvm_sequence#(transaction_write);
 `uvm_object_utils(write_sequence)
 
-int tx_count_write=100;
+int tx_count_write=TX_COUNT_WR;
 transaction_write txw;
     
 function new(string name = "write_sequence");
@@ -29,7 +29,7 @@ endclass
 class read_sequence extends uvm_sequence#(transaction_read);
 `uvm_object_utils(read_sequence)
 
-int tx_count_read=100;
+int tx_count_read=TX_COUNT_RD;
 transaction_read txr;
     
 function new(string name = "read_sequence");

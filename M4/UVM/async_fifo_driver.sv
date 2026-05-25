@@ -27,7 +27,7 @@ super.connect_phase(phase);
 endfunction
 
 task drive_write(transaction_write txw);
-	@(posedge intf_vi.wclk);
+	@(negedge intf_vi.wclk);
   	this.intf_vi.winc = txw.winc;
         this.intf_vi.wData = txw.wData;
 
@@ -45,9 +45,6 @@ repeat(10) @(posedge intf_vi.wclk);
   for (integer i = 0; i < trans_count_write ; i++) begin
 			txw=transaction_write::type_id::create("txw");
 			seq_item_port.get_next_item(txw);
-	    $display("SK_DEBUG4 entered before wait statement wr_driver");	    
-            wait(intf_vi.wFull ==0);
-	    $display("SK_DEBUG5 entered after wait statement wr_driver");
             drive_write(txw);
             seq_item_port.item_done();
 
@@ -83,7 +80,7 @@ super.connect_phase(phase);
 endfunction
 
 task drive_read(transaction_read txr);
- 	 @(posedge intf_vi.rclk);
+	@(negedge intf_vi.rclk);
   	this.intf_vi.rinc = txr.rinc;
         
   	
@@ -101,8 +98,6 @@ this.intf_vi.rinc <=0;
 						
 			seq_item_port.get_next_item(txr);
 			
-            		wait(intf_vi.rEmpty==0);
-
             		drive_read(txr);
             
             		seq_item_port.item_done();

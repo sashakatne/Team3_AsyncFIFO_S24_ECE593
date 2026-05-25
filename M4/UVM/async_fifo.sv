@@ -18,8 +18,10 @@ module asynchronous_fifo #(
 
     //FIFO Memory
     fifo_mem #(DATA_SIZE, ADDR_SIZE) fifo_mem_inst (.wclk(wclk), .w_en(winc), .rclk(rclk), .r_en(rinc), .b_wptr(wptr), .b_rptr(rptr), .data_in(wData), .full(wFull), .empty(rEmpty), .data_out(rData));
-    synchronizer #(ADDR_SIZE) synchronizer_r2w_inst (.clk(rclk), .rst_n(rrst), .d_in(g_rptr), .d_out(g_rptr_sync));
-    synchronizer #(ADDR_SIZE) synchronizer_w2r_inst (.clk(wclk), .rst_n(wrst), .d_in(g_wptr), .d_out(g_wptr_sync));
+    // Sync read pointer into the write domain: destination clock = wclk, destination reset = wrst.
+    synchronizer #(ADDR_SIZE) synchronizer_r2w_inst (.clk(wclk), .rst_n(wrst), .d_in(g_rptr), .d_out(g_rptr_sync));
+    // Sync write pointer into the read domain: destination clock = rclk, destination reset = rrst.
+    synchronizer #(ADDR_SIZE) synchronizer_w2r_inst (.clk(rclk), .rst_n(rrst), .d_in(g_wptr), .d_out(g_wptr_sync));
     rptr_handler #(ADDR_SIZE) rptr_handler_inst (.rclk(rclk), .rrst_n(rrst), .r_en(rinc), .g_wptr_sync(g_wptr_sync), .b_rptr(rptr), .g_rptr(g_rptr), .empty(rEmpty), .half_empty(rHalfEmpty));
     wptr_handler #(ADDR_SIZE) wptr_handler_inst (.wclk(wclk), .wrst_n(wrst), .w_en(winc), .g_rptr_sync(g_rptr_sync), .b_wptr(wptr), .g_wptr(g_wptr), .full(wFull), .half_full(wHalfFull));
 
@@ -109,7 +111,7 @@ module rptr_handler #(
             assign b_wptr_sync[i] = b_wptr_sync[i+1] ^ g_wptr_sync[i];
         end
     endgenerate
-    assign rptr_diff  = b_wptr_sync - b_rptr;
+    assign rptr_diff  = b_wptr_sync - b_rptr_next;
     assign rhalf_empty = (rptr_diff <= (DEPTH >> 1));
 
     assign rempty = (g_wptr_sync == g_rptr_next);
@@ -169,7 +171,7 @@ module wptr_handler #(
             assign b_rptr_sync[i] = b_rptr_sync[i+1] ^ g_rptr_sync[i];
         end
     endgenerate
-    assign wptr_diff  = b_wptr - b_rptr_sync;
+    assign wptr_diff  = b_wptr_next - b_rptr_sync;
     assign whalf_full = (wptr_diff >= (DEPTH >> 1));
 
     assign wfull = (g_wptr_next == {~g_rptr_sync[PTR_WIDTH:PTR_WIDTH-1], g_rptr_sync[PTR_WIDTH-2:0]});

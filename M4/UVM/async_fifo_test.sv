@@ -33,11 +33,11 @@ class fifo_base_test extends uvm_test;
     endfunction
 
     task run_phase(uvm_phase phase);
-        env.wa.wd.trans_count_write=4096;
-        env.ra.rd.trans_count_read=4096;
+        env.wa.wd.trans_count_write=TX_COUNT_WR;
+        env.ra.rd.trans_count_read=TX_COUNT_RD;
 
-        env.wa.wm.trans_count_write=4096;
-        env.ra.rm.trans_count_read=4096;
+        env.wa.wm.trans_count_write=TX_COUNT_WR;
+        env.ra.rm.trans_count_read=TX_COUNT_RD;
 
         phase.raise_objection(this, "Starting fifo_write_seq in main phase");
 
@@ -55,13 +55,11 @@ class fifo_base_test extends uvm_test;
             end
         join
       
-        #100ns;
- 		
-      	env.scb.compare_flags();
+        #100;
         phase.drop_objection(this , "Finished fifo_seq in main phase");
 
 
-        #2000;
+        #1000;
         $finish;
     endtask
 

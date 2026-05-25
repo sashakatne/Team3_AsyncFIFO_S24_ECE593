@@ -1,0 +1,95 @@
+Reading pref.tcl
+
+# 2021.3_1
+
+# do run_flags.do
+# QuestaSim-64 vlog 2021.3_1 Compiler 2021.08 Aug 15 2021
+# Start time: 15:26:49 on May 25,2026
+# vlog -source -lint async_fifo.sv
+# -- Compiling module asynchronous_fifo
+# -- Compiling module fifo_mem
+# -- Compiling module synchronizer
+# -- Compiling module rptr_handler
+# -- Compiling module wptr_handler
+#
+# Top level modules:
+# 	asynchronous_fifo
+# End time: 15:26:49 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2021.3_1 Compiler 2021.08 Aug 15 2021
+# Start time: 15:26:49 on May 25,2026
+# vlog -source -lint flag_threshold_tb.sv
+# -- Compiling module flag_threshold_tb
+#
+# Top level modules:
+# 	flag_threshold_tb
+# End time: 15:26:49 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vopt 2021.3_1 Compiler 2021.08 Aug 15 2021
+# Start time: 15:26:49 on May 25,2026
+# vopt flag_threshold_tb -o flag_threshold_optimized "+acc"
+#
+# Top level modules:
+# 	flag_threshold_tb
+#
+# Analyzing design...
+# -- Loading module flag_threshold_tb
+# -- Loading module asynchronous_fifo
+# -- Loading module fifo_mem
+# -- Loading module synchronizer
+# -- Loading module rptr_handler
+# -- Loading module wptr_handler
+# Optimizing 6 design-units (inlining 0/7 module instances):
+# -- Optimizing module flag_threshold_tb(fast)
+# -- Optimizing module wptr_handler(fast)
+# -- Optimizing module rptr_handler(fast)
+# -- Optimizing module asynchronous_fifo(fast)
+# -- Optimizing module fifo_mem(fast)
+# -- Optimizing module synchronizer(fast)
+# Optimized design name is flag_threshold_optimized
+# End time: 15:26:50 on May 25,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# vsim flag_threshold_optimized
+# Start time: 15:26:51 on May 25,2026
+# //  Questa Sim-64
+# //  Version 2021.3_1 linux_x86_64 Aug 15 2021
+# //
+# //  Copyright 1991-2021 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading sv_std.std
+# Loading work.flag_threshold_tb(fast)
+# Loading work.asynchronous_fifo(fast)
+# Loading work.fifo_mem(fast)
+# Loading work.synchronizer(fast)
+# Loading work.rptr_handler(fast)
+# Loading work.wptr_handler(fast)
+# 1
+# [CASE half_full] Fill to exactly DEPTH/2=32 entries
+# [OK half_full_immediate] occ=32 wHalfFull=1
+# [OBS half_full_after_idle] occ=32 wHalfFull=1
+# [CASE full] Continue filling to DEPTH=64 entries
+# [OK full_immediate] occ=64 after write #64, wFull=1
+# [OK overflow_blocked] full write attempt rejected: occ=64 accepted_writes=64 wFull=1
+# [CASE half_empty] Drain from full down to exactly DEPTH/2=32 entries
+# [OK half_empty_immediate] occ=32 rHalfEmpty=1
+# [OBS half_empty_after_idle] occ=32 rHalfEmpty=1
+# [CASE empty] Continue draining to 0 entries
+# [OK empty_immediate] occ=0 after read #64, rEmpty=1
+# [SUMMARY] half_full_lag_seen=0 half_empty_lag_seen=0 full_ok_seen=1 overflow_blocked_seen=1 empty_ok_seen=1
+# ** Note: $finish    : flag_threshold_tb.sv(210)
+#    Time: 2491 ns  Iteration: 0  Instance: /flag_threshold_tb
+# 1
+# Break in Module flag_threshold_tb at flag_threshold_tb.sv line 210
+# Stopped at flag_threshold_tb.sv line 210
+#  quit -f
+# End time: 15:26:51 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0

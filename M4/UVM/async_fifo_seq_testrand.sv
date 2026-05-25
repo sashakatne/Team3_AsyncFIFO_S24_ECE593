@@ -5,7 +5,7 @@ import uvm_pkg::*;
 class write_sequence_random extends uvm_sequence#(transaction_write);
   `uvm_object_utils(write_sequence_random)
 
-int tx_count_write=4000;
+int tx_count_write=TX_COUNT_WR;
 transaction_write txw;
     
 function new(string name = "write_sequence_full");
@@ -35,7 +35,7 @@ class read_sequence_random extends uvm_sequence#(transaction_read);
   
 `uvm_object_utils(read_sequence_random)
 
-int tx_count_read=4000;
+int tx_count_read=TX_COUNT_RD;
 transaction_read txr;
     
 function new(string name = "read_sequence_random");

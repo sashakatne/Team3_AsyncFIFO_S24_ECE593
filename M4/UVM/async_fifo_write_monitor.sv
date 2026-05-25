@@ -34,33 +34,31 @@ endfunction
 task run_phase(uvm_phase phase);
 	super.run_phase(phase);
 
-    	 fork
-        	begin : write_monitor
-            		forever @(negedge vif.wclk) begin
-                	mon_write();
-            		end
-        	end
-
-        	begin : write_completion
-              wait (w_count == trans_count_write);
-        	end
-    	join
+	forever begin
+		mon_write();
+	end
 
 endtask
         
 task mon_write;
      
   transaction_write txw;
+  bit accepted;
+  logic [DATA_SIZE-1:0] sampled_wData;
 
-   	if (vif.winc==1) begin
-	
- 	txw=transaction_write::type_id::create("txw");  
- 	txw.winc = vif.winc;
-  	txw.wData = vif.wData;
-	$display ("\t Monitor winc = %0h \t wData = %0h \t w_count=%0d", txw.winc, txw.wData, w_count+1);
-   	port_write.write(txw);
-	w_count=w_count +1;
-		 
+	@(negedge vif.wclk);
+	#1;
+	accepted = (vif.wrst === 1'b1) && (vif.winc === 1'b1) && (vif.wFull === 1'b0);
+	sampled_wData = vif.wData;
+	@(posedge vif.wclk);
+	#1;
+	if (accepted) begin
+		txw=transaction_write::type_id::create("txw");
+		txw.winc = 1'b1;
+		txw.wData = sampled_wData;
+		txw.wFull = vif.wFull;
+		port_write.write(txw);
+		w_count=w_count +1;
 	end
 endtask
 endclass
