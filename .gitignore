@@ -1,0 +1,16 @@
+CLAUDE.md
+.codex
+.DS_Store
+*DS_Store
+
+# Raw Questa/ModelSim outputs - regenerated on every run.
+# Keep parsed evidence (CSV, SVG, PNG, MANIFEST, transcript.txt) but exclude
+# the binary/large source artefacts that the make_artifacts.py scripts
+# consume as input.
+*.vcd
+*.ucdb
+*.wlf
+*.qdb
+work/
+transcript
+modelsim.ini
