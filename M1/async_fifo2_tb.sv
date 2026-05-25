@@ -49,31 +49,34 @@ module top;
         #(CLK_PERIOD_WR*2) wrst_n = 1;
         #(CLK_PERIOD_RD*2) rrst_n = 1;
 
-        // Write 120 items
+        // Drive 120 write attempts; backpressured by wfull.
+        // Update stimulus at negedge so it is stable when the DUT samples
+        // at the next posedge -- this avoids the NBA-evaluation race that
+        // would otherwise let winc stay high for one extra cycle after
+        // wfull asserts.
         repeat (120) begin
-            @(posedge wclk) begin
-                if (!wfull) begin
-                    wdata <= wdata + 1;
-                    winc <= 1;
-                end else begin
-                    winc <= 0;
-                end
+            @(negedge wclk);
+            if (!wfull) begin
+                wdata = wdata + 1;
+                winc  = 1;
+            end else begin
+                winc  = 0;
             end
         end
+        @(negedge wclk);
+        winc = 0;
 
         // Wait for some cycles
         #(CLK_PERIOD_WR*10);
 
-        // Read items
+        // Drive 120 read attempts; backpressured by rempty.
         repeat (120) begin
-            @(posedge rclk) begin
-                if (!rempty) begin
-                    rinc <= 1;
-                end else begin
-                    rinc <= 0;
-                end
-            end
+            @(negedge rclk);
+            if (!rempty) rinc = 1;
+            else         rinc = 0;
         end
+        @(negedge rclk);
+        rinc = 0;
 
         // Complete
         #(CLK_PERIOD_RD*10);
@@ -86,4 +89,3 @@ module top;
     end
 
 endmodule
-   
