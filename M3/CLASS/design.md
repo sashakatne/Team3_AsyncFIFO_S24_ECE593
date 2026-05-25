@@ -1,4 +1,4 @@
-# M3/CLASS review (enhanced class-based async FIFO TB, POST-FIX READY)
+# M3/CLASS review (enhanced class-based async FIFO TB, POST-FIX)
 
 ## What lives here
 
@@ -138,7 +138,9 @@ targets meaningful FIFO behavior:
 `run.do` now has one coherent flow:
 
 ```tcl
-catch {vdel -all}
+if {[file exists work]} {
+  vdel -all
+}
 vlib work
 vlog -source -lint ...
 vopt async_fifo_top -o top_optimized +acc +cover=sbfec+asynchronous_fifo(rtl).
@@ -173,44 +175,68 @@ async_fifo_top
 The test currently runs 500 stimulus cycles per side, then allows a
 200-read-clock quiet period before the final scoreboard report.
 
-## Verification status
+## Farm simulation evidence
 
-This local workspace does not have Questa commands on PATH:
-
-```sh
-command -v vsim
-command -v vlog
-```
-
-Both returned no path during this pass, so a real compile/sim/coverage
-run could not be produced locally. The checked-in `M3/docs/transcript.txt`
-is the original pre-fix run: it compiled, reached 99.87% code coverage,
-but had only 78.92% covergroup coverage and ended with `vcover-7`
-because the old script asked `vcover` to open `coverage_results` as a
-UCDB.
-
-To complete the evidence package, run from `M3/CLASS` on a licensed
-Questa host:
+Generated on the PSU ECE farm with Questa 2021.3_1:
 
 ```sh
 vsim -c -do 'do run.do; quit -f' 2>&1 | tee transcript_farm.txt
 python3 make_artifacts.py
 ```
 
-Expected post-fix evidence shape should match M2:
+Run metadata:
 
-- all `vlog` and `vopt` phases end with `Errors: 0, Warnings: 0`;
-- scoreboard prints `Verdict: *** PASSED ***`;
-- `coverage save async_fifo.ucdb` succeeds;
-- `vcover report async_fifo.ucdb` reports DUT code coverage;
-- `vcover report async_fifo.ucdb -cvg -details` reports M3 covergroup
-  bins instead of the old `vcover-7` failure;
-- `dump.vcd` feeds `make_artifacts.py` to regenerate waveform CSV/SVG/PNG.
+- Start UTC: `2026-05-25T21-35-36Z`
+- End UTC: `2026-05-25T21-35-42Z`
+- Remote run dir: `~/claude-runs/2026-05-25T21-35-26Z_m3-class-sim`
+- Exit status: `0`
+
+The post-fix transcript proves the expected gate:
+
+- all five `vlog` phases and `vopt` end with `Errors: 0, Warnings: 0`;
+- the simulation reaches `$finish` at `async_fifo_environment.sv:58`,
+  time `14070 ns`;
+- the scoreboard prints `Verdict: *** PASSED ***`;
+- observed transactions are balanced: `206` writes, `206` reads,
+  residual queue size `0`, mismatches/errors `0`;
+- `vcover report async_fifo.ucdb` reports 100% filtered coverage;
+- `vcover report async_fifo.ucdb -cvg -details` reports 100%
+  covergroup coverage, with 26/26 bins hit.
+
+Code coverage:
+
+```
+/async_fifo_top/DUT/fifo_mem_inst         Branches 2/2, Conditions 2/2, Statements 3/3      100%
+/async_fifo_top/DUT/synchronizer_r2w_inst Branches 2/2,                 Statements 5/5      100%
+/async_fifo_top/DUT/synchronizer_w2r_inst Branches 2/2,                 Statements 5/5      100%
+/async_fifo_top/DUT/rptr_handler_inst     Branches 6/6, Expressions 14/14, Statements 22/22 100%
+/async_fifo_top/DUT/wptr_handler_inst     Branches 6/6, Expressions 14/14, Statements 22/22 100%
+TOTAL filtered view                                                                           100%
+```
+
+Functional coverage:
+
+```
+async_fifo_cover: 26/26 bins hit, TOTAL COVERGROUP COVERAGE 100.00%
+cp_write_access.blocked_full  hit 68
+cp_read_access.blocked_empty  hit 109
+```
+
+Waveform evidence:
+
+- `dump.vcd` from the farm run contains the full 0 - 14070 ns trace
+  and is gitignored as a raw simulator artifact.
+- `make_artifacts.py` parsed 836 tracked DUT-port signal changes into
+  `waveform_samples.csv`.
+- `waveforms.svg` and `waveforms.png` render the 0 - 2500 ns review
+  window.
+
+The checked-in `M3/docs/transcript.txt` remains the original pre-fix
+student run. It compiled, reached 99.87% code coverage, but had only
+78.92% covergroup coverage and ended with `vcover-7` because the old
+script asked `vcover` to open `coverage_results` as a UCDB.
 
 ## Open items
 
-- A farm-generated `transcript_farm.txt`, `waveform_samples.csv`,
-  `waveforms.svg`, and `waveforms.png` are still needed once Questa is
-  available.
 - The `fifo_mem` reset port remains intentionally unchanged. Closing
   the X window in RTL requires a port-list change.

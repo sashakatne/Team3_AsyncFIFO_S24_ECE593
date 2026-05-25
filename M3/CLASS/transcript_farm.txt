@@ -1,0 +1,508 @@
+Reading pref.tcl
+
+# 2021.3_1
+
+# do run.do
+# QuestaSim-64 vlog 2021.3_1 Compiler 2021.08 Aug 15 2021
+# Start time: 14:35:38 on May 25,2026
+# vlog -source -lint async_fifo.sv 
+# -- Compiling module asynchronous_fifo
+# -- Compiling module fifo_mem
+# -- Compiling module synchronizer
+# -- Compiling module rptr_handler
+# -- Compiling module wptr_handler
+# 
+# Top level modules:
+# 	asynchronous_fifo
+# End time: 14:35:38 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2021.3_1 Compiler 2021.08 Aug 15 2021
+# Start time: 14:35:38 on May 25,2026
+# vlog -source -lint async_fifo_package.sv 
+# -- Compiling package async_fifo_pkg
+# 
+# Top level modules:
+# 	--none--
+# End time: 14:35:38 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2021.3_1 Compiler 2021.08 Aug 15 2021
+# Start time: 14:35:38 on May 25,2026
+# vlog -source -lint async_fifo_interface.sv 
+# -- Compiling interface intf
+# 
+# Top level modules:
+# 	--none--
+# End time: 14:35:38 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2021.3_1 Compiler 2021.08 Aug 15 2021
+# Start time: 14:35:38 on May 25,2026
+# vlog -source -lint async_fifo_top.sv 
+# -- Compiling package async_fifo_top_sv_unit
+# -- Importing package async_fifo_pkg
+# -- Compiling program test
+# -- Compiling interface intf
+# -- Compiling module async_fifo_top
+# 
+# Top level modules:
+# 	async_fifo_top
+# End time: 14:35:39 on May 25,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2021.3_1 Compiler 2021.08 Aug 15 2021
+# Start time: 14:35:39 on May 25,2026
+# vlog -source -lint async_fifo_test.sv 
+# -- Compiling package async_fifo_test_sv_unit
+# -- Importing package async_fifo_pkg
+# -- Compiling program test
+# 
+# Top level modules:
+# 	test
+# End time: 14:35:39 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vopt 2021.3_1 Compiler 2021.08 Aug 15 2021
+# Start time: 14:35:39 on May 25,2026
+# vopt async_fifo_top -o top_optimized "+acc" "+cover=sbfec+asynchronous_fifo(rtl)." 
+# 
+# Top level modules:
+# 	async_fifo_top
+# 
+# Analyzing design...
+# -- Loading module async_fifo_top
+# -- Loading interface intf
+# -- Loading program test
+# -- Loading module asynchronous_fifo
+# -- Loading module fifo_mem
+# -- Loading module synchronizer
+# -- Loading module rptr_handler
+# -- Loading module wptr_handler
+# Optimizing 12 design-units (inlining 0/9 module instances):
+# -- Optimizing package async_fifo_pkg(fast)
+# -- Optimizing package async_fifo_top_sv_unit(fast)
+# -- Optimizing package async_fifo_test_sv_unit(fast)
+# -- Optimizing module async_fifo_top(fast)
+# -- Optimizing interface intf(fast__2)
+# -- Optimizing module wptr_handler(fast)
+# -- Optimizing module rptr_handler(fast)
+# -- Optimizing module asynchronous_fifo(fast)
+# -- Optimizing module fifo_mem(fast)
+# -- Optimizing module synchronizer(fast)
+# -- Optimizing program test(fast)
+# -- Optimizing interface intf(fast)
+# Optimized design name is top_optimized
+# End time: 14:35:40 on May 25,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# vsim top_optimized -coverage 
+# Start time: 14:35:40 on May 25,2026
+# //  Questa Sim-64
+# //  Version 2021.3_1 linux_x86_64 Aug 15 2021
+# //
+# //  Copyright 1991-2021 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading sv_std.std
+# Loading work.intf(fast)
+# Loading work.async_fifo_pkg(fast)
+# Loading work.async_fifo_top_sv_unit(fast)
+# Loading work.async_fifo_top(fast)
+# Loading work.intf(fast__2)
+# Loading work.async_fifo_test_sv_unit(fast)
+# Loading work.test(fast)
+# Loading work.asynchronous_fifo(fast)
+# Loading work.fifo_mem(fast)
+# Loading work.synchronizer(fast)
+# Loading work.rptr_handler(fast)
+# Loading work.wptr_handler(fast)
+# 1
+# [TEST] M3 enhanced class-based async FIFO test starting
+# [DRIVER] Reset asserted; parking interface signals at 0
+# [DRIVER] Reset deasserted; ready to drive
+# [ENV] Running 500 stimulus cycles per side
+# [GEN] Emitted 500 transactions to each side
+# [MONITOR] Done: wr_obs=206 rd_obs=206
+# [DRIVER] Done: wr_trans=500 rd_trans=500
+# 
+# ==================== SCOREBOARD SUMMARY ====================
+#   Writes observed       : 206
+#   Reads  observed       : 206
+#   Residual expected_q   : 0
+#   Mismatches / errors   : 0
+#   Verdict: *** PASSED ***
+# ============================================================
+# ** Note: $finish    : async_fifo_environment.sv(58)
+#    Time: 14070 ns  Iteration: 1  Instance: /async_fifo_top/t1
+# 1
+# Break in Task async_fifo_test_sv_unit/environment::run at async_fifo_environment.sv line 58
+# Stopped at async_fifo_environment.sv line 58
+# QuestaSim-64 vcover 2021.3_1 Coverage Utility 2021.08 Aug 15 2021
+# Start time: 14:35:41 on May 25,2026
+# vcover report async_fifo.ucdb 
+# Coverage Report Summary Data by instance
+# 
+# =================================================================================
+# === Instance: /async_fifo_top/DUT/fifo_mem_inst
+# === Design Unit: work.fifo_mem
+# =================================================================================
+#     Enabled Coverage              Bins      Hits    Misses  Coverage
+#     ----------------              ----      ----    ------  --------
+#     Branches                         2         2         0   100.00%
+#     Conditions                       2         2         0   100.00%
+#     Statements                       3         3         0   100.00%
+# 
+# =================================================================================
+# === Instance: /async_fifo_top/DUT/synchronizer_r2w_inst
+# === Design Unit: work.synchronizer
+# =================================================================================
+#     Enabled Coverage              Bins      Hits    Misses  Coverage
+#     ----------------              ----      ----    ------  --------
+#     Branches                         2         2         0   100.00%
+#     Statements                       5         5         0   100.00%
+# 
+# =================================================================================
+# === Instance: /async_fifo_top/DUT/synchronizer_w2r_inst
+# === Design Unit: work.synchronizer
+# =================================================================================
+#     Enabled Coverage              Bins      Hits    Misses  Coverage
+#     ----------------              ----      ----    ------  --------
+#     Branches                         2         2         0   100.00%
+#     Statements                       5         5         0   100.00%
+# 
+# =================================================================================
+# === Instance: /async_fifo_top/DUT/rptr_handler_inst
+# === Design Unit: work.rptr_handler
+# =================================================================================
+#     Enabled Coverage              Bins      Hits    Misses  Coverage
+#     ----------------              ----      ----    ------  --------
+#     Branches                         6         6         0   100.00%
+#     Expressions                     14        14         0   100.00%
+#     Statements                      22        22         0   100.00%
+# 
+# =================================================================================
+# === Instance: /async_fifo_top/DUT/wptr_handler_inst
+# === Design Unit: work.wptr_handler
+# =================================================================================
+#     Enabled Coverage              Bins      Hits    Misses  Coverage
+#     ----------------              ----      ----    ------  --------
+#     Branches                         6         6         0   100.00%
+#     Expressions                     14        14         0   100.00%
+#     Statements                      22        22         0   100.00%
+# 
+# =================================================================================
+# === Instance: /async_fifo_top
+# === Design Unit: work.async_fifo_top
+# =================================================================================
+#     Enabled Coverage              Bins      Hits    Misses  Coverage
+#     ----------------              ----      ----    ------  --------
+#     Covergroups                      1        na        na   100.00%
+#         Coverpoints/Crosses         12        na        na        na
+#             Covergroup Bins         26        26         0   100.00%
+# 
+# 
+# TOTAL COVERGROUP COVERAGE: 100.00%  COVERGROUP TYPES: 1
+# 
+# Total Coverage By Instance (filtered view): 100.00%
+# 
+# End time: 14:35:41 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vcover 2021.3_1 Coverage Utility 2021.08 Aug 15 2021
+# Start time: 14:35:41 on May 25,2026
+# vcover report async_fifo.ucdb -cvg -details 
+# Coverage Report by instance with details
+# 
+# =================================================================================
+# === Instance: /async_fifo_top
+# === Design Unit: work.async_fifo_top
+# =================================================================================
+# 
+# Covergroup Coverage:
+#     Covergroups                      1        na        na   100.00%
+#         Coverpoints/Crosses         12        na        na        na
+#             Covergroup Bins         26        26         0   100.00%
+# ----------------------------------------------------------------------------------------------------------
+# Covergroup                                             Metric       Goal       Bins    Status               
+#                                                                                                          
+# ----------------------------------------------------------------------------------------------------------
+#  TYPE /async_fifo_top/async_fifo_cover                100.00%        100          -    Covered              
+#     covered/total bins:                                    26         26          -                      
+#     missing/total bins:                                     0         26          -                      
+#     % Hit:                                            100.00%        100          -                      
+#     Coverpoint cp_writedata                           100.00%        100          -    Covered              
+#         covered/total bins:                                 3          3          -                      
+#         missing/total bins:                                 0          3          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_readdata                            100.00%        100          -    Covered              
+#         covered/total bins:                                 3          3          -                      
+#         missing/total bins:                                 0          3          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_write_access                        100.00%        100          -    Covered              
+#         covered/total bins:                                 3          3          -                      
+#         missing/total bins:                                 0          3          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_read_access                         100.00%        100          -    Covered              
+#         covered/total bins:                                 3          3          -                      
+#         missing/total bins:                                 0          3          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_fullflag                            100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_emptyflag                           100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_halffullflag                        100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_halfemptyflag                       100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_writeinc                            100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_readinc                             100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_writereset                          100.00%        100          -    Covered              
+#         covered/total bins:                                 1          1          -                      
+#         missing/total bins:                                 0          1          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_readreset                           100.00%        100          -    Covered              
+#         covered/total bins:                                 1          1          -                      
+#         missing/total bins:                                 0          1          -                      
+#         % Hit:                                        100.00%        100          -                      
+#  Covergroup instance \/async_fifo_top/async_fifo_cov_inst  
+#                                                       100.00%        100          -    Covered              
+#     covered/total bins:                                    26         26          -                      
+#     missing/total bins:                                     0         26          -                      
+#     % Hit:                                            100.00%        100          -                      
+#     Coverpoint cp_writedata                           100.00%        100          -    Covered              
+#         covered/total bins:                                 3          3          -                      
+#         missing/total bins:                                 0          3          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin low_range                                      80          1          -    Covered              
+#         bin mid_range                                      51          1          -    Covered              
+#         bin high_range                                    160          1          -    Covered              
+#     Coverpoint cp_readdata                            100.00%        100          -    Covered              
+#         covered/total bins:                                 3          3          -                      
+#         missing/total bins:                                 0          3          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin low_range                                     130          1          -    Covered              
+#         bin mid_range                                      92          1          -    Covered              
+#         bin high_range                                    259          1          -    Covered              
+#     Coverpoint cp_write_access                        100.00%        100          -    Covered              
+#         covered/total bins:                                 3          3          -                      
+#         missing/total bins:                                 0          3          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin idle                                         1283          1          -    Covered              
+#         bin accepted                                      291          1          -    Covered              
+#         bin blocked_full                                   68          1          -    Covered              
+#     Coverpoint cp_read_access                         100.00%        100          -    Covered              
+#         covered/total bins:                                 3          3          -                      
+#         missing/total bins:                                 0          3          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin idle                                         1052          1          -    Covered              
+#         bin accepted                                      481          1          -    Covered              
+#         bin blocked_empty                                 109          1          -    Covered              
+#     Coverpoint cp_fullflag                            100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin full_c                                         26          1          -    Covered              
+#         bin full_c1                                        26          1          -    Covered              
+#     Coverpoint cp_emptyflag                           100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin empty_c                                         1          1          -    Covered              
+#         bin empty_c1                                        1          1          -    Covered              
+#     Coverpoint cp_halffullflag                        100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin half_full_c                                     2          1          -    Covered              
+#         bin half_full_c1                                    2          1          -    Covered              
+#     Coverpoint cp_halfemptyflag                       100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin half_empty_c                                    1          1          -    Covered              
+#         bin half_empty_c1                                   1          1          -    Covered              
+#     Coverpoint cp_writeinc                            100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin incr_s                                        123          1          -    Covered              
+#         bin incr_s1                                       123          1          -    Covered              
+#     Coverpoint cp_readinc                             100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin incr_sr                                       127          1          -    Covered              
+#         bin incr_s1r                                      127          1          -    Covered              
+#     Coverpoint cp_writereset                          100.00%        100          -    Covered              
+#         covered/total bins:                                 1          1          -                      
+#         missing/total bins:                                 0          1          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin reset_low_to_high                               1          1          -    Covered              
+#     Coverpoint cp_readreset                           100.00%        100          -    Covered              
+#         covered/total bins:                                 1          1          -                      
+#         missing/total bins:                                 0          1          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin reset_low_to_high                               1          1          -    Covered              
+# 
+# COVERGROUP COVERAGE:
+# ----------------------------------------------------------------------------------------------------------
+# Covergroup                                             Metric       Goal       Bins    Status               
+#                                                                                                          
+# ----------------------------------------------------------------------------------------------------------
+#  TYPE /async_fifo_top/async_fifo_cover                100.00%        100          -    Covered              
+#     covered/total bins:                                    26         26          -                      
+#     missing/total bins:                                     0         26          -                      
+#     % Hit:                                            100.00%        100          -                      
+#     Coverpoint cp_writedata                           100.00%        100          -    Covered              
+#         covered/total bins:                                 3          3          -                      
+#         missing/total bins:                                 0          3          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_readdata                            100.00%        100          -    Covered              
+#         covered/total bins:                                 3          3          -                      
+#         missing/total bins:                                 0          3          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_write_access                        100.00%        100          -    Covered              
+#         covered/total bins:                                 3          3          -                      
+#         missing/total bins:                                 0          3          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_read_access                         100.00%        100          -    Covered              
+#         covered/total bins:                                 3          3          -                      
+#         missing/total bins:                                 0          3          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_fullflag                            100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_emptyflag                           100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_halffullflag                        100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_halfemptyflag                       100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_writeinc                            100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_readinc                             100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_writereset                          100.00%        100          -    Covered              
+#         covered/total bins:                                 1          1          -                      
+#         missing/total bins:                                 0          1          -                      
+#         % Hit:                                        100.00%        100          -                      
+#     Coverpoint cp_readreset                           100.00%        100          -    Covered              
+#         covered/total bins:                                 1          1          -                      
+#         missing/total bins:                                 0          1          -                      
+#         % Hit:                                        100.00%        100          -                      
+#  Covergroup instance \/async_fifo_top/async_fifo_cov_inst  
+#                                                       100.00%        100          -    Covered              
+#     covered/total bins:                                    26         26          -                      
+#     missing/total bins:                                     0         26          -                      
+#     % Hit:                                            100.00%        100          -                      
+#     Coverpoint cp_writedata                           100.00%        100          -    Covered              
+#         covered/total bins:                                 3          3          -                      
+#         missing/total bins:                                 0          3          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin low_range                                      80          1          -    Covered              
+#         bin mid_range                                      51          1          -    Covered              
+#         bin high_range                                    160          1          -    Covered              
+#     Coverpoint cp_readdata                            100.00%        100          -    Covered              
+#         covered/total bins:                                 3          3          -                      
+#         missing/total bins:                                 0          3          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin low_range                                     130          1          -    Covered              
+#         bin mid_range                                      92          1          -    Covered              
+#         bin high_range                                    259          1          -    Covered              
+#     Coverpoint cp_write_access                        100.00%        100          -    Covered              
+#         covered/total bins:                                 3          3          -                      
+#         missing/total bins:                                 0          3          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin idle                                         1283          1          -    Covered              
+#         bin accepted                                      291          1          -    Covered              
+#         bin blocked_full                                   68          1          -    Covered              
+#     Coverpoint cp_read_access                         100.00%        100          -    Covered              
+#         covered/total bins:                                 3          3          -                      
+#         missing/total bins:                                 0          3          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin idle                                         1052          1          -    Covered              
+#         bin accepted                                      481          1          -    Covered              
+#         bin blocked_empty                                 109          1          -    Covered              
+#     Coverpoint cp_fullflag                            100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin full_c                                         26          1          -    Covered              
+#         bin full_c1                                        26          1          -    Covered              
+#     Coverpoint cp_emptyflag                           100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin empty_c                                         1          1          -    Covered              
+#         bin empty_c1                                        1          1          -    Covered              
+#     Coverpoint cp_halffullflag                        100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin half_full_c                                     2          1          -    Covered              
+#         bin half_full_c1                                    2          1          -    Covered              
+#     Coverpoint cp_halfemptyflag                       100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin half_empty_c                                    1          1          -    Covered              
+#         bin half_empty_c1                                   1          1          -    Covered              
+#     Coverpoint cp_writeinc                            100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin incr_s                                        123          1          -    Covered              
+#         bin incr_s1                                       123          1          -    Covered              
+#     Coverpoint cp_readinc                             100.00%        100          -    Covered              
+#         covered/total bins:                                 2          2          -                      
+#         missing/total bins:                                 0          2          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin incr_sr                                       127          1          -    Covered              
+#         bin incr_s1r                                      127          1          -    Covered              
+#     Coverpoint cp_writereset                          100.00%        100          -    Covered              
+#         covered/total bins:                                 1          1          -                      
+#         missing/total bins:                                 0          1          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin reset_low_to_high                               1          1          -    Covered              
+#     Coverpoint cp_readreset                           100.00%        100          -    Covered              
+#         covered/total bins:                                 1          1          -                      
+#         missing/total bins:                                 0          1          -                      
+#         % Hit:                                        100.00%        100          -                      
+#         bin reset_low_to_high                               1          1          -    Covered              
+# 
+# TOTAL COVERGROUP COVERAGE: 100.00%  COVERGROUP TYPES: 1
+# 
+# Total Coverage By Instance (filtered view): 100.00%
+# 
+# End time: 14:35:41 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+#  quit -f
+# End time: 14:35:41 on May 25,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0

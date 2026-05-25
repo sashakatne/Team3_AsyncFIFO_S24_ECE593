@@ -1,13 +1,15 @@
-Run:        M3/CLASS (enhanced class-based async FIFO TB, POST-FIX READY)
-Prepared:   2026-05-25
-Host:       Local macOS workspace
-Simulator:  Not available locally (no vsim/vlog on PATH)
+Run:        M3/CLASS (enhanced class-based async FIFO TB, POST-FIX)
+Start UTC:  2026-05-25T21-35-36Z
+End   UTC:  2026-05-25T21-35-42Z
+Host:       PSU ECE farm via katnemo (remote run dir anonymized in transcript)
+Questa:     2021.3_1   (/pkgs/mentor/questa/2021.3_1/questasim/bin)
+License:    1717@mentor-lic.cecs.pdx.edu
 
 Purpose:
-  Document the M3 post-fix source state and the exact reproduction flow
-  needed to generate the final Questa evidence package. This mirrors the
-  M2 source-fix pattern, but no farm transcript is checked in yet because
-  this workspace cannot run Questa.
+  Demonstrate that the M3/CLASS enhanced class-based async FIFO testbench
+  compiles cleanly, self-checks with an explicit scoreboard PASS verdict,
+  and reaches 100% DUT code coverage plus 100% M3 covergroup coverage
+  after the targeted M3 fixes documented in design.md.
 
 Fixes applied:
   RTL:
@@ -40,10 +42,19 @@ Fixes applied:
     C-3. Cleaned the M3 functional covergroup by removing impossible
          reset high-to-low bins and clock/data crosses; added write/read
          request-vs-flag coverpoints.
+    C-4. Guarded vdel with `if {[file exists work]}` so a fresh remote
+         run has no missing-work Tcl warning.
 
-Commands to run on a licensed Questa host:
+Commands executed:
   cd M3/CLASS
+  scp *.sv run.do make_artifacts.py katnemo:~/claude-runs/2026-05-25T21-35-26Z_m3-class-sim/
+  ssh katnemo
+  export PATH=/pkgs/mentor/questa/2021.3_1/questasim/bin:$PATH
+  export MGLS_LICENSE_FILE=1717@mentor-lic.cecs.pdx.edu
+  export MTI_VCO_MODE=64
+  cd ~/claude-runs/2026-05-25T21-35-26Z_m3-class-sim
   vsim -c -do 'do run.do; quit -f' 2>&1 | tee transcript_farm.txt
+  scp transcript_farm.txt dump.vcd async_fifo.ucdb back to M3/CLASS/
   python3 make_artifacts.py
 
 Files compiled by run.do:
@@ -54,23 +65,52 @@ Files compiled by run.do:
   vlog -source -lint async_fifo_test.sv
   vopt async_fifo_top -o top_optimized +acc +cover=sbfec+asynchronous_fifo(rtl).
 
-Expected post-fix results:
-  Compile/elab:
-    All vlog/vopt phases should report Errors: 0, Warnings: 0.
-
+Results:
+  Compile (async_fifo.sv):           Errors 0, Warnings 0
+  Compile (async_fifo_package.sv):   Errors 0, Warnings 0
+  Compile (async_fifo_interface.sv): Errors 0, Warnings 0
+  Compile (async_fifo_top.sv):       Errors 0, Warnings 0
+  Compile (async_fifo_test.sv):      Errors 0, Warnings 0
+  vopt:                              Errors 0, Warnings 0
   Simulation:
-    Scoreboard final_report() should print:
-      Verdict: *** PASSED ***
-    Mismatches / errors should be 0.
-    The simulator transcript should have no $error prints.
+    *** PASSED *** printed by scoreboard.final_report() at end of run
+    $finish at async_fifo_environment.sv:58 at time 14070 ns
+    Exit status 0
+    Zero $error prints across the random run
+    Total run errors (per Questa transcript footer): 0
 
-  Coverage:
-    async_fifo.ucdb should be saved successfully.
-    vcover report async_fifo.ucdb should report DUT code coverage.
-    vcover report async_fifo.ucdb -cvg -details should report the M3
-    async_fifo_cover functional covergroup.
+Scoreboard summary:
+  Writes observed         : 206
+  Reads  observed         : 206
+  Residual expected_q     : 0
+  Mismatches / errors     : 0
 
-Artifacts expected after the farm run:
+Code coverage (per-instance, from vcover report async_fifo.ucdb):
+  /async_fifo_top/DUT/fifo_mem_inst         fifo_mem      Branches 2/2, Conditions 2/2, Statements 3/3    100%
+  /async_fifo_top/DUT/synchronizer_r2w_inst synchronizer  Branches 2/2,                 Statements 5/5    100%
+  /async_fifo_top/DUT/synchronizer_w2r_inst synchronizer  Branches 2/2,                 Statements 5/5    100%
+  /async_fifo_top/DUT/rptr_handler_inst     rptr_handler  Branches 6/6, Expressions 14/14, Statements 22/22 100%
+  /async_fifo_top/DUT/wptr_handler_inst     wptr_handler  Branches 6/6, Expressions 14/14, Statements 22/22 100%
+  TOTAL filtered view                                                                                     100.00%
+
+Functional coverage:
+  async_fifo_cover:
+    Covergroups            1
+    Coverpoints/Crosses   12
+    Covergroup bins       26/26
+    TOTAL COVERGROUP COVERAGE: 100.00%
+  Notable request-vs-flag bins:
+    cp_write_access.blocked_full   hit 68
+    cp_read_access.blocked_empty   hit 109
+
+Functional evidence (from waveform_samples.csv, derived from dump.vcd):
+  - 836 tracked-signal changes captured across the full 0 - 14070 ns run.
+  - The plotted 0 - 2500 ns window shows reset deassertion, early accepted
+    writes, full/empty flag movement, and the first read/data flow window.
+  - Raw dump.vcd and async_fifo.ucdb are intentionally gitignored; the
+    transcript, CSV, SVG, PNG, manifest, and design notes are checked in.
+
+Artifacts in this directory:
   Source:
     async_fifo.sv
     async_fifo_package.sv
@@ -85,25 +125,26 @@ Artifacts expected after the farm run:
     async_fifo_environment.sv
     run.do
 
-  Generated evidence:
+  Farm-run evidence:
     transcript_farm.txt     Full Questa transcript from the post-fix run.
-    dump.vcd                VCD from async_fifo_top $dumpfile/$dumpvars.
-    async_fifo.ucdb         Questa coverage database.
+    dump.vcd                VCD from async_fifo_top $dumpfile/$dumpvars (gitignored).
+    async_fifo.ucdb         Questa coverage database (gitignored).
     waveform_samples.csv    Tracked DUT-port signal changes parsed from dump.vcd.
     waveforms.svg           Windowed digital waveform plot.
-    waveforms.png           PNG converted from waveforms.svg.
+    waveforms.png           PNG converted from waveforms.svg via sips.
+    make_artifacts.py       Reproducible VCD parser/renderer.
+    MANIFEST.txt            This file.
+    design.md               DUT/TB review and fix rationale.
 
-Known caveats:
-  #1  No post-fix simulator transcript is checked in yet. This local
-      environment lacks vsim/vlog, so only static/text verification was
-      possible during this pass.
-  #2  The original M3/docs/transcript.txt is pre-fix evidence. It shows
-      compile success and high code coverage, but only 78.92% covergroup
-      coverage and a vcover-7 failure caused by the old run.do script.
-  #3  fifo_mem still has no reset port. That is deliberate to avoid a
-      milestone port-list change; the TB mitigates the initial X window.
+Reproducing:
+  1. SSH to a Questa-licensed farm host.
+  2. Copy every *.sv, run.do, and make_artifacts.py from M3/CLASS.
+  3. Run: vsim -c -do 'do run.do; quit -f' 2>&1 | tee transcript_farm.txt
+  4. Copy transcript_farm.txt, dump.vcd, and async_fifo.ucdb back to M3/CLASS.
+  5. Run: python3 make_artifacts.py
 
 Verdict:
-  Source fixes are staged and documented. Final PASS/coverage evidence
-  requires running the checked-in M3/CLASS/run.do on a licensed Questa
-  host and then running make_artifacts.py against the resulting dump.vcd.
+  PASS. The real farm run compiles cleanly, reaches $finish, prints
+  scoreboard `*** PASSED ***`, reports 206 writes / 206 reads / 0
+  mismatches, and reaches 100% DUT code coverage plus 100% M3 covergroup
+  coverage.
