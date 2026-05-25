@@ -1,19 +1,24 @@
+# 'catch {}' so a fresh checkout (no work/ yet) doesn't fail on vdel.
+catch {vdel -all}
+vlib work
 
-vdel -all
 vlog -source -lint async_fifo.sv
 vlog -source -lint async_fifo_package.sv
 vlog -source -lint aysnc_fifo_interface.sv
 vlog -source -lint async_fifo_top.sv
 vlog -source -lint async_fifo_test.sv
 
-vsim  async_fifo_top
+# Instrument code coverage on the DUT only (statement, branch, FEC, condition).
+# Matches the M1/ConventionalTB pattern -- never broaden to the testbench.
+vopt async_fifo_top -o top_optimized +acc +cover=sbfec+asynchronous_fifo(rtl).
+vsim top_optimized -coverage
 
-#vsim -coverage top -voptargs="+cover=bcesfx"
-#vlog -cover bcst async_fifo.sv
-#vsim -coverage top -do "run -all; exit"
+set NoQuitOnFinish 1
+onbreak {resume}
+log /* -r
+
 run -all
-#coverage report -code bcesft
-#vcover report -html coverage_results
-#coverage report -codeAll
 
-
+coverage save async_fifo.ucdb
+vcover report async_fifo.ucdb
+vcover report async_fifo.ucdb -cvg -details

@@ -38,4 +38,10 @@ asynchronous_fifo DUT (.wData(in.wData),
             .rData(in.rData)
 );
 
+// VCD dump for the evidence-package waveform renderer.
+initial begin
+  $dumpfile("dump.vcd");
+  $dumpvars;
+end
+
 endmodule
