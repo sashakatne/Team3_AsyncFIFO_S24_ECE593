@@ -70,6 +70,22 @@ slot. This pass documents that window and keeps the port list stable.
 The monitor and scoreboard only compare accepted reads
 `(rinc && !rEmpty)`, so the self-checking path does not consume the X.
 
+### D-3: Half flags computed from next local occupancy
+
+The directed flag threshold test exposed that `wHalfFull` and
+`rHalfEmpty` were one destination-clock edge late at the 32-entry
+threshold. The full/empty flags already use next pointers, so the half
+flags now match that timing model:
+
+```systemverilog
+assign wptr_diff = b_wptr_next - b_rptr_sync;
+assign rptr_diff = b_wptr_sync - b_rptr_next;
+```
+
+The registered `wHalfFull` value now reflects the write accepted on
+the current `wclk` edge, and the registered `rHalfEmpty` value reflects
+the read accepted on the current `rclk` edge.
+
 ### T-1: Threaded stimulus streams
 
 The generator now emits two independent transaction streams:
@@ -186,9 +202,9 @@ python3 make_artifacts.py
 
 Run metadata:
 
-- Start UTC: `2026-05-25T21-35-36Z`
-- End UTC: `2026-05-25T21-35-42Z`
-- Remote run dir: `~/claude-runs/2026-05-25T21-35-26Z_m3-class-sim`
+- Start UTC: `2026-05-25T22-00-47Z`
+- End UTC: `2026-05-25T22-00-53Z`
+- Remote run dir: `~/claude-runs/2026-05-25T22-00-43Z_m3-class-half-flag-fix-full-sim`
 - Exit status: `0`
 
 The post-fix transcript proves the expected gate:
@@ -226,7 +242,7 @@ Waveform evidence:
 
 - `dump.vcd` from the farm run contains the full 0 - 14070 ns trace
   and is gitignored as a raw simulator artifact.
-- `make_artifacts.py` parsed 836 tracked DUT-port signal changes into
+- `make_artifacts.py` parsed 843 tracked DUT-port signal changes into
   `waveform_samples.csv`.
 - `waveforms.svg` and `waveforms.png` render the 0 - 2500 ns review
   window.
@@ -255,40 +271,55 @@ The directed test fills the FIFO to exactly 32 entries, then to 64
 entries, attempts one overflow write, drains back to exactly 32
 entries, then drains to empty.
 
-Findings:
+Current fixed findings:
 
 - `wFull` is accurate for this depth-64 case. It asserts immediately
   after the 64th accepted write, and a subsequent write while full is
   blocked by the DUT.
 - `rEmpty` is accurate in the drain case. It asserts immediately after
   the 64th accepted read.
-- `wHalfFull` is one `wclk` late. At occupancy 32, immediately after
-  the 32nd accepted write, the directed transcript reports
-  `wHalfFull=0 expected=1`; it becomes `1` on the next write-clock
-  sample with no occupancy change.
-- `rHalfEmpty` is one `rclk` late. At occupancy 32, immediately after
-  the 32nd accepted read during drain, the transcript reports
-  `rHalfEmpty=0 expected=1`; it becomes `1` on the next read-clock
-  sample with no occupancy change.
+- `wHalfFull` now asserts immediately at occupancy 32, after accepted
+  write #32.
+- `rHalfEmpty` now asserts immediately at occupancy 32, after accepted
+  read #32 during drain.
 
 Root cause:
 
-- `wHalfFull` is computed from `wptr_diff = b_wptr - b_rptr_sync`,
+- `wHalfFull` was computed from `wptr_diff = b_wptr - b_rptr_sync`,
   using the current write pointer. `wFull` correctly uses
   `g_wptr_next`, so it is predictive for the write being accepted on
   the current edge.
-- `rHalfEmpty` is computed from `rptr_diff = b_wptr_sync - b_rptr`,
+- `rHalfEmpty` was computed from `rptr_diff = b_wptr_sync - b_rptr`,
   using the current read pointer. `rEmpty` correctly uses
   `g_rptr_next`, so it is predictive for the read being accepted on
   the current edge.
 
-The likely RTL fix is to compute half flags from next pointer
-occupancy:
+The RTL fix computes half flags from next pointer occupancy:
 
 ```systemverilog
 whalf_full  = ((b_wptr_next - b_rptr_sync) >= (DEPTH >> 1));
 rhalf_empty = ((b_wptr_sync - b_rptr_next) <= (DEPTH >> 1));
 ```
 
-That fix is not applied in this pass; the new directed transcript and
-waveforms document the bug so it is visible.
+The current directed transcript proves the fix:
+
+```
+[OK half_full_immediate] occ=32 wHalfFull=1
+[OK full_immediate] occ=64 after write #64, wFull=1
+[OK overflow_blocked] full write attempt rejected: occ=64 accepted_writes=64 wFull=1
+[OK half_empty_immediate] occ=32 rHalfEmpty=1
+[OK empty_immediate] occ=0 after read #64, rEmpty=1
+[SUMMARY] half_full_lag_seen=0 half_empty_lag_seen=0 full_ok_seen=1 overflow_blocked_seen=1 empty_ok_seen=1
+```
+
+The focused waveform artifacts are regenerated from the fixed farm VCD:
+
+- `flag_debug_waveforms.svg/.png`: full directed run with `wclk`,
+  `rclk`, decimal `wptr`/`rptr`, `wen`, `ren`, and all four flags.
+- `flag_debug_write_thresholds.svg/.png`: write-side half/full
+  threshold zoom.
+- `flag_debug_read_thresholds.svg/.png`: read-side half/empty
+  threshold zoom.
+
+Red vertical ticks in those plots mark rising edges of `wclk` and
+`rclk` for edge-aligned debug.

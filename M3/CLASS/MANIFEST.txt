@@ -1,6 +1,6 @@
 Run:        M3/CLASS (enhanced class-based async FIFO TB, POST-FIX)
-Start UTC:  2026-05-25T21-35-36Z
-End   UTC:  2026-05-25T21-35-42Z
+Start UTC:  2026-05-25T22-00-47Z
+End   UTC:  2026-05-25T22-00-53Z
 Host:       PSU ECE farm via katnemo (remote run dir anonymized in transcript)
 Questa:     2021.3_1   (/pkgs/mentor/questa/2021.3_1/questasim/bin)
 License:    1717@mentor-lic.cecs.pdx.edu
@@ -17,7 +17,10 @@ Fixes applied:
          .clk(wclk), .rst_n(wrst).
     D-2. Routed synchronizer_w2r_inst into the read clock/reset domain:
          .clk(rclk), .rst_n(rrst).
-    D-3. Documented the known fifo_mem X window on rData. The TB gates
+    D-3. Compute wHalfFull and rHalfEmpty from next local pointer
+         occupancy, matching the predictive timing already used by
+         wFull and rEmpty.
+    D-4. Documented the known fifo_mem X window on rData. The TB gates
          reads on (rinc && !rEmpty), so no scoreboard compare consumes
          the uninitialized memory window.
 
@@ -47,12 +50,12 @@ Fixes applied:
 
 Commands executed:
   cd M3/CLASS
-  scp *.sv run.do make_artifacts.py katnemo:~/claude-runs/2026-05-25T21-35-26Z_m3-class-sim/
+  scp *.sv *.do *.py katnemo:~/claude-runs/2026-05-25T22-00-43Z_m3-class-half-flag-fix-full-sim/
   ssh katnemo
   export PATH=/pkgs/mentor/questa/2021.3_1/questasim/bin:$PATH
   export MGLS_LICENSE_FILE=1717@mentor-lic.cecs.pdx.edu
   export MTI_VCO_MODE=64
-  cd ~/claude-runs/2026-05-25T21-35-26Z_m3-class-sim
+  cd ~/claude-runs/2026-05-25T22-00-43Z_m3-class-half-flag-fix-full-sim
   vsim -c -do 'do run.do; quit -f' 2>&1 | tee transcript_farm.txt
   scp transcript_farm.txt dump.vcd async_fifo.ucdb back to M3/CLASS/
   python3 make_artifacts.py
@@ -104,7 +107,7 @@ Functional coverage:
     cp_read_access.blocked_empty   hit 109
 
 Functional evidence (from waveform_samples.csv, derived from dump.vcd):
-  - 836 tracked-signal changes captured across the full 0 - 14070 ns run.
+  - 843 tracked-signal changes captured across the full 0 - 14070 ns run.
   - The plotted 0 - 2500 ns window shows reset deassertion, early accepted
     writes, full/empty flag movement, and the first read/data flow window.
   - Raw dump.vcd and async_fifo.ucdb are intentionally gitignored; the
@@ -154,34 +157,48 @@ Additional directed flag-threshold result:
   Command:
     vsim -c -do 'do run_flags.do; quit -f' 2>&1 | tee flag_threshold_transcript_farm.txt
   Farm run:
-    Start UTC: 2026-05-25T21-44-23Z
-    End UTC:   2026-05-25T21-44-27Z
+    Remote dir: ~/claude-runs/2026-05-25T21-59-05Z_m3-half-flag-green
+    Start UTC: 2026-05-25T21-59-08Z
+    End UTC:   2026-05-25T21-59-12Z
     Exit status: 0
   Transcript:
     async_fifo.sv compile:       Errors 0, Warnings 0
     flag_threshold_tb.sv compile: Errors 0, Warnings 0
     vopt:                        Errors 0, Warnings 0
   Observed behavior:
+    wHalfFull:   correct. Asserts immediately at occupancy 32 after accepted write #32.
     wFull:       correct. Asserts immediately after accepted write #64.
+    overflow:    correct. Full write attempt is rejected at occupancy 64.
+    rHalfEmpty:  correct. Asserts immediately at occupancy 32 after accepted read #32.
     rEmpty:      correct. Asserts immediately after accepted read #64.
-    wHalfFull:   one wclk late at occupancy 32.
-    rHalfEmpty:  one rclk late at occupancy 32.
   Evidence prints:
-    [BUG half_full_late] occ=32 immediately after write #32, wHalfFull=0 expected=1
+    [OK half_full_immediate] occ=32 wHalfFull=1
     [OK full_immediate] occ=64 after write #64, wFull=1
     [OK overflow_blocked] full write attempt rejected: occ=64 accepted_writes=64 wFull=1
-    [BUG half_empty_late] occ=32 immediately after read #32, rHalfEmpty=0 expected=1
+    [OK half_empty_immediate] occ=32 rHalfEmpty=1
     [OK empty_immediate] occ=0 after read #64, rEmpty=1
+    [SUMMARY] half_full_lag_seen=0 half_empty_lag_seen=0 full_ok_seen=1 overflow_blocked_seen=1 empty_ok_seen=1
+
+  Focused waveform evidence:
+    flag_debug_waveforms.svg/.png: full directed run with wclk, rclk,
+      decimal wptr/rptr, wen, ren, and all four flags.
+    flag_debug_write_thresholds.svg/.png: write-side half/full threshold zoom.
+    flag_debug_read_thresholds.svg/.png: read-side half/empty threshold zoom.
+    Red vertical ticks mark rising edges of wclk/rclk.
 
 Reproducing:
   1. SSH to a Questa-licensed farm host.
-  2. Copy every *.sv, run.do, and make_artifacts.py from M3/CLASS.
+  2. Copy every *.sv, *.do, and *.py from M3/CLASS.
   3. Run: vsim -c -do 'do run.do; quit -f' 2>&1 | tee transcript_farm.txt
   4. Copy transcript_farm.txt, dump.vcd, and async_fifo.ucdb back to M3/CLASS.
   5. Run: python3 make_artifacts.py
+  6. For directed flag proof, run: vsim -c -do 'do run_flags.do; quit -f' 2>&1 | tee flag_threshold_transcript_farm.txt
+  7. Copy flag_threshold_transcript_farm.txt and flag_threshold.vcd back.
+  8. Run: python3 make_flag_debug_waveforms.py
 
 Verdict:
   PASS. The real farm run compiles cleanly, reaches $finish, prints
   scoreboard `*** PASSED ***`, reports 206 writes / 206 reads / 0
   mismatches, and reaches 100% DUT code coverage plus 100% M3 covergroup
-  coverage.
+  coverage. The directed farm run also proves immediate half/full/empty
+  flag behavior at the exact 32/64/0-entry thresholds.

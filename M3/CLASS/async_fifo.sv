@@ -111,7 +111,7 @@ module rptr_handler #(
             assign b_wptr_sync[i] = b_wptr_sync[i+1] ^ g_wptr_sync[i];
         end
     endgenerate
-    assign rptr_diff  = b_wptr_sync - b_rptr;
+    assign rptr_diff  = b_wptr_sync - b_rptr_next;
     assign rhalf_empty = (rptr_diff <= (DEPTH >> 1));
 
     assign rempty = (g_wptr_sync == g_rptr_next);
@@ -171,7 +171,7 @@ module wptr_handler #(
             assign b_rptr_sync[i] = b_rptr_sync[i+1] ^ g_rptr_sync[i];
         end
     endgenerate
-    assign wptr_diff  = b_wptr - b_rptr_sync;
+    assign wptr_diff  = b_wptr_next - b_rptr_sync;
     assign whalf_full = (wptr_diff >= (DEPTH >> 1));
 
     assign wfull = (g_wptr_next == {~g_rptr_sync[PTR_WIDTH:PTR_WIDTH-1], g_rptr_sync[PTR_WIDTH-2:0]});

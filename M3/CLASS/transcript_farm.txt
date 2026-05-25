@@ -4,7 +4,7 @@ Reading pref.tcl
 
 # do run.do
 # QuestaSim-64 vlog 2021.3_1 Compiler 2021.08 Aug 15 2021
-# Start time: 14:35:38 on May 25,2026
+# Start time: 15:00:49 on May 25,2026
 # vlog -source -lint async_fifo.sv 
 # -- Compiling module asynchronous_fifo
 # -- Compiling module fifo_mem
@@ -14,28 +14,28 @@ Reading pref.tcl
 # 
 # Top level modules:
 # 	asynchronous_fifo
-# End time: 14:35:38 on May 25,2026, Elapsed time: 0:00:00
+# End time: 15:00:49 on May 25,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # QuestaSim-64 vlog 2021.3_1 Compiler 2021.08 Aug 15 2021
-# Start time: 14:35:38 on May 25,2026
+# Start time: 15:00:49 on May 25,2026
 # vlog -source -lint async_fifo_package.sv 
 # -- Compiling package async_fifo_pkg
 # 
 # Top level modules:
 # 	--none--
-# End time: 14:35:38 on May 25,2026, Elapsed time: 0:00:00
+# End time: 15:00:49 on May 25,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # QuestaSim-64 vlog 2021.3_1 Compiler 2021.08 Aug 15 2021
-# Start time: 14:35:38 on May 25,2026
+# Start time: 15:00:49 on May 25,2026
 # vlog -source -lint async_fifo_interface.sv 
 # -- Compiling interface intf
 # 
 # Top level modules:
 # 	--none--
-# End time: 14:35:38 on May 25,2026, Elapsed time: 0:00:00
+# End time: 15:00:50 on May 25,2026, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 0
 # QuestaSim-64 vlog 2021.3_1 Compiler 2021.08 Aug 15 2021
-# Start time: 14:35:38 on May 25,2026
+# Start time: 15:00:50 on May 25,2026
 # vlog -source -lint async_fifo_top.sv 
 # -- Compiling package async_fifo_top_sv_unit
 # -- Importing package async_fifo_pkg
@@ -45,10 +45,10 @@ Reading pref.tcl
 # 
 # Top level modules:
 # 	async_fifo_top
-# End time: 14:35:39 on May 25,2026, Elapsed time: 0:00:01
+# End time: 15:00:50 on May 25,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # QuestaSim-64 vlog 2021.3_1 Compiler 2021.08 Aug 15 2021
-# Start time: 14:35:39 on May 25,2026
+# Start time: 15:00:50 on May 25,2026
 # vlog -source -lint async_fifo_test.sv 
 # -- Compiling package async_fifo_test_sv_unit
 # -- Importing package async_fifo_pkg
@@ -56,10 +56,10 @@ Reading pref.tcl
 # 
 # Top level modules:
 # 	test
-# End time: 14:35:39 on May 25,2026, Elapsed time: 0:00:00
+# End time: 15:00:50 on May 25,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # QuestaSim-64 vopt 2021.3_1 Compiler 2021.08 Aug 15 2021
-# Start time: 14:35:39 on May 25,2026
+# Start time: 15:00:50 on May 25,2026
 # vopt async_fifo_top -o top_optimized "+acc" "+cover=sbfec+asynchronous_fifo(rtl)." 
 # 
 # Top level modules:
@@ -88,10 +88,10 @@ Reading pref.tcl
 # -- Optimizing program test(fast)
 # -- Optimizing interface intf(fast)
 # Optimized design name is top_optimized
-# End time: 14:35:40 on May 25,2026, Elapsed time: 0:00:01
+# End time: 15:00:51 on May 25,2026, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 0
 # vsim top_optimized -coverage 
-# Start time: 14:35:40 on May 25,2026
+# Start time: 15:00:51 on May 25,2026
 # //  Questa Sim-64
 # //  Version 2021.3_1 linux_x86_64 Aug 15 2021
 # //
@@ -141,7 +141,7 @@ Reading pref.tcl
 # Break in Task async_fifo_test_sv_unit/environment::run at async_fifo_environment.sv line 58
 # Stopped at async_fifo_environment.sv line 58
 # QuestaSim-64 vcover 2021.3_1 Coverage Utility 2021.08 Aug 15 2021
-# Start time: 14:35:41 on May 25,2026
+# Start time: 15:00:52 on May 25,2026
 # vcover report async_fifo.ucdb 
 # Coverage Report Summary Data by instance
 # 
@@ -208,10 +208,10 @@ Reading pref.tcl
 # 
 # Total Coverage By Instance (filtered view): 100.00%
 # 
-# End time: 14:35:41 on May 25,2026, Elapsed time: 0:00:00
+# End time: 15:00:53 on May 25,2026, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 0
 # QuestaSim-64 vcover 2021.3_1 Coverage Utility 2021.08 Aug 15 2021
-# Start time: 14:35:41 on May 25,2026
+# Start time: 15:00:53 on May 25,2026
 # vcover report async_fifo.ucdb -cvg -details 
 # Coverage Report by instance with details
 # 
@@ -329,14 +329,14 @@ Reading pref.tcl
 #         covered/total bins:                                 2          2          -                      
 #         missing/total bins:                                 0          2          -                      
 #         % Hit:                                        100.00%        100          -                      
-#         bin half_full_c                                     2          1          -    Covered              
-#         bin half_full_c1                                    2          1          -    Covered              
+#         bin half_full_c                                     4          1          -    Covered              
+#         bin half_full_c1                                    4          1          -    Covered              
 #     Coverpoint cp_halfemptyflag                       100.00%        100          -    Covered              
 #         covered/total bins:                                 2          2          -                      
 #         missing/total bins:                                 0          2          -                      
 #         % Hit:                                        100.00%        100          -                      
-#         bin half_empty_c                                    1          1          -    Covered              
-#         bin half_empty_c1                                   1          1          -    Covered              
+#         bin half_empty_c                                    3          1          -    Covered              
+#         bin half_empty_c1                                   3          1          -    Covered              
 #     Coverpoint cp_writeinc                            100.00%        100          -    Covered              
 #         covered/total bins:                                 2          2          -                      
 #         missing/total bins:                                 0          2          -                      
@@ -466,14 +466,14 @@ Reading pref.tcl
 #         covered/total bins:                                 2          2          -                      
 #         missing/total bins:                                 0          2          -                      
 #         % Hit:                                        100.00%        100          -                      
-#         bin half_full_c                                     2          1          -    Covered              
-#         bin half_full_c1                                    2          1          -    Covered              
+#         bin half_full_c                                     4          1          -    Covered              
+#         bin half_full_c1                                    4          1          -    Covered              
 #     Coverpoint cp_halfemptyflag                       100.00%        100          -    Covered              
 #         covered/total bins:                                 2          2          -                      
 #         missing/total bins:                                 0          2          -                      
 #         % Hit:                                        100.00%        100          -                      
-#         bin half_empty_c                                    1          1          -    Covered              
-#         bin half_empty_c1                                   1          1          -    Covered              
+#         bin half_empty_c                                    3          1          -    Covered              
+#         bin half_empty_c1                                   3          1          -    Covered              
 #     Coverpoint cp_writeinc                            100.00%        100          -    Covered              
 #         covered/total bins:                                 2          2          -                      
 #         missing/total bins:                                 0          2          -                      
@@ -501,8 +501,8 @@ Reading pref.tcl
 # 
 # Total Coverage By Instance (filtered view): 100.00%
 # 
-# End time: 14:35:41 on May 25,2026, Elapsed time: 0:00:00
+# End time: 15:00:53 on May 25,2026, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 #  quit -f
-# End time: 14:35:41 on May 25,2026, Elapsed time: 0:00:01
+# End time: 15:00:53 on May 25,2026, Elapsed time: 0:00:02
 # Errors: 0, Warnings: 0

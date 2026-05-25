@@ -1817,10 +1817,10 @@
 <line x1="975.8" y1="379.0" x2="975.8" y2="399.0" stroke="#777" stroke-width="1"/>
 <text x="133" y="442.0" font-size="13" text-anchor="end" fill="#222">wHalfFull</text>
 <line x1="145" y1="456" x2="1860" y2="456" stroke="#bbb"/>
-<line x1="145.0" y1="447.0" x2="588.4" y2="447.0" stroke="#333333" stroke-width="2"/>
-<line x1="588.4" y1="427.0" x2="1423.5" y2="427.0" stroke="#006600" stroke-width="2"/>
+<line x1="145.0" y1="447.0" x2="579.8" y2="447.0" stroke="#333333" stroke-width="2"/>
+<line x1="579.8" y1="427.0" x2="1423.5" y2="427.0" stroke="#006600" stroke-width="2"/>
 <line x1="1423.5" y1="447.0" x2="1860.0" y2="447.0" stroke="#333333" stroke-width="2"/>
-<line x1="588.4" y1="447.0" x2="588.4" y2="427.0" stroke="#777" stroke-width="1"/>
+<line x1="579.8" y1="447.0" x2="579.8" y2="427.0" stroke="#777" stroke-width="1"/>
 <line x1="1423.5" y1="427.0" x2="1423.5" y2="447.0" stroke="#777" stroke-width="1"/>
 <text x="133" y="490.0" font-size="13" text-anchor="end" fill="#222">rEmpty</text>
 <line x1="145" y1="504" x2="1860" y2="504" stroke="#bbb"/>
@@ -1832,8 +1832,8 @@
 <text x="133" y="538.0" font-size="13" text-anchor="end" fill="#222">rHalfEmpty</text>
 <line x1="145" y1="552" x2="1860" y2="552" stroke="#bbb"/>
 <line x1="145.0" y1="523.0" x2="634.0" y2="523.0" stroke="#006600" stroke-width="2"/>
-<line x1="634.0" y1="543.0" x2="1391.6" y2="543.0" stroke="#333333" stroke-width="2"/>
-<line x1="1391.6" y1="523.0" x2="1860.0" y2="523.0" stroke="#006600" stroke-width="2"/>
+<line x1="634.0" y1="543.0" x2="1377.9" y2="543.0" stroke="#333333" stroke-width="2"/>
+<line x1="1377.9" y1="523.0" x2="1860.0" y2="523.0" stroke="#006600" stroke-width="2"/>
 <line x1="634.0" y1="523.0" x2="634.0" y2="543.0" stroke="#777" stroke-width="1"/>
-<line x1="1391.6" y1="543.0" x2="1391.6" y2="523.0" stroke="#777" stroke-width="1"/>
+<line x1="1377.9" y1="543.0" x2="1377.9" y2="523.0" stroke="#777" stroke-width="1"/>
 </svg>
