@@ -1,0 +1,109 @@
+Run:        Post_M5/UVM post-fix async FIFO verification
+Host:       PSU ECE farm via katnemo
+Questa:     2021.3_1 (/pkgs/mentor/questa/2021.3_1/questasim/bin)
+License:    1717@mentor-lic.cecs.pdx.edu
+
+Baseline RED:
+  Remote dir: ~/claude-runs/2026-05-25T22-59-37Z_post-m5-uvm-baseline-red
+  Start UTC: 2026-05-25T22-59-37Z
+  End UTC:   2026-05-25T22-59-42Z
+  Command:   timeout 180s vsim -c -do 'do run.do; quit -f'
+  Result:    run.do failed immediately on a fresh farm directory because
+             bare `vdel -all` could not access missing work/.
+
+Fixes applied:
+  RTL:
+    D-1. Routed sync_w2r reset to the read reset domain:
+         .clk(rclk), .rst_n(rrst).
+    D-2. Routed sync_r2w reset to the write reset domain:
+         .clk(wclk), .rst_n(wrst).
+    D-3. Removed the dual-clock memory fifo_count from half-flag
+         generation.
+    D-4. Computed wHalfFull/rHalfEmpty from next local pointer
+         occupancy and synchronized remote pointers.
+
+  UVM testbench:
+    T-1. Drivers now drive at negedge, before the DUT sampling edge.
+    T-2. Monitors sample request/pre-edge flag state after negedge and
+         publish only accepted transfers after the active edge.
+    T-3. Scoreboard compares DUT rData against queued expected wData,
+         raises uvm_error on mismatch, tracks reset flushes, and prints
+         a final PASS/FAIL summary.
+    T-4. The default RESET_SEQUENCE flow remains enabled and is now
+         handled by the scoreboard.
+
+  Run / coverage:
+    C-1. run.do guards vdel for fresh farm runs.
+    C-2. run.do keeps DUT-only code coverage:
+         +cover=sbfec+asynchronous_fifo(rtl).
+    C-3. Added farm VCD dump and reproducible waveform renderers.
+
+Full Post_M5/UVM farm run:
+  Remote dir: ~/claude-runs/2026-05-25T23-03-19Z_post-m5-uvm-green-attempt2
+  Start UTC: 2026-05-25T23-03-19Z
+  End UTC:   2026-05-25T23-03-42Z
+  Command:   timeout 240s vsim -c -do 'do run.do; quit -f'
+  Transcript:
+    All vlog phases: Errors 0, Warnings 0
+    vopt:            Errors 0, Warnings 0
+    vcover reports:  Errors 0, Warnings 0
+    Final footer:    Errors 0, Warnings 0
+  Scoreboard:
+    Writes observed       : 659
+    Reads  observed       : 596
+    Reset flushes         : 2
+    Residual expected_q   : 0
+    Mismatches / errors   : 0
+    Verdict: *** PASSED ***
+  UVM:
+    UVM_WARNING : 0
+    UVM_ERROR   : 0
+    UVM_FATAL   : 0
+  Coverage:
+    DUT filtered instance coverage: 100.00%
+    TOTAL COVERGROUP COVERAGE:     100.00%
+    Covergroup types:              9
+
+Directed flag-threshold farm run:
+  Remote dir: ~/claude-runs/2026-05-25T23-04-42Z_post-m5-flag-threshold-green
+  Start UTC: 2026-05-25T23-04-42Z
+  End UTC:   2026-05-25T23-05-27Z
+  Command:   timeout 120s vsim -c -do 'do run_flags.do; quit -f'
+  Transcript:
+    async_fifo.sv compile:        Errors 0, Warnings 0
+    flag_threshold_tb.sv compile: Errors 0, Warnings 0
+    vopt:                         Errors 0, Warnings 0
+    final footer:                 Errors 0, Warnings 0
+  Evidence prints:
+    [OK half_full_immediate] occ=32 wHalfFull=1
+    [OK full_immediate] occ=64 after write #64, wFull=1
+    [OK overflow_blocked] full write attempt rejected: occ=64 accepted_writes=64 wFull=1
+    [OK half_empty_immediate] occ=32 rHalfEmpty=1
+    [OK empty_immediate] occ=0 after read #64, rEmpty=1
+    [SUMMARY] half_full_lag_seen=0 half_empty_lag_seen=0 full_ok_seen=1 overflow_blocked_seen=1 empty_ok_seen=1
+
+Artifacts:
+  transcript_farm.txt
+  waveform_samples.csv
+  waveforms.svg/.png
+  flag_threshold_transcript_farm.txt
+  flag_debug_samples.csv
+  flag_debug_waveforms.svg/.png
+  flag_debug_write_thresholds.svg/.png
+  flag_debug_read_thresholds.svg/.png
+  make_artifacts.py
+  make_flag_debug_waveforms.py
+  design.md
+  MANIFEST.txt
+
+Raw simulator artifacts intentionally gitignored:
+  dump.vcd
+  flag_threshold.vcd
+  async_fifo.ucdb
+
+Verdict:
+  PASS. Post_M5/UVM now compiles cleanly on the farm, keeps the default
+  reset-sequence flow, self-checks with a reset-aware data scoreboard,
+  reaches zero UVM warnings/errors/fatals, reports 100% DUT filtered
+  code coverage and 100% covergroup coverage, and proves immediate
+  half/full/empty flag behavior with a directed farm waveform run.

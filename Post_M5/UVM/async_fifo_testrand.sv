@@ -55,11 +55,7 @@ class fifo_random_test extends uvm_test;
                                 r_seq = read_sequence_random::type_id::create("r_seq", this);
                                 r_seq.start(env.ra.rs);
                         end
-			begin
-				@(negedge vif.wrst);
-				env.scb.w_reset();
-			end
-                join
+	                join
                 #100;
                 
                 phase.drop_objection(this , "Finished fifo_seq in main phase");
@@ -69,4 +65,3 @@ class fifo_random_test extends uvm_test;
         endtask
 
 endclass
-

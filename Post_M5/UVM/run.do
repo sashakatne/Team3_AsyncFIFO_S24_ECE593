@@ -1,5 +1,7 @@
-vdel -all
-
+# Guard vdel so a fresh farm checkout does not fail when work/ is absent.
+if {[file exists work]} {
+  vdel -all
+}
 vlib work
 
 vlog -source -lint async_fifo.sv

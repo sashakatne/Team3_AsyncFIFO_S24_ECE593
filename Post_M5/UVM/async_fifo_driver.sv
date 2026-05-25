@@ -27,7 +27,7 @@ class write_driver extends uvm_driver#(transaction_write);
 	endfunction
 
 	task drive_write (transaction_write txw);
-		@(posedge intf_vi.wclk);
+		@(negedge intf_vi.wclk);
 		this.intf_vi.winc = txw.winc;
 		this.intf_vi.wData = txw.wData;
 	endtask
@@ -79,7 +79,7 @@ class read_driver extends uvm_driver#(transaction_read);
 	endfunction
 
 	task drive_read (transaction_read txr);
-		@(posedge intf_vi.rclk);
+		@(negedge intf_vi.rclk);
 		this.intf_vi.rinc = txr.rinc;
 	endtask
 

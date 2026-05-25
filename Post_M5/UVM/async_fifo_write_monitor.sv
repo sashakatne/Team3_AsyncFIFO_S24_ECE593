@@ -33,36 +33,31 @@ class write_monitor extends uvm_monitor;
 	
 	task run_phase(uvm_phase phase);
 		super.run_phase(phase);
-		fork
-			begin
-				forever @(negedge vif.wclk) begin
-					mon_write();
-				end
-			end
-			begin
-				wait (w_count == trans_count_write);
-			end
-		join
+		forever begin
+			mon_write();
+		end
 	endtask
 			
 	task mon_write;
 		transaction_write txw;
-		if (vif.winc == '1 && vif.wrst == '1 && vif.wFull == '0)
-			begin
-				txw=transaction_write::type_id::create("txw");  
-				txw.winc = vif.winc;
-				txw.wData = vif.wData;
-				txw.wFull = vif.wFull;
-				txw.wHalfFull = vif.wHalfFull;
-				$display ("\t [WRITE_MONITOR] winc = %0h \t wData = %0h \t w_count=%0d \t wFull=%0h \t wHalfFull=%0h", txw.winc, txw.wData, w_count, txw.wFull, txw.wHalfFull);
-				port_write.write(txw);
-				w_count = w_count + 1;
-			end
-		else if (vif.winc == '1 && vif.wrst == '1 && vif.wFull == '1)
-			begin
-				$display ("\t [WRITE_MONITOR] winc = %0h \t wData = %0h \t w_count=%0d \t wFull=%0h \t wHalfFull=%0h", vif.winc, vif.wData, w_count, vif.wFull, vif.wHalfFull);
-				`uvm_info("WRITE_MONITOR", "Write attempted to a full FIFO", UVM_MEDIUM)
-			end
+		bit accepted;
+		logic [DATA_SIZE-1:0] sampled_wData;
+
+		@(negedge vif.wclk);
+		#1;
+		accepted = (vif.wrst === 1'b1) && (vif.winc === 1'b1) && (vif.wFull === 1'b0);
+		sampled_wData = vif.wData;
+		@(posedge vif.wclk);
+		#1;
+		if (accepted) begin
+			txw=transaction_write::type_id::create("txw");
+			txw.winc = 1'b1;
+			txw.wData = sampled_wData;
+			txw.wFull = vif.wFull;
+			txw.wHalfFull = vif.wHalfFull;
+			port_write.write(txw);
+			w_count = w_count + 1;
+		end
 	endtask
 
 endclass

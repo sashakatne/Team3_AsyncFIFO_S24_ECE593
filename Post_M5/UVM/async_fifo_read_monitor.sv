@@ -34,40 +34,29 @@ class read_monitor extends uvm_monitor;
 	
 	task run_phase(uvm_phase phase);
 		super.run_phase(phase);
-		fork 
-			begin
-				forever @(negedge vif.rclk) begin
-					mon_read();
-				end
-			end
-			begin
-				wait (r_count == trans_count_read);
-			end
-		join_any	
+		forever begin
+			mon_read();
+		end
 	endtask
 	
 	task mon_read;
 		transaction_read txr;
-		if (vif.rinc == '1 && vif.rrst == '1 && vif.rEmpty == '0)
-			begin
-				txr=transaction_read::type_id::create("txr"); 
-				fork
-					begin
-						@(negedge vif.rclk);
-						txr.rData = vif.rData;
-						txr.rEmpty = vif.rEmpty;
-						txr.rHalfEmpty = vif.rHalfEmpty;
-						$display ("\t [READ_MONITOR] rinc = %0h \t rData = %0h \t rcount=%0d \t rEmpty=%0h \t rHalfEmpty=%0h", txr.rinc, txr.rData, r_count, txr.rEmpty, txr.rHalfEmpty);
-						port_read.write(txr);
-						r_count= r_count + 1;
-					end
-				join_none
-			end
-		else if (vif.rinc == '1 && vif.rrst == '1 && vif.rEmpty == '1)
-			begin
-				$display ("\t [READ_MONITOR] rinc = %0h \t rData = %0h \t rcount=%0d \t rEmpty=%0h \t rHalfEmpty=%0h", vif.rinc, vif.rData, r_count, vif.rEmpty, vif.rHalfEmpty);
-				`uvm_info("READ_MONITOR", "Read attempted from an empty FIFO", UVM_MEDIUM)
-			end
+		bit accepted;
+
+		@(negedge vif.rclk);
+		#1;
+		accepted = (vif.rrst === 1'b1) && (vif.rinc === 1'b1) && (vif.rEmpty === 1'b0);
+		@(posedge vif.rclk);
+		#1;
+		if (accepted) begin
+			txr=transaction_read::type_id::create("txr");
+			txr.rinc = 1'b1;
+			txr.rData = vif.rData;
+			txr.rEmpty = vif.rEmpty;
+			txr.rHalfEmpty = vif.rHalfEmpty;
+			port_read.write(txr);
+			r_count= r_count + 1;
+		end
 	endtask
 
 endclass
