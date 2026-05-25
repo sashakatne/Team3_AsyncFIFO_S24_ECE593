@@ -1,0 +1,96 @@
+Run:        Miscellaneous standalone FIFO enhancement
+Host:       PSU ECE farm via katnemo
+Questa:     2021.3_1 (/pkgs/mentor/questa/2021.3_1/questasim/bin)
+License:    1717@mentor-lic.cecs.pdx.edu
+
+Baseline observations:
+  Remote dir: ~/claude-runs/2026-05-25T23-09-06Z_misc-baseline-red
+  Result:
+    fifo2 compiled and simulated, but emitted two real warnings from implicit
+    `aempty_n` / `afull_n` nets.
+    async_fifo4 data and flag benches printed PASS, but the flag bench did not
+    prove exact immediate half/full/empty threshold timing.
+
+Additional pre-fix evidence:
+  Remote dir: ~/claude-runs/2026-05-25T23-17-54Z_misc-standalone-green-candidate
+  Result:
+    The upgraded fifo2 self-check failed before the RTL fix:
+      data mismatch at read 1: expected=1 actual=46
+    Root cause:
+      fifo2 held the write pointer when full but still drove RAM write enable
+      from raw `winc`, allowing over-full writes to corrupt stored data.
+
+Fixes applied:
+  D-1. Added explicit fifo2 async compare nets:
+       `wire aempty_n, afull_n;`
+  D-2. Qualified fifo2 RAM writes with `winc & !wfull`.
+  D-3. Changed async_fifo4 half flags to next-pointer occupancy:
+       `wptr_diff = b_wptr_next - b_rptr_sync`
+       `rptr_diff = b_wptr_sync - b_rptr_next`
+  D-4. Passed async_fifo4 parameters through to fifo_mem.
+  T-1. Replaced monitor-only/racy standalone benches with self-checking,
+       race-free procedural benches.
+  T-2. Added exact directed flag-threshold waveform bench.
+  R-1. Added standalone run scripts and farm-backed waveform renderers.
+  C-1. Added detailed explanatory comments to standalone RTL/test/run files and
+       the FIFO depth calculation note.
+
+Standalone farm regression:
+  Remote dir: /u/katne/claude-runs/2026-05-25T23-21-44Z_misc-standalone-green-final2
+  Start UTC: 2026-05-25T23-21-48Z
+  End UTC:   2026-05-25T23-21-59Z
+  Commands:
+    timeout 240s vsim -c -do "do run_fifo2.do; quit -f"
+    timeout 240s vsim -c -do "do run.do; quit -f"
+    timeout 240s vsim -c -do "do run_flags_compat.do; quit -f"
+  Transcript:
+    All vlog phases: Errors 0, Warnings 0
+    All vopt phases: Errors 0, Warnings 0
+    Final sim footers: Errors 0, Warnings 0
+  Self-check summaries:
+    [SUMMARY fifo2] accepted_writes=64 accepted_reads=64 blocked_writes=6 blocked_reads=1 residual_q=0 errors=0
+    [SUMMARY fifo4_main] accepted_writes=96 accepted_reads=96 blocked_writes=4 blocked_reads=1 residual_q=0 errors=0
+    [SUMMARY fifo4_flags] accepted_writes=64 accepted_reads=64 occ=0 full=0 empty=1 half_full=0 half_empty=1 errors=0
+
+Directed flag-threshold farm run:
+  Remote dir: /u/katne/claude-runs/2026-05-25T23-22-25Z_misc-flag-threshold-green-final
+  Start UTC: 2026-05-25T23-22-42Z
+  End UTC:   2026-05-25T23-22-46Z
+  Command:
+    timeout 240s vsim -c -do 'do run_flags.do; quit -f'
+  Transcript:
+    async_fifo4.sv compile:       Errors 0, Warnings 0
+    flag_threshold_tb.sv compile: Errors 0, Warnings 0
+    vopt:                         Errors 0, Warnings 0
+    final footer:                 Errors 0, Warnings 0
+  Evidence prints:
+    [OK half_full_immediate] occ=32 wptr=32 rptr=0 half_full=1
+    [OK full_immediate] occ=64 accepted_writes=64 wptr=64 rptr=0 full=1
+    [OK overflow_blocked] occ=64 accepted_writes=64 wptr=64 rptr=0 full=1
+    [OK half_empty_immediate] occ=32 reads=32 wptr=64 rptr=32 half_empty=1
+    [OK empty_immediate] occ=0 reads=64 wptr=64 rptr=64 empty=1
+    [SUMMARY] half_full_lag_seen=0 half_empty_lag_seen=0 full_ok_seen=1 overflow_blocked_seen=1 empty_ok_seen=1 errors=0
+
+Artifacts:
+  transcript_farm.txt
+  flag_threshold_transcript_farm.txt
+  waveform_samples.csv
+  waveforms.svg
+  waveforms.png
+  flag_debug_samples.csv
+  flag_debug_waveforms.svg
+  flag_debug_waveforms.png
+  flag_debug_write_thresholds.svg
+  flag_debug_write_thresholds.png
+  flag_debug_read_thresholds.svg
+  flag_debug_read_thresholds.png
+  make_artifacts.py
+  make_flag_debug_waveforms.py
+  design.md
+  MANIFEST.txt
+
+Verdict:
+  PASS. Miscellaneous now has warning-clean standalone farm simulations,
+  self-checking tests for fifo2 and async_fifo4, exact immediate half/full/empty
+  flag-threshold evidence, and readable farm-backed waveform artifacts with
+  clocks, decimal pointers, enables, and all four flags.

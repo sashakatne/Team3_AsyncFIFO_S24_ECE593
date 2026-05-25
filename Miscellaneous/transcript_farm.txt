@@ -1,0 +1,274 @@
+RUN_DIR=/u/katne/claude-runs/2026-05-25T23-21-44Z_misc-standalone-green-final2
+START_UTC=2026-05-25T23-21-48Z
+===== FARM SCRIPT run_fifo2.do =====
+Reading pref.tcl
+
+# 2021.3_1
+
+# do run_fifo2.do
+# QuestaSim-64 vlog 2021.3_1 Compiler 2021.08 Aug 15 2021
+# Start time: 16:21:49 on May 25,2026
+# vlog -source -lint async_fifo2.sv
+# -- Compiling module fifo2
+# -- Compiling module fifomem
+# -- Compiling module async_cmp
+# -- Compiling module rptr_empty
+# -- Compiling module wptr_full
+#
+# Top level modules:
+# 	fifo2
+# End time: 16:21:50 on May 25,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2021.3_1 Compiler 2021.08 Aug 15 2021
+# Start time: 16:21:50 on May 25,2026
+# vlog -source -lint async_fifo2_tb.sv
+# -- Compiling module top
+#
+# Top level modules:
+# 	top
+# End time: 16:21:50 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vopt 2021.3_1 Compiler 2021.08 Aug 15 2021
+# Start time: 16:21:50 on May 25,2026
+# vopt top -o fifo2_optimized "+acc"
+#
+# Top level modules:
+# 	top
+#
+# Analyzing design...
+# -- Loading module top
+# -- Loading module fifo2
+# -- Loading module async_cmp
+# -- Loading module fifomem
+# -- Loading module rptr_empty
+# -- Loading module wptr_full
+# Optimizing 6 design-units (inlining 0/6 module instances):
+# -- Optimizing module top(fast)
+# -- Optimizing module async_cmp(fast)
+# -- Optimizing module wptr_full(fast)
+# -- Optimizing module rptr_empty(fast)
+# -- Optimizing module fifo2(fast)
+# -- Optimizing module fifomem(fast)
+# Optimized design name is fifo2_optimized
+# End time: 16:21:51 on May 25,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# vsim fifo2_optimized
+# Start time: 16:21:51 on May 25,2026
+# //  Questa Sim-64
+# //  Version 2021.3_1 linux_x86_64 Aug 15 2021
+# //
+# //  Copyright 1991-2021 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading sv_std.std
+# Loading work.top(fast)
+# Loading work.fifo2(fast)
+# Loading work.async_cmp(fast)
+# Loading work.fifomem(fast)
+# Loading work.rptr_empty(fast)
+# Loading work.wptr_full(fast)
+# 1
+# [SUMMARY fifo2] accepted_writes=64 accepted_reads=64 blocked_writes=6 blocked_reads=1 residual_q=0 errors=0
+# *** PASSED ***
+# ** Note: $finish    : async_fifo2_tb.sv(144)
+#    Time: 2431 ns  Iteration: 0  Instance: /top
+# 1
+# Break in Task finish_with_summary at async_fifo2_tb.sv line 144
+# Stopped at async_fifo2_tb.sv line 144
+#  quit -f
+# End time: 16:21:51 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+[SCRIPT run_fifo2.do] rc=0
+===== FARM SCRIPT run.do =====
+Reading pref.tcl
+
+# 2021.3_1
+
+# do run.do
+# QuestaSim-64 vlog 2021.3_1 Compiler 2021.08 Aug 15 2021
+# Start time: 16:21:53 on May 25,2026
+# vlog -source -lint async_fifo4.sv
+# -- Compiling module asynchronous_fifo
+# -- Compiling module synchronizer
+# -- Compiling module wptr_handler
+# -- Compiling module rptr_handler
+# -- Compiling module fifo_mem
+#
+# Top level modules:
+# 	asynchronous_fifo
+# End time: 16:21:53 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2021.3_1 Compiler 2021.08 Aug 15 2021
+# Start time: 16:21:53 on May 25,2026
+# vlog -source -lint async_fifo4_tb.sv
+# -- Compiling module top
+#
+# Top level modules:
+# 	top
+# End time: 16:21:53 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vopt 2021.3_1 Compiler 2021.08 Aug 15 2021
+# Start time: 16:21:54 on May 25,2026
+# vopt top -o top_optimized "+acc"
+#
+# Top level modules:
+# 	top
+#
+# Analyzing design...
+# -- Loading module top
+# -- Loading module asynchronous_fifo
+# -- Loading module synchronizer
+# -- Loading module wptr_handler
+# -- Loading module rptr_handler
+# -- Loading module fifo_mem
+# Optimizing 6 design-units (inlining 0/7 module instances):
+# -- Optimizing module top(fast)
+# -- Optimizing module wptr_handler(fast)
+# -- Optimizing module rptr_handler(fast)
+# -- Optimizing module asynchronous_fifo(fast)
+# -- Optimizing module fifo_mem(fast)
+# -- Optimizing module synchronizer(fast)
+# Optimized design name is top_optimized
+# End time: 16:21:55 on May 25,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# vsim top_optimized
+# Start time: 16:21:55 on May 25,2026
+# //  Questa Sim-64
+# //  Version 2021.3_1 linux_x86_64 Aug 15 2021
+# //
+# //  Copyright 1991-2021 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading sv_std.std
+# Loading work.top(fast)
+# Loading work.asynchronous_fifo(fast)
+# Loading work.synchronizer(fast)
+# Loading work.wptr_handler(fast)
+# Loading work.rptr_handler(fast)
+# Loading work.fifo_mem(fast)
+# 1
+# [SUMMARY fifo4_main] accepted_writes=96 accepted_reads=96 blocked_writes=4 blocked_reads=1 residual_q=0 errors=0
+# *** PASSED ***
+# ** Note: $finish    : async_fifo4_tb.sv(165)
+#    Time: 3551 ns  Iteration: 0  Instance: /top
+# 1
+# Break in Task finish_with_summary at async_fifo4_tb.sv line 165
+# Stopped at async_fifo4_tb.sv line 165
+#  quit -f
+# End time: 16:21:55 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+[SCRIPT run.do] rc=0
+===== FARM SCRIPT run_flags_compat.do =====
+Reading pref.tcl
+
+# 2021.3_1
+
+# do run_flags_compat.do
+# QuestaSim-64 vlog 2021.3_1 Compiler 2021.08 Aug 15 2021
+# Start time: 16:21:57 on May 25,2026
+# vlog -source -lint async_fifo4.sv
+# -- Compiling module asynchronous_fifo
+# -- Compiling module synchronizer
+# -- Compiling module wptr_handler
+# -- Compiling module rptr_handler
+# -- Compiling module fifo_mem
+#
+# Top level modules:
+# 	asynchronous_fifo
+# End time: 16:21:57 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2021.3_1 Compiler 2021.08 Aug 15 2021
+# Start time: 16:21:57 on May 25,2026
+# vlog -source -lint async_fifo4_tb2.sv
+# -- Compiling module top
+#
+# Top level modules:
+# 	top
+# End time: 16:21:57 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vopt 2021.3_1 Compiler 2021.08 Aug 15 2021
+# Start time: 16:21:57 on May 25,2026
+# vopt top -o flags_compat_optimized "+acc"
+#
+# Top level modules:
+# 	top
+#
+# Analyzing design...
+# -- Loading module top
+# -- Loading module asynchronous_fifo
+# -- Loading module synchronizer
+# -- Loading module wptr_handler
+# -- Loading module rptr_handler
+# -- Loading module fifo_mem
+# Optimizing 6 design-units (inlining 0/7 module instances):
+# -- Optimizing module top(fast)
+# -- Optimizing module wptr_handler(fast)
+# -- Optimizing module rptr_handler(fast)
+# -- Optimizing module asynchronous_fifo(fast)
+# -- Optimizing module fifo_mem(fast)
+# -- Optimizing module synchronizer(fast)
+# Optimized design name is flags_compat_optimized
+# End time: 16:21:59 on May 25,2026, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 0
+# vsim flags_compat_optimized
+# Start time: 16:21:59 on May 25,2026
+# //  Questa Sim-64
+# //  Version 2021.3_1 linux_x86_64 Aug 15 2021
+# //
+# //  Copyright 1991-2021 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading sv_std.std
+# Loading work.top(fast)
+# Loading work.asynchronous_fifo(fast)
+# Loading work.synchronizer(fast)
+# Loading work.wptr_handler(fast)
+# Loading work.rptr_handler(fast)
+# Loading work.fifo_mem(fast)
+# 1
+# [CASE half_full] Fill to exactly DEPTH/2=32
+# [OK half_full_immediate] occ=32 half_full=1
+# [CASE full] Continue filling to DEPTH=64
+# [OK full_immediate] occ=64 full=1
+# [OK overflow_blocked] occ=64 accepted_writes=64 full=1
+# [CASE half_empty] Drain to exactly DEPTH/2=32
+# [OK half_empty_immediate] occ=32 half_empty=1
+# [CASE empty] Continue draining to zero
+# [OK empty_immediate] occ=0 empty=1
+# [SUMMARY fifo4_flags] accepted_writes=64 accepted_reads=64 occ=0 full=0 empty=1 half_full=0 half_empty=1 errors=0
+# *** PASSED ***
+# ** Note: $finish    : async_fifo4_tb2.sv(132)
+#    Time: 2470 ns  Iteration: 1  Instance: /top
+# 1
+# Break in Task finish_with_summary at async_fifo4_tb2.sv line 132
+# Stopped at async_fifo4_tb2.sv line 132
+#  quit -f
+# End time: 16:21:59 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+[SCRIPT run_flags_compat.do] rc=0
+EXIT_STATUS=0
+END_UTC=2026-05-25T23-21-59Z

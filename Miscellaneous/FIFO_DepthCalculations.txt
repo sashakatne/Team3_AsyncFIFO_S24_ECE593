@@ -1,4 +1,12 @@
 # Specification B
+#
+# Standalone note:
+# This file documents the arithmetic depth estimate used by the standalone
+# Miscellaneous FIFO examples.  The calculation gives the minimum storage needed
+# for the stated burst-rate mismatch.  The RTL examples use a power-of-two depth
+# of 64 entries because the pointer/Gray-code logic depends on binary wrap
+# arithmetic; 64 is the smallest power-of-two implementation depth above the
+# 45-entry theoretical minimum.
 
 FIFO Operating Conditions:
 
