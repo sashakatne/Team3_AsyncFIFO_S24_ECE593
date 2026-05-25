@@ -25,9 +25,7 @@ module asynchronous_fifo #(
         .wData(wData),
         .rData(rData),
         .winc(winc & ~wFull),
-        .rinc(rinc & ~rEmpty),
-        .half_full(wHalfFull),
-        .half_empty(rHalfEmpty)
+        .rinc(rinc & ~rEmpty)
     );
 
     // Write Pointer and Full Flag Logic
@@ -38,7 +36,8 @@ module asynchronous_fifo #(
         .wptr(wptr),
         .waddr(waddr),
         .wq2_rptr(wq2_rptr),
-        .wFull(wFull)
+        .wFull(wFull),
+        .wHalfFull(wHalfFull)
     );
 
     // Read Pointer and Empty Flag Logic
@@ -49,21 +48,22 @@ module asynchronous_fifo #(
         .rptr(rptr),
         .raddr(raddr),
         .rq2_wptr(rq2_wptr),
-        .rEmpty(rEmpty)
+        .rEmpty(rEmpty),
+        .rHalfEmpty(rHalfEmpty)
     );
 
-    // Synchronization from write to read domain
+    // Synchronization from write to read domain (clocked by rclk, reset by rrst)
     sync #(.ADDR_SIZE(ADDR_SIZE)) sync_w2r (
         .clk(rclk),
-        .rst_n(wrst),
+        .rst_n(rrst),
         .wData(wptr),
         .rData(rq2_wptr)
     );
 
-    // Synchronization from read to write domain
+    // Synchronization from read to write domain (clocked by wclk, reset by wrst)
     sync #(.ADDR_SIZE(ADDR_SIZE)) sync_r2w (
         .clk(wclk),
-        .rst_n(rrst),
+        .rst_n(wrst),
         .wData(rptr),
         .rData(wq2_rptr)
     );
@@ -79,42 +79,29 @@ module fifo_memory #(
     input  logic                      wrst, rrst,
     input  logic  [ADDR_SIZE-1:0]    waddr, raddr,
     input  logic  [DATA_SIZE-1:0]    wData,
-    output logic  [DATA_SIZE-1:0]    rData,
-    output logic                      half_full,
-    output logic                      half_empty
+    output logic  [DATA_SIZE-1:0]    rData
 );
 
     logic [DATA_SIZE-1:0] mem[2**ADDR_SIZE-1:0];
-    logic [ADDR_SIZE:0]   fifo_count; // To track the number of elements in the FIFO
 
     // Write logic
-    always_ff @(posedge wclk or negedge wrst) begin
-        if (!wrst) begin
-            fifo_count <= '0;
-        end else if (winc) begin
+    always_ff @(posedge wclk) begin
+        if (winc) begin
             `ifdef WDATA_CORRUPTION_BUG
                 mem[waddr] <= wData ^ 8'hFF; // Bug: corrupting the data
             `else
                 mem[waddr] <= wData;
             `endif
-            fifo_count <= fifo_count + 1;
         end
     end
 
-    // Read logic
+    // Read logic (registered output)
     always_ff @(posedge rclk or negedge rrst) begin
         if (!rrst) begin
-            fifo_count <= '0;
+            rData <= '0;
         end else if (rinc) begin
             rData <= mem[raddr];
-            fifo_count <= fifo_count - 1;
         end
-    end
-
-    // Half-full and half-empty logic
-    always_comb begin
-        half_full  = fifo_count >= 2**(ADDR_SIZE-1) ? '1 : '0;
-        half_empty = fifo_count <= 2**(ADDR_SIZE-1) ? '1 : '0;
     end
 
 endmodule
@@ -150,9 +137,10 @@ module read_pointer #(
 )(
     input  logic                    clk, rst_n, inc,
     input  logic [ADDR_SIZE:0]     rq2_wptr,
-    output logic [ADDR_SIZE:0]     rptr, 
+    output logic [ADDR_SIZE:0]     rptr,
     output logic [ADDR_SIZE-1:0]   raddr,
-    output logic                    rEmpty
+    output logic                    rEmpty,
+    output logic                    rHalfEmpty
 );
 
     logic [ADDR_SIZE:0]    gray_rptr_next;
@@ -181,8 +169,18 @@ module read_pointer #(
     assign binary_rptr_next = binary_rptr + (inc & ~rEmpty);
     assign raddr = binary_rptr[ADDR_SIZE-1:0];
 
+    // Half-empty flag: computed locally in the read domain using the synced
+    // write pointer (rq2_wptr is Gray, converted to binary by an XOR cascade).
+    logic [ADDR_SIZE:0] rq2_wptr_bin;
+    always_comb begin
+        rq2_wptr_bin[ADDR_SIZE] = rq2_wptr[ADDR_SIZE];
+        for (int i = ADDR_SIZE-1; i >= 0; i--)
+            rq2_wptr_bin[i] = rq2_wptr_bin[i+1] ^ rq2_wptr[i];
+    end
+    assign rHalfEmpty = (rq2_wptr_bin - binary_rptr) <= (1 << (ADDR_SIZE-1));
+
 endmodule
-       
+
 module write_pointer #(
     parameter ADDR_SIZE = 6
 )(
@@ -190,7 +188,8 @@ module write_pointer #(
     input  logic [ADDR_SIZE:0]     wq2_rptr,
     output logic [ADDR_SIZE:0]     wptr,
     output logic [ADDR_SIZE-1:0]   waddr,
-    output logic                    wFull
+    output logic                    wFull,
+    output logic                    wHalfFull
 );
 
     logic   [ADDR_SIZE:0]  binary_wptr;
@@ -203,7 +202,7 @@ module write_pointer #(
             binary_wptr <= '0;
             wFull <= '0;
         end
-        else begin 
+        else begin
             wptr <= gray_wptr_next;
             binary_wptr <= binary_wptr_next;
             wFull <= full_next;
@@ -218,8 +217,18 @@ module write_pointer #(
         assign full_next = (gray_wptr_next == wq2_rptr); // Bug: directly comparing gray_wptr_next with wq2_rptr
     `else
         assign full_next =  ((gray_wptr_next[ADDR_SIZE-2:0] == wq2_rptr[ADDR_SIZE-2:0]) &&
-                            (gray_wptr_next[ADDR_SIZE-1:0] != wq2_rptr[ADDR_SIZE-1:0]) && 
+                            (gray_wptr_next[ADDR_SIZE-1:0] != wq2_rptr[ADDR_SIZE-1:0]) &&
                             (gray_wptr_next[ADDR_SIZE] != wq2_rptr[ADDR_SIZE]));
     `endif
+
+    // Half-full flag: computed locally in the write domain using the synced
+    // read pointer (wq2_rptr is Gray, converted to binary by an XOR cascade).
+    logic [ADDR_SIZE:0] wq2_rptr_bin;
+    always_comb begin
+        wq2_rptr_bin[ADDR_SIZE] = wq2_rptr[ADDR_SIZE];
+        for (int i = ADDR_SIZE-1; i >= 0; i--)
+            wq2_rptr_bin[i] = wq2_rptr_bin[i+1] ^ wq2_rptr[i];
+    end
+    assign wHalfFull = (binary_wptr - wq2_rptr_bin) >= (1 << (ADDR_SIZE-1));
 
 endmodule
