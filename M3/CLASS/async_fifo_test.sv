@@ -3,20 +3,17 @@
 program test(intf in);
 
   environment env;
-  
+
   initial begin
-  
-    $display("ASYNC FIFO TEST START");
+    $display("[TEST] M3 enhanced class-based async FIFO test starting");
 
     env = new(in);
-    env.gen.trans_count = 420;
-    env.no_of_transactions = 420;
+    env.gen.trans_count    = 500;
+    env.no_of_transactions = 500;
 
     env.run();
-    $display("ASYNC FIFO TEST FINISH");
-    $finish;
+    $display("[TEST] Done");
 
   end
 
 endprogram
-

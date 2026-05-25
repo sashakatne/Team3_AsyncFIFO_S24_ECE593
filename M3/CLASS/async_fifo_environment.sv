@@ -1,114 +1,61 @@
 import async_fifo_pkg::*;
 
 class environment;
-    
-//Instantiate Generator and Driver
-generator gen;
-driver driv;
-monitor mon;
-scoreboard scb;
-  
-//Instantiate Communication between Generator and Driver
-mailbox gen2driv;
-mailbox mon2scb;
-  
-event driv2gen;
-  
-virtual intf vif;
 
-int no_of_transactions;
+  generator  gen;
+  driver     driv;
+  monitor    mon;
+  scoreboard scb;
 
-function new(virtual intf vif);
-	this.vif = vif;
-    gen2driv = new();
-    mon2scb	= new();
-    gen	= new(gen2driv, driv2gen);
-    driv = new (vif,gen2driv);
-    mon = new (vif, mon2scb);
-    scb	= new (mon2scb);
-endfunction
-  
- //reset task
-task pre_env();
-	driv.reset();
-endtask
-    
-//Generate and Drive
-task test();
-    
-    $display("********************************");
-    gen.main();
-    $display("DRIVER STARTED");
-	driv.main();
-    $display("MONITOR STARTED");
-    mon.main();
-    $display("SCOREBOARD STARTED");
-	scb.main();
-    $display("********************************");
+  // Stimulus mailboxes (generator -> driver)
+  mailbox gen2driv_w;
+  mailbox gen2driv_r;
 
-endtask
+  // Observation mailboxes (monitor -> scoreboard)
+  mailbox mon2scb_w;
+  mailbox mon2scb_r;
 
-task test_write();
-    
-    $display("********************************");
-    gen.main();
-    $display("WRITE DRIVER STARTED");
-	driv.main_write();
-    $display("WRITE MONITOR STARTED");
-    mon.main();
-    $display("WRITE SCOREBOARD STARTED");
-	scb.main();
-    $display("********************************");
+  virtual intf vif;
 
-endtask
+  // Total stimulus cycles per side. Set by the test.
+  int no_of_transactions;
 
-task test_read();
-    
-    $display("********************************");
-    gen.main();
-    $display("READ DRIVER STARTED");
-	driv.main_read();
-    $display("READ MONITOR STARTED");
-    mon.main();
-    $display("READ SCOREBOARD STARTED");
-	scb.main();
-    $display("********************************");
+  function new(virtual intf vif);
+    this.vif    = vif;
+    gen2driv_w  = new();
+    gen2driv_r  = new();
+    mon2scb_w   = new();
+    mon2scb_r   = new();
+    gen         = new(gen2driv_w, gen2driv_r);
+    driv        = new(vif, gen2driv_w, gen2driv_r);
+    mon         = new(vif, mon2scb_w, mon2scb_r);
+    scb         = new(mon2scb_w, mon2scb_r);
+  endfunction
 
-endtask
+  task pre_env();
+    driv.reset();
+  endtask
 
-task post_env();
-	$display("IN POST TEST");
-    wait(driv2gen.triggered);
-    $display("1 DONE");
-    wait(gen.trans_count == driv.no_trans);
-    $display("2 DONE");
-    wait (gen.trans_count == scb.no_trans);
-    $display("3 DONE");
-endtask
-    
-//task run
-task run();
-	pre_env();
-    $display("------Bursts requested %0d-------",gen.trans_count);
-    for (int i = 0; i < no_of_transactions; i++) 
-	begin
-    	test();
-    end
+  task test_run();
+    scb.main();
+    fork
+      gen.main();
+      driv.main(gen.trans_count);
+      mon.main(gen.trans_count);
+    join
+  endtask
 
+  task post_env();
+    repeat (200) @(posedge vif.rclk);
+    scb.final_report();
+  endtask
+
+  task run();
     pre_env();
-    $display("------ Write Bursts requested-------");
-	for (int i = 0; i < no_of_transactions; i++)  
-	begin
-    	test_write();
-    end
-
-    $display("------ Read Bursts requested-------");
-    for (int i = 0; i < no_of_transactions; i++) 
-	begin
-    	test_read();
-    end
-
+    $display("[ENV] Running %0d stimulus cycles per side", gen.trans_count);
+    test_run();
+    post_env();
     $finish;
-endtask
-        
+  endtask
+
 endclass

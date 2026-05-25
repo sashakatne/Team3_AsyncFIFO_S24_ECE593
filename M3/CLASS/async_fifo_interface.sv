@@ -22,13 +22,23 @@ clocking driver_cb @(posedge wclk);
 endclocking
 
 // Clocking for read domain
-clocking monitor_cb @(posedge rclk);        
+clocking monitor_cb @(posedge rclk);
       	input winc, rinc;
-        input rData; 
-        input wFull, rEmpty;    
-        input wHalfFull, rHalfEmpty;           
+        input rData;
+        input wFull, rEmpty;
+        input wHalfFull, rHalfEmpty;
 endclocking
-      
+
+// Write-side observation clocking block. Default input skew is #1step, so
+// samples are taken before module-side NBAs update flags on this wclk edge.
+// That gives the monitor the same view the DUT sampled in its Active region.
+clocking write_mon_cb @(posedge wclk);
+        input winc;
+        input wData;
+        input wFull;
+        input wHalfFull;
+endclocking
+
 //modport DRIVER (clocking driver_cb, input wclk, rclk, rrst,wrst);
 modport DRIVER(clocking driver_cb, input wclk,wrst);
 modport MONITOR(clocking monitor_cb, input rclk,rrst);

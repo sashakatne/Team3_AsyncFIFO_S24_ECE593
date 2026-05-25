@@ -1,68 +1,74 @@
 class scoreboard;
 
-	parameter DATA_SIZE = 8;
-	parameter ADDR_SIZE = 6;
-	parameter DEPTH = 64;
-	int no_trans; 
-	logic [DATA_SIZE-1 : 0] fifo_mem [DEPTH-1 : 0];
-	bit [ADDR_SIZE : 0] wr_count;
-	bit [ADDR_SIZE : 0] rd_count;
-	mailbox mon2scb;
+  parameter DATA_SIZE = 8;
 
-	function new(mailbox mon2scb);
-	this.mon2scb = mon2scb;
-	foreach(fifo_mem[i])
-	begin
-		fifo_mem[i] = '0;
-	end
-	endfunction 
+  mailbox mon2scb_w;
+  mailbox mon2scb_r;
 
-	virtual task main();
-	begin   
-	transaction trans_sb;
-	mon2scb.get(trans_sb);
-		
-	if(trans_sb.winc)
-	begin
-		fifo_mem[wr_count] = trans_sb.wData;
-		wr_count = wr_count + 1;
-	end
+  // Reference model: push every accepted write and pop/compare every observed read.
+  bit [DATA_SIZE-1:0] expected_q [$];
 
-	if(trans_sb.rinc)
-	begin
-		if(trans_sb.rData == fifo_mem[rd_count])
-		begin
-			$display("MATCH at address %0h - trans_sb.Data = %0h - Saved Data = %0h",rd_count, trans_sb.rData, fifo_mem[rd_count]);
-			rd_count = rd_count + 1;
-		end 
-		else 
-		begin
-			$display("ERROR at address %0h - trans_sb.Data = %0h - Saved Data = %0h",rd_count, trans_sb.rData, fifo_mem[rd_count]);
-		end
-	end
+  int wr_count;
+  int rd_count;
+  int error_count;
 
-	// Half Full & Half Empty checks
-	if(trans_sb.wHalfFull)
-	begin
-		$display("FIFO is half full");
-	end
-	if(trans_sb.rHalfEmpty)
-	begin
-		$display("FIFO is half empty");
-	end
+  function new(mailbox mon2scb_w, mailbox mon2scb_r);
+    this.mon2scb_w   = mon2scb_w;
+    this.mon2scb_r   = mon2scb_r;
+    this.wr_count    = 0;
+    this.rd_count    = 0;
+    this.error_count = 0;
+  endfunction
 
-	// Full & Empty checks
-	if(trans_sb.wFull)
-	begin
-		$display("FIFO is full");
-	end
-	if(trans_sb.rEmpty)
-	begin
-		$display("FIFO is empty");
-	end
-	no_trans++;
+  task process_writes();
+    transaction t;
+    forever begin
+      mon2scb_w.get(t);
+      expected_q.push_back(t.wData);
+      wr_count++;
+    end
+  endtask
 
-	end
-	endtask
+  task process_reads();
+    transaction t;
+    bit [DATA_SIZE-1:0] expected;
+    forever begin
+      mon2scb_r.get(t);
+      if (expected_q.size() == 0) begin
+        $error("[SCB] Read observed at rd_count=%0d but expected queue is empty (rData=%0h)",
+               rd_count, t.rData);
+        error_count++;
+      end else begin
+        expected = expected_q.pop_front();
+        if (t.rData !== expected) begin
+          $error("[SCB] MISMATCH at rd_count=%0d: expected=%0h, got=%0h",
+                 rd_count, expected, t.rData);
+          error_count++;
+        end
+      end
+      rd_count++;
+    end
+  endtask
+
+  task main();
+    fork
+      process_writes();
+      process_reads();
+    join_none
+  endtask
+
+  function void final_report();
+    $display("");
+    $display("==================== SCOREBOARD SUMMARY ====================");
+    $display("  Writes observed       : %0d", wr_count);
+    $display("  Reads  observed       : %0d", rd_count);
+    $display("  Residual expected_q   : %0d", expected_q.size());
+    $display("  Mismatches / errors   : %0d", error_count);
+    if (error_count == 0)
+      $display("  Verdict: *** PASSED ***");
+    else
+      $display("  Verdict: *** FAILED ***");
+    $display("============================================================");
+  endfunction
 
 endclass

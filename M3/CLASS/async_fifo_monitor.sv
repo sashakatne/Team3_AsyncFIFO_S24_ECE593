@@ -1,40 +1,62 @@
 class monitor;
 
-virtual intf mon_if;
-mailbox mon2scb;
- 
-function new(virtual intf mon_if,mailbox mon2scb);
-	this.mon_if = mon_if;
-  	this.mon2scb = mon2scb;
-endfunction
- 
-virtual task drive();
-begin
-     
-	transaction trans_mon;
-   	trans_mon = new(); 	  
-	@(posedge mon_if.rclk);
-	trans_mon.rinc = mon_if.rinc;
-	trans_mon.winc = mon_if.winc;
-	trans_mon.wData = mon_if.wData;  
-	trans_mon.wFull = mon_if.wFull;
-	trans_mon.wHalfFull = mon_if.wHalfFull;
-	trans_mon.rEmpty = mon_if.rEmpty;
-	trans_mon.rHalfEmpty = mon_if.rHalfEmpty;
-	trans_mon.rData = mon_if.rData; 
-	mon2scb.put(trans_mon);
-	
-end
-endtask
+  virtual intf mon_if;
+  mailbox mon2scb_w;   // accepted writes -> scoreboard
+  mailbox mon2scb_r;   // observed reads  -> scoreboard
 
-task  main();
-begin
-	for (int i = 0; i < 1; i++) 
-	begin
-        drive(); 
-	end
-end
-endtask
+  int wr_obs;
+  int rd_obs;
+
+  function new(virtual intf mon_if, mailbox mon2scb_w, mailbox mon2scb_r);
+    this.mon_if    = mon_if;
+    this.mon2scb_w = mon2scb_w;
+    this.mon2scb_r = mon2scb_r;
+    this.wr_obs    = 0;
+    this.rd_obs    = 0;
+  endfunction
+
+  // Sample the write side through a clocking block so the monitor sees the
+  // pre-edge values consumed by the DUT, not post-NBA flag updates.
+  task observe_writes(int n);
+    transaction t;
+    for (int i = 0; i < n; i++) begin
+      @(mon_if.write_mon_cb);
+      if (mon_if.write_mon_cb.winc && !mon_if.write_mon_cb.wFull) begin
+        t = new();
+        t.winc      = mon_if.write_mon_cb.winc;
+        t.wData     = mon_if.write_mon_cb.wData;
+        t.wFull     = mon_if.write_mon_cb.wFull;
+        t.wHalfFull = mon_if.write_mon_cb.wHalfFull;
+        mon2scb_w.put(t);
+        wr_obs++;
+      end
+    end
+  endtask
+
+  // Same idea for reads: sample through monitor_cb to observe the data word
+  // associated with the pre-increment read pointer.
+  task observe_reads(int n);
+    transaction t;
+    for (int i = 0; i < n; i++) begin
+      @(mon_if.monitor_cb);
+      if (mon_if.monitor_cb.rinc && !mon_if.monitor_cb.rEmpty) begin
+        t = new();
+        t.rinc       = mon_if.monitor_cb.rinc;
+        t.rData      = mon_if.monitor_cb.rData;
+        t.rEmpty     = mon_if.monitor_cb.rEmpty;
+        t.rHalfEmpty = mon_if.monitor_cb.rHalfEmpty;
+        mon2scb_r.put(t);
+        rd_obs++;
+      end
+    end
+  endtask
+
+  task main(int n);
+    fork
+      observe_writes(n);
+      observe_reads(n);
+    join
+    $display("[MONITOR] Done: wr_obs=%0d rd_obs=%0d", wr_obs, rd_obs);
+  endtask
 
 endclass
-  
