@@ -133,8 +133,45 @@ Artifacts in this directory:
     waveforms.svg           Windowed digital waveform plot.
     waveforms.png           PNG converted from waveforms.svg via sips.
     make_artifacts.py       Reproducible VCD parser/renderer.
+    flag_threshold_tb.sv    Directed half/full flag threshold test.
+    run_flags.do            Questa script for the directed flag threshold run.
+    flag_threshold_transcript_farm.txt
+                            Full farm transcript for the directed flag run.
+    flag_debug_samples.csv  Focused debug signals parsed from flag_threshold.vcd.
+    flag_debug_waveforms.svg/.png
+                            Full-run debug waveform: clocks, pointers, enables,
+                            and all four flags.
+    flag_debug_write_thresholds.svg/.png
+                            Zoomed write-side half-full/full threshold waveform.
+    flag_debug_read_thresholds.svg/.png
+                            Zoomed read-side half-empty/empty threshold waveform.
+    make_flag_debug_waveforms.py
+                            Reproducible renderer for the focused flag waveforms.
     MANIFEST.txt            This file.
     design.md               DUT/TB review and fix rationale.
+
+Additional directed flag-threshold result:
+  Command:
+    vsim -c -do 'do run_flags.do; quit -f' 2>&1 | tee flag_threshold_transcript_farm.txt
+  Farm run:
+    Start UTC: 2026-05-25T21-44-23Z
+    End UTC:   2026-05-25T21-44-27Z
+    Exit status: 0
+  Transcript:
+    async_fifo.sv compile:       Errors 0, Warnings 0
+    flag_threshold_tb.sv compile: Errors 0, Warnings 0
+    vopt:                        Errors 0, Warnings 0
+  Observed behavior:
+    wFull:       correct. Asserts immediately after accepted write #64.
+    rEmpty:      correct. Asserts immediately after accepted read #64.
+    wHalfFull:   one wclk late at occupancy 32.
+    rHalfEmpty:  one rclk late at occupancy 32.
+  Evidence prints:
+    [BUG half_full_late] occ=32 immediately after write #32, wHalfFull=0 expected=1
+    [OK full_immediate] occ=64 after write #64, wFull=1
+    [OK overflow_blocked] full write attempt rejected: occ=64 accepted_writes=64 wFull=1
+    [BUG half_empty_late] occ=32 immediately after read #32, rHalfEmpty=0 expected=1
+    [OK empty_immediate] occ=0 after read #64, rEmpty=1
 
 Reproducing:
   1. SSH to a Questa-licensed farm host.

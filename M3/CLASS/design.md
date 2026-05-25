@@ -240,3 +240,55 @@ script asked `vcover` to open `coverage_results` as a UCDB.
 
 - The `fifo_mem` reset port remains intentionally unchanged. Closing
   the X window in RTL requires a port-list change.
+
+## Additional flag review (directed farm run)
+
+After the random M3 run passed, a directed farm simulation was added to
+check the exact flag thresholds:
+
+```sh
+vsim -c -do 'do run_flags.do; quit -f' 2>&1 | tee flag_threshold_transcript_farm.txt
+python3 make_flag_debug_waveforms.py
+```
+
+The directed test fills the FIFO to exactly 32 entries, then to 64
+entries, attempts one overflow write, drains back to exactly 32
+entries, then drains to empty.
+
+Findings:
+
+- `wFull` is accurate for this depth-64 case. It asserts immediately
+  after the 64th accepted write, and a subsequent write while full is
+  blocked by the DUT.
+- `rEmpty` is accurate in the drain case. It asserts immediately after
+  the 64th accepted read.
+- `wHalfFull` is one `wclk` late. At occupancy 32, immediately after
+  the 32nd accepted write, the directed transcript reports
+  `wHalfFull=0 expected=1`; it becomes `1` on the next write-clock
+  sample with no occupancy change.
+- `rHalfEmpty` is one `rclk` late. At occupancy 32, immediately after
+  the 32nd accepted read during drain, the transcript reports
+  `rHalfEmpty=0 expected=1`; it becomes `1` on the next read-clock
+  sample with no occupancy change.
+
+Root cause:
+
+- `wHalfFull` is computed from `wptr_diff = b_wptr - b_rptr_sync`,
+  using the current write pointer. `wFull` correctly uses
+  `g_wptr_next`, so it is predictive for the write being accepted on
+  the current edge.
+- `rHalfEmpty` is computed from `rptr_diff = b_wptr_sync - b_rptr`,
+  using the current read pointer. `rEmpty` correctly uses
+  `g_rptr_next`, so it is predictive for the read being accepted on
+  the current edge.
+
+The likely RTL fix is to compute half flags from next pointer
+occupancy:
+
+```systemverilog
+whalf_full  = ((b_wptr_next - b_rptr_sync) >= (DEPTH >> 1));
+rhalf_empty = ((b_wptr_sync - b_rptr_next) <= (DEPTH >> 1));
+```
+
+That fix is not applied in this pass; the new directed transcript and
+waveforms document the bug so it is visible.
