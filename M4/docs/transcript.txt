@@ -1,6 +1,6 @@
 # transcript.txt
 do run.do
-# ** Warning: (vdel-134) Unable to remove locked optimized design "_opt".  Locker is katne@SISKO.
+# ** Warning: (vdel-134) Unable to remove locked optimized design "_opt".  Locker is <user>@<workstation>.
 # ** Warning: (vlib-34) Library already exists at "work".
 # Errors: 0, Warnings: 1
 # QuestaSim-64 vlog 2023.3 Compiler 2023.07 Jul 17 2023

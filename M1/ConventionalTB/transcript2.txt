@@ -2,7 +2,7 @@
 set PrefMain(file) transcript2.txt
 # transcript2.txt
 do run.do
-# Error 133: Unable to remove directory "/u/katne/myCourses/PreSi/asyncfifo_conventionaltb/work".
+# Error 133: Unable to remove directory "/u/<user>/myCourses/PreSi/asyncfifo_conventionaltb/work".
 # QuestaSim-64 vlog 2019.2_1 Compiler 2019.05 May 13 2019
 # Start time: 12:53:20 on Jun 08,2024
 # vlog -reportprogress 300 -source -lint async_fifo2.sv 

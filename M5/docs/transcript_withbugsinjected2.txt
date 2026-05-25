@@ -1,11 +1,11 @@
 # transcript_withbugs2.txt
 do run.do
-# Error 31: Unable to unlink file "//thoth.cecs.pdx.edu/Home06/katne/Downloads/M5/work/top_optimized/_lib.qdb".
-# Error 31: Unable to unlink file "//thoth.cecs.pdx.edu/Home06/katne/Downloads/M5/work/top_optimized/_lib3_0.qdb".
-# Error 31: Unable to unlink file "//thoth.cecs.pdx.edu/Home06/katne/Downloads/M5/work/top_optimized/_lib3_0.qpg".
-# Error 31: Unable to unlink file "//thoth.cecs.pdx.edu/Home06/katne/Downloads/M5/work/top_optimized/_lib3_0.qtl".
-# Error 133: Unable to remove directory "//thoth.cecs.pdx.edu/Home06/katne/Downloads/M5/work/top_optimized".
-# Error 133: Unable to remove directory "//thoth.cecs.pdx.edu/Home06/katne/Downloads/M5/work".
+# Error 31: Unable to unlink file "//<file-server>/Home06/<user>/Downloads/M5/work/top_optimized/_lib.qdb".
+# Error 31: Unable to unlink file "//<file-server>/Home06/<user>/Downloads/M5/work/top_optimized/_lib3_0.qdb".
+# Error 31: Unable to unlink file "//<file-server>/Home06/<user>/Downloads/M5/work/top_optimized/_lib3_0.qpg".
+# Error 31: Unable to unlink file "//<file-server>/Home06/<user>/Downloads/M5/work/top_optimized/_lib3_0.qtl".
+# Error 133: Unable to remove directory "//<file-server>/Home06/<user>/Downloads/M5/work/top_optimized".
+# Error 133: Unable to remove directory "//<file-server>/Home06/<user>/Downloads/M5/work".
 # QuestaSim-64 vlog 2023.3 Compiler 2023.07 Jul 17 2023
 # Start time: 23:07:59 on Jun 04,2024
 # vlog -reportprogress 300 -source -lint async_fifo.sv 

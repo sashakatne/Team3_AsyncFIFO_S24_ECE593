@@ -14,7 +14,7 @@ couldn't open "transcript": permission denied
 # //  is prohibited from disclosure under the Trade Secrets Act,
 # //  18 U.S.C. Section 1905.
 # //
-cd {\\thoth.cecs.pdx.edu\Home06\maheswar\Downloads\ECE593_S24_team_03_Asyn_ FIFO_M4\ECE593_S24_team_03_Asyn_ FIFO_M3\CLASS}
+cd {\\<file-server>\Home06\<user>\Downloads\ECE593_S24_team_03_Asyn_ FIFO_M4\ECE593_S24_team_03_Asyn_ FIFO_M3\CLASS}
 do run.do
 # ** Warning: (vlib-34) Library already exists at "work".
 # Errors: 0, Warnings: 1

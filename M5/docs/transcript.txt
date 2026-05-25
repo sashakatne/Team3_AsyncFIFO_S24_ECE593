@@ -1,6 +1,6 @@
 # transcript3.txt
 do run.do
-# Error 133: Unable to remove directory "/u/katne/myCourses/PreSi/team3_uvm_m5/work".
+# Error 133: Unable to remove directory "/u/<user>/myCourses/PreSi/team3_uvm_m5/work".
 # QuestaSim-64 vlog 2019.2_1 Compiler 2019.05 May 13 2019
 # Start time: 19:20:22 on Jun 04,2024
 # vlog -reportprogress 300 -source -lint -source -lint async_fifo.sv 
