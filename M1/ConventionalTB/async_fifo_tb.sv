@@ -115,7 +115,13 @@ module top;
     end
   endtask
 
-  // Task to check wFull flag
+  // Flag-invariant spot-checks (fire once after reset to confirm initial state).
+  // A true continuous monitor would need CDC-aware tolerance: wdata_q updates
+  // immediately on every write, but rEmpty/wFull in the DUT lag by the two-FF
+  // synchroniser. So a naive 'forever @(negedge clk)' check would false-error
+  // for ~2 destination clocks every time the synced pointer crosses. The
+  // properly CDC-aware version is out of scope for this minimal-fix pass; see
+  // design.md for the open task.
   task check_wFull;
     begin
       @(negedge wclk);
@@ -130,7 +136,6 @@ module top;
     end
   endtask
 
-  // Task to check rEmpty flag
   task check_rEmpty;
     begin
       @(negedge rclk);
@@ -149,7 +154,7 @@ module top;
     fork
       check_wFull();
       check_rEmpty();
-    join
+    join_none
   end
 
   initial begin 
