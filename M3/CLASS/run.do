@@ -1,5 +1,7 @@
-# 'catch {}' so a fresh checkout (no work/ yet) does not fail on vdel.
-catch {vdel -all}
+# Guard vdel so a fresh checkout (no work/ yet) does not print a warning.
+if {[file exists work]} {
+  vdel -all
+}
 vlib work
 
 vlog -source -lint async_fifo.sv
