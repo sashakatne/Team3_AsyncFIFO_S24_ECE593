@@ -1,0 +1,191 @@
+Run:        M2/CLASS (Cliff Cummings Style #2 async FIFO + class-based scoreboard, POST-FIX)
+Start UTC:  2026-05-25T21-11-20Z
+End   UTC:  2026-05-25T21-11-23Z   (per the vlog/vopt End time on the remote host)
+Host:       Questa-licensed remote host (anonymized)
+Questa:     2021.3_1   (/pkgs/mentor/questa/2021.3_1/questasim/bin)
+License:    <license-server>:<port>
+
+Purpose:
+  Demonstrate that the M2/CLASS async FIFO (Style #2) and its rewritten
+  class-based testbench (generator -> driver -> monitor -> scoreboard ->
+  environment) compile cleanly and pass *** PASSED *** with 100% code
+  coverage AFTER the targeted defect fixes documented in design.md.
+
+Fixes applied (see design.md "Fixes applied" for full rationale):
+  DUT (async_fifo.sv):
+    D-1. Routed both synchronizer instances to their DESTINATION
+         clock and reset domain (was source on both). synchronizer_r2w
+         now has .clk(wclk) .rst_n(wrst); synchronizer_w2r now has
+         .clk(rclk) .rst_n(rrst). Without this fix the two sync flops
+         lived in the wrong domain on real silicon (zero metastability
+         protection); simulation was passing only because of
+         deterministic event ordering.
+    D-2. Deferred. The fifo_mem array's data_out is combinational on
+         b_rptr, and the array is X at elaboration -- so rData is X
+         until the first write reaches the active read slot. Questa's
+         strict always_ff single-driver rule prevents adding an
+         elaboration-time initialiser. The post-fix TB makes this
+         benign by gating all read-side comparisons on (rinc &&
+         !rEmpty); see design.md for the full rationale.
+
+  TB (full class layer rewritten):
+    T-1. Driver / monitor / scoreboard now use proper iteration: the
+         pre-fix `for i<1` loops in each class's main() were replaced
+         by long-running threaded consumers that process 500 cycles
+         per side.
+    T-2. Scoreboard now uses a SystemVerilog queue as the reference
+         model, tracks error_count, escalates mismatches via $error,
+         and prints an explicit *** PASSED *** / *** FAILED *** verdict
+         in final_report() at end of simulation.
+    T-3. Driver reset wait corrected from the inverted
+         wait(drv_if.wrst || drv_if.rrst) / wait(!drv_if.wrst ||
+         drv_if.rrst) sequence to wait(drv_if.wrst === 1 &&
+         drv_if.rrst === 1) with signals parked at 0 during reset.
+    T-4. Driver now forks drive_writes (negedge wclk) and drive_reads
+         (negedge rclk) as independent threads instead of serialising
+         them in a single drive() task.
+    T-5. Monitor split into observe_writes (posedge wclk via the new
+         write_mon_cb clocking block) and observe_reads (posedge rclk
+         via the existing monitor_cb clocking block). Each pushes to
+         its own scoreboard mailbox; the scoreboard process_writes
+         and process_reads consumers run independently.
+
+  Interface (aysnc_fifo_interface.sv, NEW clocking block):
+    Added clocking write_mon_cb @(posedge wclk) with input winc,
+    wData, wFull, wHalfFull. Necessary because program code (the
+    `test` program) schedules in the Reactive region per IEEE
+    1800-2017 §4.4, which is AFTER module-side NBAs fire on the same
+    posedge. Without the clocking block the monitor sees the
+    post-edge view of flag signals, undercounting boundary writes
+    when wFull transitions 0->1. The clocking block's default #1step
+    input skew captures the pre-edge view -- the same view the DUT's
+    Active-region always_ff saw -- which is the only way to get
+    consistent transaction counts.
+
+  Top (async_fifo_top.sv):
+    Added $dumpfile / $dumpvars in an initial block so the
+    evidence-package waveform renderer has a VCD to parse.
+
+  run.do:
+    Wrapped `vdel -all` in `catch {}` and added explicit `vlib work`
+    so a fresh checkout doesn't error. Added vopt with
+    `+cover=sbfec+asynchronous_fifo(rtl).` to instrument code
+    coverage on the DUT only. Switched the vsim line to
+    `top_optimized -coverage`. Added `coverage save async_fifo.ucdb`
+    and `vcover report` calls at the end. Existing vlog ordering was
+    preserved.
+
+Commands executed (from the remote run dir, in order):
+  vsim -c -do 'do run.do; quit -f' 2>&1 | tee transcript_farm.txt
+
+Files compiled (per run.do):
+  vlog -source -lint async_fifo.sv                 (DUT: 5 modules)
+  vlog -source -lint async_fifo_package.sv         (class package)
+  vlog -source -lint aysnc_fifo_interface.sv       (intf + 3 clocking blocks)
+  vlog -source -lint async_fifo_top.sv             (harness module)
+  vlog -source -lint async_fifo_test.sv            (program test)
+  vopt async_fifo_top -o top_optimized +acc +cover=sbfec+asynchronous_fifo(rtl).
+
+Results:
+  Compile (async_fifo.sv):           Errors 0, Warnings 0
+  Compile (async_fifo_package.sv):   Errors 0, Warnings 0
+  Compile (aysnc_fifo_interface.sv): Errors 0, Warnings 0
+  Compile (async_fifo_top.sv):       Errors 0, Warnings 0
+  Compile (async_fifo_test.sv):      Errors 0, Warnings 0
+  vopt:                              Errors 0, Warnings 0
+  Simulation:
+    *** PASSED *** printed by scoreboard.final_report() at end of run
+    $finish at async_fifo_environment.sv:63 at time 14070 ns
+    Exit code 0
+    Zero $error prints across the full random run
+    Total run errors (per Questa transcript footer): 0
+
+Scoreboard summary (per transcript):
+  Writes observed         : 206
+  Reads  observed         : 206
+  Residual expected_q     : 0
+  Mismatches / errors     : 0
+
+Code coverage (per-instance, from vcover report async_fifo.ucdb):
+  /async_fifo_top/DUT/fifo_mem_inst        fifo_mem      Branches 2/2,  Conditions 2/2,  Statements 3/3    100%
+  /async_fifo_top/DUT/synchronizer_r2w_inst synchronizer Branches 2/2,                   Statements 5/5    100%
+  /async_fifo_top/DUT/synchronizer_w2r_inst synchronizer Branches 2/2,                   Statements 5/5    100%
+  /async_fifo_top/DUT/rptr_handler_inst    rptr_handler  Branches 6/6,  Expressions 14/14, Statements 22/22 100%
+  /async_fifo_top/DUT/wptr_handler_inst    wptr_handler  Branches 6/6,  Expressions 14/14, Statements 22/22 100%
+  TOTAL                                                                                                     100.00%
+
+Functional evidence (from waveform_samples.csv, derived from dump.vcd):
+  - 848 change events captured across the full 0 - 14070 ns range.
+  - rData starts at X and becomes deterministic only after the first
+    write reaches mem[0] (D-2 X-propagation window).
+  - First wFull assertion observed within the first ~1 us of the run.
+  - First rEmpty deassertion observed shortly after the first write
+    propagates through the (now correctly clocked) synchronizer_w2r
+    into rptr_handler.
+
+Caveats:
+  #1  The pre-fix run.do had a bare `vdel -all` (no catch wrapper) and
+      no coverage instrumentation. We added `catch {vdel -all}`,
+      explicit `vlib work`, vopt with `+cover=sbfec+asynchronous_fifo(rtl).`,
+      `vsim top_optimized -coverage`, and coverage save/report calls.
+      Existing vlog ordering was preserved.
+  #2  `vcover report ... -cvg -details` prints `No matching coverage
+      data found` because the TB defines no covergroups (only code
+      coverage is instrumented). Not a defect; functional coverage
+      appears in M4 onward.
+  #3  The filename `aysnc_fifo_interface.sv` (sic) is preserved.
+      Renaming would force changes to async_fifo_top.sv and the
+      package include path with zero functional benefit.
+  #4  D-2 (rData X-propagation window) is deferred to a later fix
+      pass that is willing to change the fifo_mem port list. The
+      post-fix TB makes it benign via (rinc && !rEmpty) gating.
+  #5  No bug-injection flags enabled. The M2 RTL has no `ifdef`-gated
+      bugs; those appear only in Post_M5.
+
+Artifacts in this directory:
+  Source (POST-FIX, see design.md for the full changelog):
+    async_fifo.sv                 - DUT (Style #2): asynchronous_fifo + fifo_mem +
+                                    synchronizer x2 + rptr_handler + wptr_handler
+    async_fifo_package.sv         - package async_fifo_pkg with class includes
+    aysnc_fifo_interface.sv       - intf with driver_cb / monitor_cb / write_mon_cb
+    async_fifo_top.sv             - harness module: instantiates DUT, intf, program
+                                    test, and dumps VCD
+    async_fifo_test.sv            - program test; instantiates environment
+    async_fifo_transaction.sv     - transaction class (unchanged port-list)
+    async_fifo_generator.sv       - generator: emits to two stimulus mailboxes
+    async_fifo_driver.sv          - driver: threaded drive_writes / drive_reads
+    async_fifo_monitor.sv         - monitor: threaded observe_writes /
+                                    observe_reads via clocking blocks
+    async_fifo_scoreboard.sv      - scoreboard: queue-based, PASS/FAIL verdict
+    async_fifo_environment.sv    - environment: pre_env / test_run / post_env
+    run.do                        - Questa script (catch vdel, vlib, vlog x5,
+                                    vopt, vsim, run, coverage save, vcover report)
+
+  Farm-run evidence (this work):
+    transcript_farm.txt           - Full Questa transcript from the 2026 post-fix run
+    dump.vcd                      - VCD from top module $dumpfile/$dumpvars (gitignored)
+    async_fifo.ucdb               - Questa UCDB with 100% code coverage (gitignored)
+    waveform_samples.csv          - All 848 tracked-signal change events from dump.vcd
+    waveforms.svg                 - Windowed digital-waveform plot (0 - 2500 ns)
+    waveforms.png                 - waveforms.svg converted via sips (1800x712)
+    make_artifacts.py             - Reproducible: parses dump.vcd -> CSV + SVG + PNG
+    MANIFEST.txt                  - This file
+    design.md                     - DUT/TB review, pre-fix defects, Fixes-applied changelog
+
+Reproducing locally:
+  1. SSH to a Questa-licensed remote host.
+  2. mkdir a fresh dir, scp every *.sv and run.do from M2/CLASS/.
+  3. Run: vsim -c -do 'do run.do; quit -f' 2>&1 | tee transcript_farm.txt
+  4. Copy transcript_farm.txt, dump.vcd, async_fifo.ucdb back to this dir,
+     then run:
+         python3 make_artifacts.py
+     to regenerate waveform_samples.csv, waveforms.svg, waveforms.png.
+
+Verdict: PASS (clean). All six vlog/vopt phases ended with `Errors: 0,
+         Warnings: 0`. The scoreboard's `*** PASSED ***` print plus
+         206 writes / 206 reads / 0 mismatches across the random
+         500-cycle-per-side run, with zero $error prints in the
+         transcript, constitute the proof. 100% statement / branch /
+         condition / FEC coverage on every DUT instance confirms the
+         stimulus exercised every reachable code path in the post-fix
+         RTL.
