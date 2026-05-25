@@ -1,0 +1,98 @@
+Run:        M1 root testbench (Cliff Cummings Style #1 async FIFO + monitor TB, POST-FIX)
+Start UTC:  2026-05-25T20-03-35Z
+End   UTC:  2026-05-25T20-03-51Z   (per the vlog End time on the remote host)
+Host:       Questa-licensed remote host (anonymized)
+Questa:     2021.3_1   (/pkgs/mentor/questa/2021.3_1/questasim/bin)
+License:    <license-server>:<port>
+
+Purpose:
+  Demonstrate that the M1 root async FIFO (Style #1: async_cmp + direction
+  flop + N-bit Gray pointers) compiles cleanly and simulates correctly
+  AFTER the 6 DUT fixes and 1 TB fix documented in design.md. The original
+  June-2024 snapshot was preserved up to commit dd7965f for milestone
+  provenance; this run reflects the corrected RTL/TB.
+
+Fixes applied (see design.md "Fixes applied" for full rationale):
+  DUT (async_fifo2.sv):
+    1. Declared aempty_n and afull_n as wires in fifo2 (was implicit nets;
+       eliminated 2 vlog-2623 / vopt-2623 warnings).
+    2. Gated fifomem write enable by `winc & ~wfull` so an overflow write
+       attempt no longer clobbers mem[0].
+    3. Routed binary pointers (rbin, wbin) to fifomem instead of the
+       Gray-coded wptr/rptr. The Gray pointers still drive async_cmp.
+    4. Added rrst_n to the reset path of {rempty,rempty2} so the read side
+       initializes correctly even if the two reset domains aren't aligned.
+    5. Removed the unreachable `posedge high` (where `high` is a constant
+       1'b1) from async_cmp's sensitivity list; trimmed the dead else branch.
+    6. Initialized the `direction` register to 1'b0 to avoid an 'X' on
+       aempty_n/afull_n during the brief window before wrst_n applies.
+  TB (async_fifo2_tb.sv):
+    7. Drive winc/wdata at negedge wclk (with blocking assignments) so they
+       are stable when the DUT samples at the following posedge -- removes
+       the one-cycle NBA-evaluation lag that previously kept winc asserted
+       for one extra cycle after wfull. Combined with DUT fix #2 this is
+       belt-and-braces.
+
+Commands executed (from the remote run dir):
+  vsim -c -do 'do run.do; quit -f' 2>&1 | tee transcript.txt
+
+Files compiled (per run.do):
+  vlog +acc -source -lint async_fifo2.sv async_fifo2_tb.sv
+
+Results:
+  Compile:    vlog Errors 0, Warnings 0   (was Warnings 2 pre-fix)
+  Elaboration:vopt-equivalent inside vsim, Errors 0, Warnings 0 (was 2)
+  Simulation: reached $finish at async_fifo2_tb.sv:83 at time 4240 ns
+              Exit code 0
+              No UVM Report Summary (the TB is procedural, predates UVM)
+              No PASS/FAIL print (the TB has no scoreboard; $monitor only)
+
+Functional evidence (from waveform_samples.csv, parsed from transcript.txt):
+  - 133 $monitor change events captured between 0 and 2910 ns.
+  - wdata sequenced 1..64 then froze (DUT correctly backpressured the TB
+    so attempted write 65 was dropped). Pre-fix the TB attempted to write
+    65 and the DUT wrote it into the just-wrapped mem[0].
+  - wfull asserted at time 834 ns with wdata=64 (DUT correctly latched
+    full at the depth-64 boundary). Pre-fix wdata at this moment was 65.
+  - First rdata after rempty deasserts is 1, sequencing 1, 2, ..., 64.
+    Pre-fix the first rdata was 65 (the overflow-corrupted mem[0]).
+  - rempty re-asserts at time 2910 ns once the 64 items have been drained.
+
+Caveats:
+  #1  No coverage was instrumented (the run.do does not pass +cover or
+      invoke vcover). Coverage starts in M1/ConventionalTB and continues
+      through Post_M5.
+  #2  run.do uses GUI-style 'add wave -position insertpoint sim:/top/uut/*'
+      commands that follow 'run -all'. In batch mode (vsim -c) these run
+      after $finish; they print Wave-window unavailable errors but do not
+      affect the verdict. Not patched (run.do remains as-is).
+  #3  No bug-injection +define+*_BUG flags enabled. The Style #1 RTL has no
+      such hooks; those were added in Post_M5.
+
+Artifacts in this directory:
+  Source (POST-FIX, see design.md changelog for the diff):
+    async_fifo2.sv     - DUT: fifo2 + fifomem + async_cmp + rptr_empty + wptr_full
+    async_fifo2_tb.sv  - Procedural TB, $monitor only, $finish after 120 attempts each
+    run.do             - GUI-style Questa script (compile + vsim + wave + run -all)
+    docs/              - Original milestone documentation (unchanged)
+
+  Farm-run evidence (this work):
+    transcript.txt          - Full Questa transcript from the post-fix farm run
+    waveform_samples.csv    - Parsed $monitor sample table (time/wdata/rdata/wfull/rempty)
+    waveforms.svg           - Hand-rolled digital-waveform SVG plot (0-2910 ns)
+    waveforms.png           - waveforms.svg converted via sips (1600x520)
+    make_artifacts.py       - Reproducible: parses transcript.txt -> CSV + SVG + PNG
+    MANIFEST.txt            - This file
+    design.md               - DUT review, original defects, and Fixes-applied changelog
+
+Reproducing locally:
+  1. SSH to a Questa-licensed remote host.
+  2. mkdir a fresh dir, scp async_fifo2.sv async_fifo2_tb.sv run.do.
+  3. Run: vsim -c -do 'do run.do; quit -f' 2>&1 | tee transcript.txt
+  4. Copy transcript.txt back to this directory, then run:
+         python3 make_artifacts.py
+     to regenerate waveform_samples.csv, waveforms.svg, waveforms.png.
+
+Verdict: PASS (clean). Zero compile warnings, $finish reached, no
+         monitor-output evidence of overflow corruption (first rdata is
+         the first written word, not the overflow-clobbered value).
