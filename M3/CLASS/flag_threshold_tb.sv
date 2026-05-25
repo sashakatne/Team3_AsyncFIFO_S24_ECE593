@@ -134,8 +134,8 @@ module flag_threshold_tb;
 
     if (wHalfFull !== 1'b1) begin
       half_full_lag_seen = 1;
-      $display("[BUG half_full_late] occ=%0d immediately after write #%0d, wHalfFull=%0b expected=1",
-               model_occ, accepted_writes, wHalfFull);
+      $error("[BUG half_full_late] occ=%0d immediately after write #%0d, wHalfFull=%0b expected=1",
+             model_occ, accepted_writes, wHalfFull);
     end else begin
       $display("[OK half_full_immediate] occ=%0d wHalfFull=1", model_occ);
     end
@@ -183,8 +183,8 @@ module flag_threshold_tb;
 
     if (rHalfEmpty !== 1'b1) begin
       half_empty_lag_seen = 1;
-      $display("[BUG half_empty_late] occ=%0d immediately after read #%0d, rHalfEmpty=%0b expected=1",
-               model_occ, accepted_reads, rHalfEmpty);
+      $error("[BUG half_empty_late] occ=%0d immediately after read #%0d, rHalfEmpty=%0b expected=1",
+             model_occ, accepted_reads, rHalfEmpty);
     end else begin
       $display("[OK half_empty_immediate] occ=%0d rHalfEmpty=1", model_occ);
     end
