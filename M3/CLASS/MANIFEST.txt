@@ -1,0 +1,109 @@
+Run:        M3/CLASS (enhanced class-based async FIFO TB, POST-FIX READY)
+Prepared:   2026-05-25
+Host:       Local macOS workspace
+Simulator:  Not available locally (no vsim/vlog on PATH)
+
+Purpose:
+  Document the M3 post-fix source state and the exact reproduction flow
+  needed to generate the final Questa evidence package. This mirrors the
+  M2 source-fix pattern, but no farm transcript is checked in yet because
+  this workspace cannot run Questa.
+
+Fixes applied:
+  RTL:
+    D-1. Routed synchronizer_r2w_inst into the write clock/reset domain:
+         .clk(wclk), .rst_n(wrst).
+    D-2. Routed synchronizer_w2r_inst into the read clock/reset domain:
+         .clk(rclk), .rst_n(rrst).
+    D-3. Documented the known fifo_mem X window on rData. The TB gates
+         reads on (rinc && !rEmpty), so no scoreboard compare consumes
+         the uninitialized memory window.
+
+  Testbench:
+    T-1. Replaced the single-mailbox, one-transaction driver path with
+         independent write/read stimulus mailboxes.
+    T-2. Driver now forks write and read threads on their own clock
+         domains and drives at negedge so stimulus is stable by the DUT
+         sampling edge.
+    T-3. Added write_mon_cb to the interface and split the monitor into
+         write/read observers.
+    T-4. Replaced the old array scoreboard with a queue reference model
+         that calls $error on mismatch and prints a final PASS/FAIL
+         verdict.
+    T-5. Fixed the reset wait to block until both active-low reset
+         domains are deasserted.
+
+  Coverage / run infrastructure:
+    C-1. Added top-level VCD dump for artifact generation.
+    C-2. Replaced the old mixed run.do flow with a single compile,
+         vopt, vsim, coverage-save, vcover-report sequence.
+    C-3. Cleaned the M3 functional covergroup by removing impossible
+         reset high-to-low bins and clock/data crosses; added write/read
+         request-vs-flag coverpoints.
+
+Commands to run on a licensed Questa host:
+  cd M3/CLASS
+  vsim -c -do 'do run.do; quit -f' 2>&1 | tee transcript_farm.txt
+  python3 make_artifacts.py
+
+Files compiled by run.do:
+  vlog -source -lint async_fifo.sv
+  vlog -source -lint async_fifo_package.sv
+  vlog -source -lint async_fifo_interface.sv
+  vlog -source -lint async_fifo_top.sv
+  vlog -source -lint async_fifo_test.sv
+  vopt async_fifo_top -o top_optimized +acc +cover=sbfec+asynchronous_fifo(rtl).
+
+Expected post-fix results:
+  Compile/elab:
+    All vlog/vopt phases should report Errors: 0, Warnings: 0.
+
+  Simulation:
+    Scoreboard final_report() should print:
+      Verdict: *** PASSED ***
+    Mismatches / errors should be 0.
+    The simulator transcript should have no $error prints.
+
+  Coverage:
+    async_fifo.ucdb should be saved successfully.
+    vcover report async_fifo.ucdb should report DUT code coverage.
+    vcover report async_fifo.ucdb -cvg -details should report the M3
+    async_fifo_cover functional covergroup.
+
+Artifacts expected after the farm run:
+  Source:
+    async_fifo.sv
+    async_fifo_package.sv
+    async_fifo_interface.sv
+    async_fifo_top.sv
+    async_fifo_test.sv
+    async_fifo_transaction.sv
+    async_fifo_generator.sv
+    async_fifo_driver.sv
+    async_fifo_monitor.sv
+    async_fifo_scoreboard.sv
+    async_fifo_environment.sv
+    run.do
+
+  Generated evidence:
+    transcript_farm.txt     Full Questa transcript from the post-fix run.
+    dump.vcd                VCD from async_fifo_top $dumpfile/$dumpvars.
+    async_fifo.ucdb         Questa coverage database.
+    waveform_samples.csv    Tracked DUT-port signal changes parsed from dump.vcd.
+    waveforms.svg           Windowed digital waveform plot.
+    waveforms.png           PNG converted from waveforms.svg.
+
+Known caveats:
+  #1  No post-fix simulator transcript is checked in yet. This local
+      environment lacks vsim/vlog, so only static/text verification was
+      possible during this pass.
+  #2  The original M3/docs/transcript.txt is pre-fix evidence. It shows
+      compile success and high code coverage, but only 78.92% covergroup
+      coverage and a vcover-7 failure caused by the old run.do script.
+  #3  fifo_mem still has no reset port. That is deliberate to avoid a
+      milestone port-list change; the TB mitigates the initial X window.
+
+Verdict:
+  Source fixes are staged and documented. Final PASS/coverage evidence
+  requires running the checked-in M3/CLASS/run.do on a licensed Questa
+  host and then running make_artifacts.py against the resulting dump.vcd.
